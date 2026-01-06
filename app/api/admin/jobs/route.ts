@@ -178,12 +178,10 @@ export async function POST(request: Request) {
       })
       .then((rows) => rows[0]);
 
-    // Immediately notify matching alerts based on keyword in title/tags
+    // Immediately notify matching alerts based on keyword in title/tags.
+    // One email per user per job, sent sequentially to avoid Resend rate limits.
     try {
-      const jobText = [
-        data.title,
-        ...(data.tags || []),
-      ]
+      const jobText = [data.title, ...(data.tags || [])]
         .join(" ")
         .toLowerCase();
 
@@ -192,20 +190,25 @@ export async function POST(request: Request) {
         .from(alerts)
         .where(eq(alerts.isActive, true));
 
-      await Promise.all(
-        activeAlerts.map(async (alert) => {
-          if (!alert.keyword) return;
-          const kw = alert.keyword.toLowerCase();
-          if (!jobText.includes(kw)) return;
+      const notifiedEmails = new Set<string>();
 
-          await sendAlertEmail({
-            to: alert.email,
-            keyword: alert.keyword,
-            frequency: (alert.frequency as "daily" | "weekly") || "daily",
-            jobTitles: [data.title],
-          });
-        }),
-      );
+      for (const alert of activeAlerts) {
+        if (!alert.keyword) continue;
+        const kw = alert.keyword.toLowerCase();
+        if (!jobText.includes(kw)) continue;
+        if (notifiedEmails.has(alert.email)) continue; // one email per user
+
+        await sendAlertEmail({
+          to: alert.email,
+          keyword: alert.keyword,
+          frequency: (alert.frequency as "daily" | "weekly") || "daily",
+          jobTitles: [data.title],
+        });
+
+        notifiedEmails.add(alert.email);
+        // Small delay so we don't hit Resend's per‑second rate limit
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
     } catch {
       // fail silently; job creation should still succeed
     }

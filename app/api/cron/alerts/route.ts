@@ -46,9 +46,12 @@ export async function GET(req: NextRequest) {
     .from(alerts)
     .where(eq(alerts.isActive, true));
 
-  // Naive matching: keyword contained in title or tags
-  const emailsToSend: Record<string, { keyword: string; jobTitles: string[] }> =
-    {};
+  // Naive matching: keyword contained in title or tags.
+  // We aggregate per user so each user gets a single digest email.
+  const emailsToSend: Record<
+    string,
+    { keywords: Set<string>; jobTitles: Set<string> }
+  > = {};
 
   for (const alert of allAlerts) {
     if (!alert.keyword) continue;
@@ -64,27 +67,30 @@ export async function GET(req: NextRequest) {
 
     if (matched.length === 0) continue;
 
-    const key = `${alert.email}::${alert.keyword}`;
-    if (!emailsToSend[key]) {
-      emailsToSend[key] = { keyword: alert.keyword, jobTitles: [] };
+    const emailKey = alert.email;
+    if (!emailsToSend[emailKey]) {
+      emailsToSend[emailKey] = {
+        keywords: new Set<string>(),
+        jobTitles: new Set<string>(),
+      };
     }
-    emailsToSend[key].jobTitles.push(...matched.map((j) => j.title));
+    emailsToSend[emailKey].keywords.add(alert.keyword);
+    matched.forEach((j) => emailsToSend[emailKey].jobTitles.add(j.title));
   }
 
-  // Send emails via Resend
+  // Send emails via Resend, sequentially with a small delay to avoid rate limits
   let sent = 0;
-  await Promise.all(
-    Object.entries(emailsToSend).map(async ([key, payload]) => {
-      const [email] = key.split("::");
-      await sendAlertEmail({
-        to: email,
-        keyword: payload.keyword,
-        frequency: "daily",
-        jobTitles: payload.jobTitles.slice(0, 10),
-      });
-      sent += 1;
-    }),
-  );
+  for (const [email, payload] of Object.entries(emailsToSend)) {
+    const keywordSummary = Array.from(payload.keywords).join(", ");
+    await sendAlertEmail({
+      to: email,
+      keyword: keywordSummary || "your alerts",
+      frequency: "daily",
+      jobTitles: Array.from(payload.jobTitles).slice(0, 10),
+    });
+    sent += 1;
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
 
   return NextResponse.json({ ok: true, sent });
 }

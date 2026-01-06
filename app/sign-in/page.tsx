@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Briefcase, Users, TrendingUp, CheckCircle2 } from "lucide-react";
@@ -13,7 +13,7 @@ import { signIn } from "@/lib/auth-client";
 
 type Role = "user" | "employer";
 
-export default function SignIn() {
+function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/alerts";
@@ -27,28 +27,28 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Sign In Form (Dark Theme) */}
-      <div className="flex-1 bg-zinc-900 text-white flex items-center justify-center p-8">
+      {/* Left Side - Sign In Form */}
+      <div className="flex-1 bg-white text-zinc-900 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-2">Welcome to WorkIsWork</h1>
-            <p className="text-zinc-400 text-sm">
+            <p className="text-zinc-600 text-sm">
               Sign in to access your account
             </p>
           </div>
 
           {/* Role Selection */}
           <div className="space-y-2">
-            <Label className="text-sm text-zinc-300">I am a...</Label>
+              <Label className="text-sm text-zinc-700">I am a...</Label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setRole("user")}
                 className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "user"
-                    ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                    : "border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-800/50"
+                    ? "border-orange-500 bg-orange-50 text-orange-600"
+                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
                 }`}
               >
                 Job Seeker
@@ -58,8 +58,8 @@ export default function SignIn() {
                 onClick={() => setRole("employer")}
                 className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "employer"
-                    ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                    : "border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-800/50"
+                    ? "border-orange-500 bg-orange-50 text-orange-600"
+                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
                 }`}
               >
                 Employer
@@ -70,7 +70,7 @@ export default function SignIn() {
           {/* Form */}
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-zinc-300">Email</Label>
+              <Label htmlFor="email" className="text-sm text-zinc-700">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -78,7 +78,7 @@ export default function SignIn() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
               />
             </div>
 
@@ -108,7 +108,7 @@ export default function SignIn() {
                 id="remember"
                 checked={rememberMe}
                 onCheckedChange={(checked) => setRememberMe(checked === true)}
-                className="border-zinc-700 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="border-zinc-300 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
               />
               <Label htmlFor="remember" className="text-sm text-zinc-300 cursor-pointer">
                 Keep me signed in
@@ -147,11 +147,11 @@ export default function SignIn() {
             </Button>
 
             <div className="text-center">
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-zinc-600">
                 Are you a new member?{" "}
                 <Link
                   href={`/sign-up${callbackUrl ? `?callbackUrl=${callbackUrl}` : ""}${roleParam ? `&role=${roleParam}` : ""}`}
-                  className="text-orange-400 hover:text-orange-300 font-semibold underline"
+                  className="text-orange-600 hover:text-orange-700 font-semibold underline"
                 >
                   Create Account
                 </Link>
@@ -161,9 +161,9 @@ export default function SignIn() {
 
           {/* Footer */}
           <div className="text-center text-xs text-zinc-500 space-x-2">
-            <Link href="#" className="hover:text-zinc-400">Terms of Use</Link>
+            <Link href="#" className="hover:text-zinc-700">Terms of Use</Link>
             <span>•</span>
-            <Link href="#" className="hover:text-zinc-400">Privacy Policy</Link>
+            <Link href="#" className="hover:text-zinc-700">Privacy Policy</Link>
           </div>
         </div>
       </div>
@@ -234,6 +234,18 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white text-zinc-900">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    }>
+      <SignInForm />
+    </Suspense>
   );
 }
 

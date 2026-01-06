@@ -79,11 +79,11 @@ export function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-orange-200 bg-[#fde9d7]">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
         <Link href="/jobs" className="flex items-center min-w-fit">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white px-2 py-1 shadow-sm ring-1 ring-orange-200">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white px-2 py-1 shadow-sm ring-1 ring-zinc-200">
             <Logo width={32} height={20} />
           </span>
           {/* Brand name always visible to right of Logo in desktop */}
@@ -162,7 +162,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
+              className="rounded-xl border border-zinc-300 bg-white cursor-pointer px-4 py-2 text-sm text-black font-semibold shadow-sm"
             >
               Log out
             </button>
@@ -184,7 +184,7 @@ export function Navbar() {
           onClick={() => setMobileOpen((open) => !open)}
         >
           {/* Hamburger icon */}
-          <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={2} className="text-orange-700">
+          <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={2} className="text-zinc-700">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -210,18 +210,18 @@ export function Navbar() {
       {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-[#fde9d7] border-l border-orange-200 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
+          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-white border-l border-zinc-200 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{ transitionProperty: 'transform' }}
         aria-modal={mobileOpen}
         tabIndex={-1}
       >
-        <div className="flex items-center justify-between px-4 py-4 border-b border-orange-200">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-200">
           <Link href="/jobs" className="flex items-center gap-2 min-w-fit" onClick={() => setMobileOpen(false)}>
           </Link>
           <button
-            className="p-2 rounded-full hover:bg-orange-100"
+            className="p-2 rounded-full hover:bg-zinc-100"
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
           >
@@ -312,7 +312,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
+              className="rounded-xl border border-zinc-300 cursor-pointer bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
               onClick={() => setMobileOpen(false)}
             >
               Log in

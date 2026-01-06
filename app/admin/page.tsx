@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { db } from "../../db";
 import { categories, users } from "../../db/schema";
 import { AdminJobForm } from "../../components/admin/job-form";
+import { Footer } from "../../components/Footer";
 import { getServerSession } from "../../lib/auth-server";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
@@ -28,7 +29,7 @@ export default async function AdminPage() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-900">
         <header className="border-b border-zinc-200 bg-white/80">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-semibold">
@@ -36,7 +37,7 @@ export default async function AdminPage() {
             </Link>
           </div>
         </header>
-        <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6">
           <div className="rounded-2xl border border-orange-200 bg-white p-8 text-center shadow-sm">
             <h1 className="text-xl font-semibold text-zinc-900">
               Company login required
@@ -54,6 +55,7 @@ export default async function AdminPage() {
             </div>
           </div>
         </main>
+        <Footer variant="light" />
       </div>
     );
   }
@@ -68,7 +70,7 @@ export default async function AdminPage() {
 
   if (!userRow || userRow.role !== "employer") {
     return (
-      <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-900">
         <header className="border-b border-zinc-200 bg-white/80">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-semibold">
@@ -76,7 +78,7 @@ export default async function AdminPage() {
             </Link>
           </div>
         </header>
-        <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6">
           <div className="rounded-2xl border border-orange-200 bg-white p-8 text-center shadow-sm">
             <h1 className="text-xl font-semibold text-zinc-900">
               Employer access required
@@ -94,12 +96,13 @@ export default async function AdminPage() {
             </div>
           </div>
         </main>
+        <Footer variant="light" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
+    <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-900">
       <header className="border-b border-zinc-200 bg-white/80">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-semibold">
@@ -111,9 +114,11 @@ export default async function AdminPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <AdminJobForm categories={cats} />
       </main>
+
+      <Footer variant="light" />
     </div>
   );
 }

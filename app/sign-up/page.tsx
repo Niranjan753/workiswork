@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Loader2, X, Briefcase, Users, TrendingUp, CheckCircle2, Building2, Globe } from "lucide-react";
+import { Loader2, X, Briefcase, Users, TrendingUp, CheckCircle2, Building2, Globe }from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -14,7 +14,7 @@ import { signUp } from "@/lib/auth-client";
 
 type Role = "user" | "employer";
 
-export default function SignUp() {
+function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/jobs";
@@ -53,28 +53,28 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Sign Up Form (Dark Theme) */}
-      <div className="flex-1 bg-zinc-900 text-white flex items-center justify-center p-8 overflow-y-auto">
+      {/* Left Side - Sign Up Form */}
+      <div className="flex-1 bg-white text-zinc-900 flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-6">
           {/* Header */}
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-2">Create your account</h1>
-            <p className="text-zinc-400 text-sm">
+            <p className="text-zinc-600 text-sm">
               Join WorkIsWork and start your remote work journey
             </p>
           </div>
 
           {/* Role Selection */}
           <div className="space-y-2">
-            <Label className="text-sm text-zinc-300">I am a...</Label>
+            <Label className="text-sm text-zinc-700">I am a...</Label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setRole("user")}
                 className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "user"
-                    ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                    : "border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-800/50"
+                    ? "border-orange-500 bg-orange-50 text-orange-600"
+                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
                 }`}
               >
                 Job Seeker
@@ -84,8 +84,8 @@ export default function SignUp() {
                 onClick={() => setRole("employer")}
                 className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "employer"
-                    ? "border-orange-500 bg-orange-500/10 text-orange-400"
-                    : "border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-800/50"
+                    ? "border-orange-500 bg-orange-50 text-orange-600"
+                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
                 }`}
               >
                 Employer
@@ -97,31 +97,31 @@ export default function SignUp() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="first-name" className="text-sm text-zinc-300">First name</Label>
+                <Label htmlFor="first-name" className="text-sm text-zinc-700">First name</Label>
                 <Input
                   id="first-name"
                   placeholder="John"
                   required
                   onChange={(e) => setFirstName(e.target.value)}
                   value={firstName}
-                  className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                  className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last-name" className="text-sm text-zinc-300">Last name</Label>
+                <Label htmlFor="last-name" className="text-sm text-zinc-700">Last name</Label>
                 <Input
                   id="last-name"
                   placeholder="Doe"
                   required
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
-                  className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                  className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-zinc-300">Email</Label>
+              <Label htmlFor="email" className="text-sm text-zinc-700">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -129,12 +129,12 @@ export default function SignUp() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm text-zinc-300">Password</Label>
+              <Label htmlFor="password" className="text-sm text-zinc-700">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -142,12 +142,12 @@ export default function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 placeholder="At least 8 characters"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password_confirmation" className="text-sm text-zinc-300">Confirm Password</Label>
+              <Label htmlFor="password_confirmation" className="text-sm text-zinc-700">Confirm Password</Label>
               <Input
                 id="password_confirmation"
                 type="password"
@@ -155,15 +155,15 @@ export default function SignUp() {
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 autoComplete="new-password"
                 placeholder="Confirm your password"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-sm text-zinc-300">Profile Image (optional)</Label>
+              <Label htmlFor="image" className="text-sm text-zinc-700">Profile Image (optional)</Label>
               <div className="flex items-end gap-3">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-700">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-300">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -178,7 +178,7 @@ export default function SignUp() {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="bg-zinc-800 border-zinc-700 text-white file:text-white file:bg-zinc-700 file:border-0 file:rounded file:px-3 file:py-1 file:text-sm file:cursor-pointer"
+                    className="bg-white border-zinc-300 text-zinc-900 file:text-zinc-900 file:bg-zinc-100 file:border-0 file:rounded file:px-3 file:py-1 file:text-sm file:cursor-pointer"
                   />
                   {imagePreview && (
                     <button
@@ -187,9 +187,9 @@ export default function SignUp() {
                         setImage(null);
                         setImagePreview(null);
                       }}
-                      className="p-2 hover:bg-zinc-800 rounded"
+                      className="p-2 hover:bg-zinc-100 rounded"
                     >
-                      <X className="w-4 h-4 text-zinc-400" />
+                      <X className="w-4 h-4 text-zinc-600" />
                     </button>
                   )}
                 </div>
@@ -264,11 +264,11 @@ export default function SignUp() {
             )}
 
             <div className="text-center">
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-zinc-600">
                 Already have an account?{" "}
                 <Link
                   href={`/sign-in${callbackUrl ? `?callbackUrl=${callbackUrl}` : ""}${roleParam ? `&role=${roleParam}` : ""}`}
-                  className="text-orange-400 hover:text-orange-300 font-semibold underline"
+                  className="text-orange-600 hover:text-orange-700 font-semibold underline"
                 >
                   Sign In
                 </Link>
@@ -277,10 +277,10 @@ export default function SignUp() {
           </div>
 
           {/* Footer */}
-          <div className="text-center text-xs text-zinc-500 space-x-2 pt-4 border-t border-zinc-800">
-            <Link href="#" className="hover:text-zinc-400">Terms of Use</Link>
+          <div className="text-center text-xs text-zinc-500 space-x-2 pt-4 border-t border-zinc-200">
+            <Link href="#" className="hover:text-zinc-700">Terms of Use</Link>
             <span>•</span>
-            <Link href="#" className="hover:text-zinc-400">Privacy Policy</Link>
+            <Link href="#" className="hover:text-zinc-700">Privacy Policy</Link>
           </div>
         </div>
       </div>
@@ -402,4 +402,15 @@ export default function SignUp() {
   );
 }
 
+export default function SignUp() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white text-zinc-900">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    }>
+      <SignUpForm />
+    </Suspense>
+  );
+}
 

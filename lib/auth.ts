@@ -54,7 +54,8 @@ export const auth = betterAuth({
     async sendResetPassword(data, request) {
       // Hook for password reset emails – currently just logs.
       console.log("[Better Auth] sendResetPassword called", {
-        email: data.email,
+        email: data.user.email,
+        url: data.url,
       });
     },
   },

@@ -41,7 +41,7 @@ export default function JobsPage({
   const q = searchParams?.q || "";
 
   return (
-    <div className="min-h-screen bg-[#fde9d7] text-zinc-900">
+    <div className="min-h-screen bg-white text-zinc-900">
       <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
         <section className="mb-6 space-y-3 text-center">
           <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-[40px]">
@@ -90,5 +90,4 @@ export default function JobsPage({
     </div>
   );
 }
-
 

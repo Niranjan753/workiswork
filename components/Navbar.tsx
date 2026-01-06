@@ -12,6 +12,7 @@ export function Navbar() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [userRole, setUserRole] = React.useState<"user" | "employer" | null>(null);
 
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
@@ -19,6 +20,49 @@ export function Navbar() {
   const isAdmin = pathname.startsWith("/admin");
 
   const userEmail = session?.user?.email;
+
+  // Fetch user role when session is available
+  React.useEffect(() => {
+    if (session?.user?.id) {
+      fetch("/api/user/role")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.role) {
+            setUserRole(data.role);
+          }
+        })
+        .catch(() => {
+          // Default to user if fetch fails
+          setUserRole("user");
+        });
+    } else {
+      setUserRole(null);
+    }
+  }, [session?.user?.id]);
+
+  const handleAlertsClick = (e: React.MouseEvent) => {
+    if (!userEmail) {
+      e.preventDefault();
+      router.push("/login?callbackUrl=/alerts");
+      return;
+    }
+    if (userRole === "employer") {
+      e.preventDefault();
+      return;
+    }
+  };
+
+  const handleAdminClick = (e: React.MouseEvent) => {
+    if (!userEmail) {
+      e.preventDefault();
+      router.push("/login?callbackUrl=/admin&role=employer");
+      return;
+    }
+    if (userRole === "user") {
+      e.preventDefault();
+      return;
+    }
+  };
 
   async function handleSignOut() {
     await authClient.signOut({
@@ -78,22 +122,28 @@ export function Navbar() {
           </Link>
           <Link
             href="/alerts"
+            onClick={handleAlertsClick}
             className={cn(
               "px-4 py-2 text-sm font-semibold",
               isAlerts
                 ? "rounded-xl bg-white text-zinc-900 shadow-sm"
-                : "text-zinc-700 hover:text-zinc-900",
+                : userRole === "employer"
+                  ? "text-zinc-400 cursor-not-allowed"
+                  : "text-zinc-700 hover:text-zinc-900",
             )}
           >
             Job Alerts
           </Link>
           <Link
             href="/admin"
+            onClick={handleAdminClick}
             className={cn(
               "px-4 py-2 text-sm font-semibold",
               isAdmin
                 ? "rounded-xl bg-white text-zinc-900 shadow-sm"
-                : "text-zinc-700 hover:text-zinc-900",
+                : userRole === "user"
+                  ? "text-zinc-400 cursor-not-allowed"
+                  : "text-zinc-700 hover:text-zinc-900",
             )}
           >
             For Employers
@@ -207,25 +257,35 @@ export function Navbar() {
           </Link>
           <Link
             href="/alerts"
+            onClick={(e) => {
+              setMobileOpen(false);
+              handleAlertsClick(e);
+            }}
             className={cn(
               "rounded-xl px-4 py-2",
               isAlerts
                 ? "bg-white text-zinc-900 shadow-sm"
-                : "text-zinc-700 hover:text-zinc-900"
+                : userRole === "employer"
+                  ? "text-zinc-400 cursor-not-allowed"
+                  : "text-zinc-700 hover:text-zinc-900"
             )}
-            onClick={() => setMobileOpen(false)}
           >
             Job Alerts
           </Link>
           <Link
             href="/admin"
+            onClick={(e) => {
+              setMobileOpen(false);
+              handleAdminClick(e);
+            }}
             className={cn(
               "rounded-xl px-4 py-2",
               isAdmin
                 ? "bg-white text-zinc-900 shadow-sm"
-                : "text-zinc-700 hover:text-zinc-900"
+                : userRole === "user"
+                  ? "text-zinc-400 cursor-not-allowed"
+                  : "text-zinc-700 hover:text-zinc-900"
             )}
-            onClick={() => setMobileOpen(false)}
           >
             For Employers
           </Link>

@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <AppProviders>
           <Navbar />
-          <div className="pt-24 sm:pt-24 lg:pt-24">{children}</div>
+          <div className="pt-18 sm:pt-24 lg:pt-18">{children}</div>
         </AppProviders>
       </body>
     </html>

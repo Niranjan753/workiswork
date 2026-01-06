@@ -10,17 +10,24 @@ const originalInsert = db.insert.bind(db);
 const wrappedDb = new Proxy(db, {
   get(target, prop) {
     if (prop === "insert") {
-      return function(table: any) {
+      return function (table: any) {
         const insertBuilder = originalInsert(table);
         // If inserting into users table, wrap the values method
         if (table === users) {
           const originalValues = insertBuilder.values.bind(insertBuilder);
-          insertBuilder.values = function(values: any) {
+          insertBuilder.values = function (values: any) {
+            const makeUuid = () => randomUUID();
             // If values is an array, map over it; otherwise wrap single object
             const processedValues = Array.isArray(values)
-              ? values.map(v => ({ ...v, id: v.id ? randomUUID() : randomUUID() }))
-              : { ...values, id: values.id ? randomUUID() : randomUUID() };
-            console.log("[Wrapped DB] Inserting user with UUID:", processedValues.id || processedValues[0]?.id);
+              ? values.map((v) => ({ ...v, id: makeUuid() }))
+              : { ...values, id: makeUuid() };
+            console.log(
+              "[Wrapped DB] Inserting user with UUID:",
+              (processedValues as any).id ??
+                (Array.isArray(processedValues)
+                  ? processedValues[0]?.id
+                  : undefined),
+            );
             return originalValues(processedValues);
           };
         }
@@ -44,6 +51,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
+    async sendResetPassword(data, request) {
+      // Hook for password reset emails – currently just logs.
+      console.log("[Better Auth] sendResetPassword called", {
+        email: data.email,
+      });
+    },
   },
   secret: process.env.BETTER_AUTH_SECRET || process.env.NEXTAUTH_SECRET || "change-me-in-production",
   baseURL:

@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WorkIsWork – Remote Jobs, Curated.",
+  title: "WorkIsWork",
   description:
     "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
   icons: {
-    icon: "/logo.svg",
+    icon: "/svgg.svg",
   },
 };
 

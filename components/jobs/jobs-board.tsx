@@ -54,6 +54,7 @@ export function JobsBoard() {
   const router = useRouter();
 
   const q = searchParams.get("q") ?? "";
+  const activeCategory = searchParams.get("category") ?? "";
   const [location, setLocation] = React.useState(
     searchParams.get("location") ?? "",
   );
@@ -62,8 +63,8 @@ export function JobsBoard() {
   );
 
   const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes }],
-    [q, location, jobTypes],
+    () => ["jobs", { q, location, jobTypes, activeCategory }],
+    [q, location, jobTypes, activeCategory],
   );
 
   const fetchJobs = React.useCallback(
@@ -73,6 +74,7 @@ export function JobsBoard() {
       params.set("limit", "20");
       if (q) params.set("q", q);
       if (location) params.set("location", location);
+      if (activeCategory) params.set("category", activeCategory);
       jobTypes.forEach((jt) => params.append("job_type", jt));
 
       const res = await fetch(`/api/jobs${buildQueryString(params)}`);
@@ -81,7 +83,7 @@ export function JobsBoard() {
       }
       return res.json();
     },
-    [q, location, jobTypes],
+    [q, location, jobTypes, activeCategory],
   );
 
   const {

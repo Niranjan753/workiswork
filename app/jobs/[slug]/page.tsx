@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq, ne } from "drizzle-orm";
-
 import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
 import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";

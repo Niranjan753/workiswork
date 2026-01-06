@@ -39,7 +39,7 @@ export async function sendAlertEmail({
   `;
 
   await resendClient.emails.send({
-    from: "berlin@pocketsflow.com",
+    from: "niranjanr753@gmail.com",
     to,
     subject,
     html,

@@ -112,13 +112,18 @@ export async function POST(request: Request) {
         .returning()
         .then((rows) => rows[0]!));
 
-    // link company owner if new
+    // link company owner if new (best-effort; don't block job creation)
     if (!existingCompany) {
-      await db.insert(companyUsers).values({
-        companyId: company.id,
-        userId: session.user.id as string,
-        role: "owner",
-      });
+      try {
+        await db.insert(companyUsers).values({
+          companyId: company.id,
+          userId: session.user.id as string,
+          role: "owner",
+        });
+      } catch (err) {
+        console.error("[POST /api/admin/jobs] Failed to link company owner", err);
+        // continue without failing the whole request
+      }
     }
 
     const baseSlug = `${data.title}-${company.name}`

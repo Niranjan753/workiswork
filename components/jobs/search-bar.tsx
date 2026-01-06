@@ -120,12 +120,18 @@ export function JobsSearchBar({ categories }: Props) {
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
+        onBlur={() => {
+          // If the input is cleared and focus leaves, hide suggestions
+          if (!q.trim()) {
+            setOpen(false);
+          }
+        }}
         autoComplete="off"
       />
       <input type="hidden" name="category" value={selectedCategory} />
       <button
         type="submit"
-        className="h-8 rounded-full bg-orange-500 px-4 text-xs font-semibold text-white hover:bg-orange-600"
+        className="h-8 rounded-full bg-orange-500 px-4 text-xs font-semibold text-white cursor-pointer hover:bg-orange-600"
       >
         Search
       </button>

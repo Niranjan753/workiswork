@@ -23,11 +23,16 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-40 border-b border-orange-200 bg-[#fde9d7]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
-        <Link href="/jobs" className="flex items-center gap-2 min-w-fit">
+        <Link href="/jobs" className="flex items-center min-w-fit">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white px-2 py-1 shadow-sm ring-1 ring-orange-200">
             <Logo width={32} height={20} />
           </span>
-          <span className="text-lg font-semibold tracking-tight text-zinc-900 hidden xs:inline">
+          {/* Brand name always visible to right of Logo in desktop */}
+          <span className="text-lg font-semibold tracking-tight text-zinc-900 ml-2 hidden md:inline">
+            WorkIsWork
+          </span>
+          {/* Show name on xs but hide on SM+ for only mobile (optional) */}
+          <span className="text-lg font-semibold tracking-tight text-zinc-900 ml-2 inline md:hidden xs:inline">
             WorkIsWork
           </span>
         </Link>
@@ -139,12 +144,6 @@ export function Navbar() {
       >
         <div className="flex items-center justify-between px-4 py-4 border-b border-orange-200">
           <Link href="/jobs" className="flex items-center gap-2 min-w-fit" onClick={() => setMobileOpen(false)}>
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-orange-200">
-              <Logo width={28} height={18} />
-            </span>
-            <span className="text-base font-semibold tracking-tight text-zinc-900">
-              WorkIsWork
-            </span>
           </Link>
           <button
             className="p-2 rounded-full hover:bg-orange-100"

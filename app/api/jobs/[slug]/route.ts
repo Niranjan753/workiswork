@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { and, eq, ne } from "drizzle-orm";
 
 import { db } from "../../../../db";
@@ -7,14 +7,12 @@ import { categories, companies, jobs } from "../../../../db/schema";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type Params = {
-  params: {
-    slug: string;
-  };
+type Context = {
+  params: Promise<{ slug: string }>;
 };
 
-export async function GET(_request: Request, { params }: Params) {
-  const { slug } = params;
+export async function GET(_request: NextRequest, context: Context) {
+  const { slug } = await context.params;
 
   const job = await db
     .select({

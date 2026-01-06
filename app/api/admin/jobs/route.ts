@@ -34,7 +34,7 @@ const createJobSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions as any);
+  const session = (await getServerSession(authOptions as any)) as any;
   if (!session?.user?.email || !session.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

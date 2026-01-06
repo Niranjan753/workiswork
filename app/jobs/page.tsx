@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
@@ -51,7 +52,9 @@ export default function JobsPage({
             interviews.
           </p>
           {/* Centered search bar like Remotive */}
-          <JobsSearchBar categories={categoryChips} />
+          <Suspense fallback={null}>
+            <JobsSearchBar categories={categoryChips} />
+          </Suspense>
 
           {/* Category pills row */}
           <div className="mt-4 flex flex-wrap justify-center gap-2 text-[11px]">
@@ -80,7 +83,9 @@ export default function JobsPage({
           </div>
         </section>
 
-        <JobsBoard />
+        <Suspense fallback={null}>
+          <JobsBoard />
+        </Suspense>
       </main>
     </div>
   );

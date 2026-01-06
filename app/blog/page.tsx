@@ -1,0 +1,91 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Logo } from "../../components/Logo";
+import { blogPosts } from "../../data/blog";
+
+export const metadata: Metadata = {
+  title: "Blog – WorkIsWork",
+  description:
+    "Tips, stories, and resources for remote work and job seekers.",
+};
+
+export default function BlogPage() {
+  const posts = blogPosts;
+
+  return (
+    <div className="min-h-screen bg-[#fde9d7] text-zinc-900">
+      <header className="border-b border-orange-200 bg-[#fde9d7]/95">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white px-2 py-1 shadow-sm ring-1 ring-orange-200">
+              <Logo width={32} height={20} />
+            </span>
+            <span className="text-lg font-semibold tracking-tight">
+              WorkisWork
+            </span>
+          </Link>
+          <nav className="flex items-center gap-3 text-xs font-medium text-zinc-800">
+            <Link href="/jobs" className="px-3 py-1">
+              Remote Jobs
+            </Link>
+            <span className="rounded-full bg-white px-3 py-1">Blog</span>
+            <Link href="/alerts" className="px-3 py-1">
+              Job Alerts
+            </Link>
+            <Link href="/admin" className="px-3 py-1">
+              For Employers
+            </Link>
+          </nav>
+          <div className="flex items-center gap-2 text-xs">
+            <Link
+              href="/pricing"
+              className="rounded-full border border-orange-400 bg-white px-3 py-1 font-semibold text-orange-700"
+            >
+              Unlock All Jobs
+            </Link>
+            <Link
+              href="/login"
+              className="rounded-full border border-zinc-300 bg-white px-3 py-1 font-semibold"
+            >
+              Log in
+            </Link>
+          </div>
+        </div>
+      </header>
+      <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
+        <section className="mb-6 space-y-3 text-center">
+          <h1 className="text-balance text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">
+            Remote work, without the fluff
+          </h1>
+          <p className="text-xs text-zinc-600 sm:text-sm">
+            Short, opinionated essays on remote careers, hiring, and building
+            great distributed teams.
+          </p>
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          {posts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="flex flex-col rounded-2xl border border-orange-200 bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-orange-600">
+                {post.category}
+              </span>
+              <h2 className="mt-1 text-sm font-semibold text-zinc-900">
+                {post.title}
+              </h2>
+              <p className="mt-2 line-clamp-3 text-xs text-zinc-600">
+                {post.excerpt}
+              </p>
+              <div className="mt-4 flex items-center justify-between text-[11px] text-zinc-500">
+                <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+                <span>{post.readTime}</span>
+              </div>
+            </Link>
+          ))}
+        </section>
+      </main>
+    </div>
+  );
+}

@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
 
@@ -54,7 +53,7 @@ export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [q, setQ] = React.useState(searchParams.get("q") ?? "");
+  const q = searchParams.get("q") ?? "";
   const [location, setLocation] = React.useState(
     searchParams.get("location") ?? "",
   );
@@ -113,15 +112,6 @@ export function JobsBoard() {
         ? prev.filter((v) => v !== value)
         : [...prev, value],
     );
-  }
-
-  function handleSearchSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    if (location) params.set("location", location);
-    jobTypes.forEach((jt) => params.append("job_type", jt));
-    router.push(`/jobs${buildQueryString(params)}`);
   }
 
   return (
@@ -203,25 +193,6 @@ export function JobsBoard() {
             {total.toLocaleString()} matching jobs
           </p>
         </div>
-
-        {/* Search bar replicated here */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex flex-col gap-2 rounded-xl border border-orange-200/80 bg-white/90 p-3 shadow-sm sm:flex-row sm:items-center"
-        >
-          <Input
-            placeholder="Search Job Title or Company name..."
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="h-10 flex-1 rounded-lg border-orange-200 bg-white text-xs text-zinc-800 placeholder:text-zinc-400"
-          />
-          <Button
-            type="submit"
-            className="h-10 rounded-lg bg-orange-500 px-4 text-xs font-semibold text-white hover:bg-orange-600"
-          >
-            Search
-          </Button>
-        </form>
 
         {/* Jobs list */}
         <div className="space-y-2 rounded-xl border border-orange-200/80 bg-white/90 p-2">

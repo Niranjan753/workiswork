@@ -18,6 +18,7 @@ type Props = {
 
 export function AdminJobForm({ categories }: Props) {
   const router = useRouter();
+  const formRef = React.useRef<HTMLFormElement>(null);
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [successSlug, setSuccessSlug] = React.useState<string | null>(null);
@@ -82,7 +83,7 @@ export function AdminJobForm({ categories }: Props) {
       setSuccessSlug(slug);
 
       // Reset form
-      e.currentTarget.reset();
+      formRef.current?.reset();
 
       // Refresh jobs board
       router.refresh();
@@ -96,6 +97,7 @@ export function AdminJobForm({ categories }: Props) {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       className="space-y-5 rounded-xl border border-zinc-200 bg-white p-5 text-sm text-zinc-900 shadow-sm"
     >

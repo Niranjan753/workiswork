@@ -117,7 +117,7 @@ export function JobsBoard() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
       {/* Filters */}
       <aside className="space-y-6 rounded-xl border border-orange-200/60 bg-orange-50/80 p-4 text-sm text-zinc-800">
         <div className="space-y-2">

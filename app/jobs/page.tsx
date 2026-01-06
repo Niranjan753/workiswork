@@ -65,8 +65,8 @@ export default function JobsPage({
 
   return (
     <div className="min-h-screen bg-white text-zinc-900">
-      <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
-        <section className="mb-6 space-y-3 text-center">
+      <main className="mx-auto outline max-w-6xl px-4 pb-10 pt-8 sm:px-6 bg-blacklg:px-8">
+        <section className="mb-6 mt-8 space-y-3 text-center">
           <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-[40px]">
             Find your dream remote job without the hassle
           </h1>
@@ -80,29 +80,33 @@ export default function JobsPage({
           </Suspense>
 
           {/* Category pills row */}
-          <div className="mt-4 flex flex-wrap justify-center gap-2 text-[11px]">
-            {categoryChips.map(({ label, slug }) => {
-              const params = new URLSearchParams();
-              if (q) params.set("q", q);
-              if (slug !== "all-others") params.set("category", slug);
+          <div className="mt-8 flex flex-wrap justify-center gap-2 text-[11px]">
+            <div className="w-full flex justify-center">
+              <div className="rounded-xl bg-orange-50/80 p-2 flex flex-wrap justify-center gap-2 shadow-inner max-w-3xl">
+                {categoryChips.map(({ label, slug }) => {
+                  const params = new URLSearchParams();
+                  if (q) params.set("q", q);
+                  if (slug !== "all-others") params.set("category", slug);
 
-              const href = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
-              const isActive = activeCategory === slug;
+                  const href = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
+                  const isActive = activeCategory === slug;
 
-              return (
-                <Link
-                  key={slug}
-                  href={href}
-                  className={`rounded-full px-3 py-1 shadow-sm ${
-                    isActive
-                      ? "bg-orange-500 text-white"
-                      : "bg-white text-zinc-700"
-                  }`}
-                >
-                  {label}
-                </Link>
-              );
-            })}
+                  return (
+                    <Link
+                      key={slug}
+                      href={href}
+                      className={`rounded-full px-3 py-1 shadow-sm transition-colors ${
+                        isActive
+                          ? "bg-orange-500 text-white"
+                          : "bg-white text-zinc-700"
+                      }`}
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </section>
 

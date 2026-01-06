@@ -107,7 +107,7 @@ export function JobsSearchBar({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative mx-auto mt-4 flex max-w-3xl items-center gap-2 rounded-full border border-orange-200 bg-white px-4 py-2 shadow-sm"
+      className="relative mx-auto mt-14 flex max-w-3xl items-center gap-2 rounded-full border border-orange-200 bg-white px-4 py-2 shadow-sm"
     >
       <input
         type="text"

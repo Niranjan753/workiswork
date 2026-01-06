@@ -4,6 +4,9 @@ import { and, desc, eq, gte, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const PAGE_SIZE_DEFAULT = 20;
 const PAGE_SIZE_MAX = 50;
 

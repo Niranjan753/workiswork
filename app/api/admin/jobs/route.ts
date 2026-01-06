@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { getServerSession } from "next-auth";
 
 import { db } from "../../../../db";
 import {
   categories,
   companies,
+  companyUsers,
   jobTypeEnum,
   jobs,
   remoteScopeEnum,
 } from "../../../../db/schema";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { guessLogoFromWebsite } from "../../../../lib/logo";
 
 const createJobSchema = z.object({
   title: z.string().min(3),
@@ -30,6 +34,11 @@ const createJobSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions as any);
+  if (!session?.user?.email || !session.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
 
   const parsed = createJobSchema.safeParse(body);
@@ -55,7 +64,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // Find or create company
+  // Find or create company tied to this user
   const companySlug = data.companyName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -76,9 +85,19 @@ export async function POST(request: Request) {
         name: data.companyName,
         slug: companySlug,
         websiteUrl: data.companyWebsite || null,
+        logoUrl: guessLogoFromWebsite(data.companyWebsite),
       })
       .returning()
       .then((rows) => rows[0]!));
+
+  // link company owner if new
+  if (!existingCompany) {
+    await db.insert(companyUsers).values({
+      companyId: company.id,
+      userId: session.user.id as string,
+      role: "owner",
+    });
+  }
 
   const baseSlug = `${data.title}-${company.name}`
     .toLowerCase()

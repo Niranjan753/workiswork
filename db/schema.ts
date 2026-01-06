@@ -85,6 +85,18 @@ export const companies = pgTable("companies", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const companyUsers = pgTable("company_users", {
+  id: serial("id").primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  companyId: integer("company_id")
+    .notNull()
+    .references(() => companies.id, { onDelete: "cascade" }),
+  role: text("role").notNull().default("owner"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const jobs = pgTable("jobs", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),

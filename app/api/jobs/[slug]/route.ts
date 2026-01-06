@@ -4,6 +4,9 @@ import { and, eq, ne } from "drizzle-orm";
 import { db } from "../../../../db";
 import { categories, companies, jobs } from "../../../../db/schema";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 type Params = {
   params: {
     slug: string;
@@ -36,6 +39,7 @@ export async function GET(_request: Request, { params }: Params) {
       companyLocation: companies.location,
       categorySlug: categories.slug,
       categoryName: categories.name,
+      categoryId: categories.id,
     })
     .from(jobs)
     .leftJoin(companies, eq(jobs.companyId, companies.id))
@@ -45,6 +49,7 @@ export async function GET(_request: Request, { params }: Params) {
     .then((rows) => rows[0] || null);
 
   if (!job) {
+    console.error("[jobs/[slug]] not found", { slug, hasDbUrl: !!process.env.DATABASE_URL });
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -61,9 +66,9 @@ export async function GET(_request: Request, { params }: Params) {
     .leftJoin(companies, eq(jobs.companyId, companies.id))
     .where(
       and(
-        eq(jobs.categoryId, jobs.categoryId),
+        eq(jobs.categoryId, job.categoryId as any),
         ne(jobs.slug, slug),
-      ) as any,
+      ),
     )
     .limit(6);
 

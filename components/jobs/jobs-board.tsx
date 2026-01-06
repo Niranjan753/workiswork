@@ -251,7 +251,7 @@ export function JobsBoard() {
                 variant="outline"
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className="rounded-full border-orange-300 px-4 py-1 text-xs font-semibold text-orange-700 hover:bg-orange-50"
+                className="rounded-full border-orange-300 cursor-pointer px-4 py-1 text-xs font-semibold text-orange-700 hover:bg-orange-50"
               >
                 {isFetchingNextPage ? "Loading more…" : "Load more jobs"}
               </Button>

@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Loader2, X, Briefcase, Users, TrendingUp, CheckCircle2, Building2, Globe }from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -71,7 +71,7 @@ function SignUpForm() {
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
+                className={`flex-1 rounded-lg cursor-pointer border px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "user"
                     ? "border-orange-500 bg-orange-50 text-orange-600"
                     : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
@@ -82,7 +82,7 @@ function SignUpForm() {
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
+                className={`flex-1 rounded-lg border cursor-pointer px-4 py-2.5 text-sm font-semibold transition-colors ${
                   role === "employer"
                     ? "border-orange-500 bg-orange-50 text-orange-600"
                     : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
@@ -198,7 +198,7 @@ function SignUpForm() {
 
             <Button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
+              className="w-full bg-orange-500 hover:bg-orange-600 cursor-pointer text-white font-semibold"
               disabled={loading || password !== passwordConfirmation}
               onClick={async () => {
                 if (password !== passwordConfirmation) {
@@ -285,117 +285,22 @@ function SignUpForm() {
         </div>
       </div>
 
-      {/* Right Side - Promotional Section (Orange Theme) */}
-      <div className="flex-1 bg-gradient-to-br from-orange-500 to-orange-600 text-white hidden lg:flex items-center justify-center p-12 relative overflow-hidden">
-        {/* Background Pattern */}
+      {/* Right Side - Promotional Image Section */}
+      <div className="flex-1 bg-white text-white hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='50' height='60' viewBox='0 0 50 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}></div>
         </div>
-
-        <div className="relative z-10 max-w-lg space-y-8">
-          <div>
-            <h2 className="text-4xl font-bold mb-4">
-              {role === "employer" 
-                ? "Post jobs that find the best talent"
-                : "Start your remote work journey"}
-            </h2>
-            <p className="text-lg text-orange-50">
-              {role === "employer"
-                ? "Join thousands of companies posting remote jobs. Reach qualified candidates and build your remote team."
-                : "Join the largest remote job community and discover your next opportunity. Connect with top companies and find the perfect remote role."}
-            </p>
-          </div>
-
-          {/* Stats Preview */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-            {role === "employer" ? (
-              <>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Building2 className="w-5 h-5" />
-                      <span className="text-sm text-orange-100">Companies</span>
-                    </div>
-                    <p className="text-3xl font-bold">8,432</p>
-                  </div>
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Briefcase className="w-5 h-5" />
-                      <span className="text-sm text-orange-100">Jobs Posted</span>
-                    </div>
-                    <p className="text-3xl font-bold">12,543</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Post jobs in minutes</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Reach qualified remote talent</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Manage applications easily</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Track job performance</span>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Briefcase className="w-5 h-5" />
-                      <span className="text-sm text-orange-100">Active Jobs</span>
-                    </div>
-                    <p className="text-3xl font-bold">12,543</p>
-                  </div>
-                  <div className="bg-white/10 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Users className="w-5 h-5" />
-                      <span className="text-sm text-orange-100">Job Seekers</span>
-                    </div>
-                    <p className="text-3xl font-bold">45,231</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Curated remote jobs from top companies</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Instant job alerts for your skills</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Save and track your favorite opportunities</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-orange-200" />
-                    <span className="text-sm">Join thousands of remote workers</span>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Growth Indicator */}
-          <div className="flex items-center gap-2 text-orange-100">
-            <TrendingUp className="w-5 h-5" />
-            <span className="text-sm">
-              {role === "employer" 
-                ? "500+ companies joined this month"
-                : "+2,341 new jobs this week"}
-            </span>
-          </div>
+        <div className="relative z-10 w-full h-full flex items-center justify-center p-8">
+          <Image
+            src="/signup.jpeg"
+            alt="Sign up promo"
+            fill
+            style={{ objectFit: "contain" }}
+            className="rounded-2xl shadow-xl"
+            priority
+          />
         </div>
       </div>
     </div>
@@ -413,4 +318,3 @@ export default function SignUp() {
     </Suspense>
   );
 }
-

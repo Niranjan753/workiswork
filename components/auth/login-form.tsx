@@ -86,7 +86,7 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setRole("user")}
-              className={`flex-1 rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
+              className={`flex-1 rounded-full cursor-pointer border px-4 py-2 text-xs font-semibold transition-colors ${
                 role === "user"
                   ? "border-orange-500 bg-orange-50 text-orange-700"
                   : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"

@@ -6,6 +6,7 @@ import { Logo } from "./Logo";
 import { cn } from "../lib/utils";
 import * as React from "react";
 import { authClient } from "../lib/auth-client";
+import { LockOpen } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -154,8 +155,9 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-2 text-xs">
           <Link
             href="/pricing"
-            className="rounded-xl border border-orange-500 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm"
+            className="flex items-center gap-2 rounded-xl border border-orange-500 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm"
           >
+            <LockOpen className="w-4 h-4" />
             Unlock All Jobs
           </Link>
           {userEmail ? (
@@ -293,9 +295,10 @@ export function Navbar() {
         <div className="flex flex-col gap-2 px-3 pb-4">
           <Link
             href="/pricing"
-            className="rounded-xl border border-orange-500 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm"
+            className="flex items-center gap-2 rounded-xl border border-orange-500 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm"
             onClick={() => setMobileOpen(false)}
           >
+            <LockOpen className="w-4 h-4" />
             Unlock All Jobs
           </Link>
           {userEmail ? (

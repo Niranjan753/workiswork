@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-
 import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";

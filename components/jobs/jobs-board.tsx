@@ -3,7 +3,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
-
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 import Link from "next/link";

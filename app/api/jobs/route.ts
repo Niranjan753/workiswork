@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
-import { and, desc, eq, gte, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, inArray, or, sql } from "drizzle-orm";
 
 import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const PAGE_SIZE_DEFAULT = 20;
 const PAGE_SIZE_MAX = 50;
@@ -22,6 +25,7 @@ export async function GET(request: Request) {
   const jobType = searchParams.get("job_type") || undefined;
   const remoteScope = searchParams.get("remote_scope") || undefined;
   const minSalary = searchParams.get("min_salary");
+  const location = searchParams.get("location") || undefined;
   const sort = searchParams.get("sort") || "date"; // date | relevance
   const premiumOnly = searchParams.get("premium") === "true";
 
@@ -42,7 +46,15 @@ export async function GET(request: Request) {
     filters.push(eq(categories.slug, categorySlug));
   }
 
-  if (jobType) {
+  // Allow multiple job_type filters (?job_type=full_time&job_type=contract)
+  const jobTypes = searchParams.getAll("job_type").filter(Boolean);
+  if (jobTypes.length === 1 && jobTypes[0]?.includes(",")) {
+    jobTypes.splice(0, 1, ...jobTypes[0].split(",").map((t) => t.trim()));
+  }
+  if (jobTypes.length > 0) {
+    filters.push(inArray(jobs.jobType, jobTypes as any));
+  } else if (jobType) {
+    // Fallback for single value
     filters.push(eq(jobs.jobType, jobType as any));
   }
 
@@ -52,6 +64,11 @@ export async function GET(request: Request) {
 
   if (minSalary) {
     filters.push(gte(jobs.salaryMin, sql`${minSalary}`));
+  }
+
+  if (location) {
+    const pattern = `%${location}%`;
+    filters.push(ilike(jobs.location, pattern));
   }
 
   if (premiumOnly) {

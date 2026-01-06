@@ -1,19 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import { cn } from "../lib/utils";
 import * as React from "react";
+import { authClient } from "../lib/auth-client";
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
   const isAlerts = pathname.startsWith("/alerts");
   const isAdmin = pathname.startsWith("/admin");
+
+  const userEmail = session?.user?.email;
+
+  async function handleSignOut() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/jobs");
+        },
+      },
+    });
+  }
 
   React.useEffect(() => {
     setMobileOpen(false); // close mobile nav when navigating
@@ -93,12 +108,22 @@ export function Navbar() {
           >
             Unlock All Jobs
           </Link>
-          <Link
-            href="/login"
-            className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
-          >
-            Log in
-          </Link>
+          {userEmail ? (
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
+            >
+              Log out
+            </button>
+          ) : (
+            <Link
+              href="/login?callbackUrl=/alerts"
+              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
+            >
+              Log in
+            </Link>
+          )}
         </div>
 
         {/* Hamburger Icon for Mobile */}
@@ -213,13 +238,26 @@ export function Navbar() {
           >
             Unlock All Jobs
           </Link>
-          <Link
-            href="/login"
-            className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
-            onClick={() => setMobileOpen(false)}
-          >
-            Log in
-          </Link>
+          {userEmail ? (
+            <button
+              type="button"
+              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm text-left"
+              onClick={() => {
+                setMobileOpen(false);
+                handleSignOut();
+              }}
+            >
+              Log out
+            </button>
+          ) : (
+            <Link
+              href="/login?callbackUrl=/alerts"
+              className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm text-black font-semibold shadow-sm"
+              onClick={() => setMobileOpen(false)}
+            >
+              Log in
+            </Link>
+          )}
         </div>
       </div>
     </header>

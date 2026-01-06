@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 
 import { db } from "../../../../db";
 import {
@@ -12,8 +12,9 @@ import {
   jobTypeEnum,
   jobs,
   remoteScopeEnum,
+  users,
 } from "../../../../db/schema";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { auth } from "../../../../lib/auth";
 import { guessLogoFromWebsite } from "../../../../lib/logo";
 import { sendAlertEmail } from "../../../../lib/resend";
 
@@ -40,7 +41,9 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
-    const session = (await getServerSession(authOptions as any)) as any;
+    const h = await headers();
+    const session = await auth.api.getSession({ headers: h });
+    
     if (!session?.user?.email || !session.user?.id) {
       console.error("[POST /api/admin/jobs] Unauthorized:", {
         hasSession: !!session,
@@ -50,6 +53,21 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Unauthorized - please log in" },
         { status: 401 },
+      );
+    }
+
+    // Check if user is an employer
+    const userRow = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, session.user.id))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!userRow || userRow.role !== "employer") {
+      return NextResponse.json(
+        { error: "Forbidden - employer access required" },
+        { status: 403 },
       );
     }
 

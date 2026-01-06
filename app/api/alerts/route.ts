@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 
 import { db } from "../../../db";
 import { alerts, users } from "../../../db/schema";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { auth } from "../../../lib/auth";
 import { sendAlertEmail } from "../../../lib/resend";
 
 export const runtime = "nodejs";
@@ -18,7 +18,8 @@ const createAlertSchema = z.object({
 });
 
 export async function GET(request: Request) {
-  const session = (await getServerSession(authOptions as any)) as any;
+  const h = await headers();
+  const session = await auth.api.getSession({ headers: h });
   const { searchParams } = new URL(request.url);
 
   let email = session?.user?.email || "";

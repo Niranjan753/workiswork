@@ -8,6 +8,20 @@
       "when": 1767686207691,
       "tag": "0000_workable_mongoose",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767700690823,
+      "tag": "0001_fuzzy_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767701554395,
+      "tag": "0002_rich_princess_powerful",
+      "breakpoints": true
     }
   ]
 }

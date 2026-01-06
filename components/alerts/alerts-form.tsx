@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-
+import { authClient } from "../../lib/auth-client";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
@@ -15,6 +15,7 @@ type Alert = {
 };
 
 export function AlertsForm() {
+  const { data: session } = authClient.useSession();
   const [email, setEmail] = React.useState("");
   const [keyword, setKeyword] = React.useState("");
   const [frequency, setFrequency] = React.useState<"daily" | "weekly">("daily");
@@ -22,11 +23,25 @@ export function AlertsForm() {
   const [error, setError] = React.useState<string | null>(null);
   const [alerts, setAlerts] = React.useState<Alert[]>([]);
 
+  // Prefill email from logged-in user
   React.useEffect(() => {
-    if (!email) return;
+    if (session?.user?.email && !email) {
+      setEmail(session.user.email);
+    }
+  }, [session, email]);
+
+  // Load alerts for current user / email
+  React.useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(`/api/alerts?email=${encodeURIComponent(email)}`);
+        const url =
+          session?.user?.email && !email
+            ? "/api/alerts"
+            : email
+              ? `/api/alerts?email=${encodeURIComponent(email)}`
+              : null;
+        if (!url) return;
+        const res = await fetch(url);
         if (!res.ok) return;
         const data = await res.json();
         setAlerts(data.alerts || []);
@@ -35,7 +50,7 @@ export function AlertsForm() {
       }
     };
     load();
-  }, [email]);
+  }, [session, email]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();

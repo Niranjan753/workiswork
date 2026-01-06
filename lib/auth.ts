@@ -46,10 +46,16 @@ export const auth = betterAuth({
     requireEmailVerification: false,
   },
   secret: process.env.BETTER_AUTH_SECRET || process.env.NEXTAUTH_SECRET || "change-me-in-production",
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000",
+  baseURL:
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXTAUTH_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
   basePath: "/api/auth",
   trustedOrigins: [
-    process.env.BETTER_AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000",
+    process.env.BETTER_AUTH_URL ||
+      process.env.NEXTAUTH_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
+    "https://workiswork.vercel.app", // Add your production domain
   ],
 });
 

@@ -57,33 +57,32 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Primary Meta Tags */}
-        <title>Meta Tags — Preview, Edit and Generate</title>
-        <meta name="title" content="Meta Tags — Preview, Edit and Generate" />
+        <title>Workiswork - Remote Jobs Board</title>
+        <meta name="title" content="Workiswork - Remote Jobs Board" />
         <meta
           name="description"
-          content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, X and more!"
+          content="Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent."
         />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://workiswork.xyz" />
-        <meta property="og:title" content="Meta Tags — Preview, Edit and Generate" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:title" content="Workiswork - Remote Jobs Board" />
         <meta
           property="og:description"
-          content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, X and more!"
+          content="Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent."
         />
-        <meta property="og:image" content="/Users/berlin/workiswork/workiswork/public/metaheader.png" />
+        <meta property="og:image" content={ogImage} />
 
         {/* X (Twitter) */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://workiswork.xyz" />
-        <meta property="twitter:title" content="Meta Tags — Preview, Edit and Generate" />
+        <meta property="twitter:url" content={siteUrl} />
+        <meta property="twitter:title" content="Workiswork - Remote Jobs Board" />
         <meta
           property="twitter:description"
-          content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, X and more!"
+          content="Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent."
         />
-        <meta property="twitter:image" content="/Users/berlin/workiswork/workiswork/public/metaheader.png" />
-        {/* Meta Tags Generated with https://metatags.io */}
+        <meta property="twitter:image" content={ogImage} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-50`}

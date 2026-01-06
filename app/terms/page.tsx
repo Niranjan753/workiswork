@@ -1,9 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Terms of Service – WorkIsWork",
   description: "Read our terms of service and understand your rights and responsibilities when using WorkIsWork.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/terms`,
+    title: "Terms of Service – WorkIsWork",
+    description: "Read our terms of service and understand your rights and responsibilities when using WorkIsWork.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Terms of Service",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service – WorkIsWork",
+    description: "Read our terms of service and understand your rights and responsibilities when using WorkIsWork.",
+    images: [ogImage],
+  },
 };
 
 export default function TermsPage() {

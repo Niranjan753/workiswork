@@ -5,6 +5,7 @@ import { and, eq, ne } from "drizzle-orm";
 
 import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
+import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -63,6 +64,9 @@ async function getJob(slug: string) {
   return { job, similar };
 }
 
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
+
 export async function generateMetadata({
   params,
 }: Params): Promise<Metadata> {
@@ -74,9 +78,34 @@ export async function generateMetadata({
       description: "This job is no longer available.",
     };
   }
+  
+  const title = `${job.title} at ${job.companyName || "Remote company"} | WorkIsWork`;
+  const description = `Remote ${job.jobType} role in ${job.location || "Remote"} – apply now.`;
+  const url = `${siteUrl}/jobs/${resolved.slug}`;
+  
   return {
-    title: `${job.title} at ${job.companyName || "Remote company"} | WorkIsWork`,
-    description: `Remote ${job.jobType} role in ${job.location || "Remote"} – apply now.`,
+    title,
+    description,
+    openGraph: {
+      type: "website",
+      url,
+      title,
+      description,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 

@@ -1,10 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Briefcase, Users, Target, Heart } from "lucide-react";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "About Us – WorkIsWork",
   description: "Learn about WorkIsWork and our mission to connect remote workers with the best opportunities.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/about`,
+    title: "About Us – WorkIsWork",
+    description: "Learn about WorkIsWork and our mission to connect remote workers with the best opportunities.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "About WorkIsWork",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us – WorkIsWork",
+    description: "Learn about WorkIsWork and our mission to connect remote workers with the best opportunities.",
+    images: [ogImage],
+  },
 };
 
 export default function AboutPage() {

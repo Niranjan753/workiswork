@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppProviders } from "../components/providers";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "@/components/Footer";
+import { getSiteUrl, getOgImageUrl } from "../lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,13 +16,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
+
 export const metadata: Metadata = {
-  title: "WorkIsWork",
-  description:
-    "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
+  title: "Workiswork - Remote Jobs Board",
+  description: "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
   icons: {
     icon: "/svgg.svg",
   },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    title: "Workiswork - Remote Jobs Board",
+    description: "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Workiswork - Remote Jobs Board",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Workiswork - Remote Jobs Board",
+    description: "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
+    images: [ogImage],
+  },
+  metadataBase: new URL(siteUrl),
 };
 
 export default function RootLayout({

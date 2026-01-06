@@ -1,8 +1,32 @@
 import type { Metadata } from "next";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Pricing – WorkIsWork",
   description: "Unlock all remote jobs and premium alerts.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/pricing`,
+    title: "Pricing – WorkIsWork",
+    description: "Unlock all remote jobs and premium alerts.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Pricing",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pricing – WorkIsWork",
+    description: "Unlock all remote jobs and premium alerts.",
+    images: [ogImage],
+  },
 };
 
 export default function PricingPage() {

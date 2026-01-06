@@ -4,11 +4,34 @@ import { Suspense } from "react";
 
 import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Remote Jobs Board – WorkIsWork",
-  description:
-    "Browse curated remote jobs across development, design, marketing, and more. Inspired by Remotive, built with Next.js.",
+  description: "Browse curated remote jobs across development, design, marketing, and more. Inspired by Remotive, built with Next.js.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/jobs`,
+    title: "Remote Jobs Board – WorkIsWork",
+    description: "Browse curated remote jobs across development, design, marketing, and more. Inspired by Remotive, built with Next.js.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork - Remote Jobs Board",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Remote Jobs Board – WorkIsWork",
+    description: "Browse curated remote jobs across development, design, marketing, and more. Inspired by Remotive, built with Next.js.",
+    images: [ogImage],
+  },
 };
 
 export default function JobsPage({

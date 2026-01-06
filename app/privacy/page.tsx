@@ -1,9 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Privacy Policy – WorkIsWork",
   description: "Learn how WorkIsWork collects, uses, and protects your personal information.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/privacy`,
+    title: "Privacy Policy – WorkIsWork",
+    description: "Learn how WorkIsWork collects, uses, and protects your personal information.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Privacy Policy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy – WorkIsWork",
+    description: "Learn how WorkIsWork collects, uses, and protects your personal information.",
+    images: [ogImage],
+  },
 };
 
 export default function PrivacyPage() {

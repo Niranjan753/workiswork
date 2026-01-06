@@ -1,11 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "../../data/blog";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Blog – WorkIsWork",
-  description:
-    "Tips, stories, and resources for remote work and job seekers.",
+  description: "Tips, stories, and resources for remote work and job seekers.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/blog`,
+    title: "Blog – WorkIsWork",
+    description: "Tips, stories, and resources for remote work and job seekers.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Blog",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog – WorkIsWork",
+    description: "Tips, stories, and resources for remote work and job seekers.",
+    images: [ogImage],
+  },
 };
 
 export default function BlogPage() {

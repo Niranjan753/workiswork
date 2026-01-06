@@ -6,11 +6,34 @@ import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "../../lib/auth-server";
 import { AlertsForm } from "../../components/alerts/alerts-form";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Job Alerts – WorkIsWork",
-  description:
-    "Create custom remote job alerts and get new matching roles emailed to you.",
+  description: "Create custom remote job alerts and get new matching roles emailed to you.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/alerts`,
+    title: "Job Alerts – WorkIsWork",
+    description: "Create custom remote job alerts and get new matching roles emailed to you.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Job Alerts",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Job Alerts – WorkIsWork",
+    description: "Create custom remote job alerts and get new matching roles emailed to you.",
+    images: [ogImage],
+  },
 };
 
 export default async function AlertsPage() {

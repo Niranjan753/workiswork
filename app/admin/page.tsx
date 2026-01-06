@@ -6,10 +6,34 @@ import { Footer } from "../../components/Footer";
 import { getServerSession } from "../../lib/auth-server";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
+import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+
+const siteUrl = getSiteUrl();
+const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
   title: "Admin – Create Remote Jobs | WorkIsWork",
   description: "Curate and publish remote jobs to the WorkIsWork board.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/admin`,
+    title: "Admin – Create Remote Jobs | WorkIsWork",
+    description: "Curate and publish remote jobs to the WorkIsWork board.",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "WorkIsWork Admin",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Admin – Create Remote Jobs | WorkIsWork",
+    description: "Curate and publish remote jobs to the WorkIsWork board.",
+    images: [ogImage],
+  },
 };
 
 async function getCategories() {

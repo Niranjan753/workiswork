@@ -22,10 +22,13 @@ export function AdminJobForm({ categories }: Props) {
   const [error, setError] = React.useState<string | null>(null);
   const [successSlug, setSuccessSlug] = React.useState<string | null>(null);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setSubmitting(true);
     setError(null);
     setSuccessSlug(null);
+
+    const formData = new FormData(e.currentTarget);
 
     const payload = {
       title: String(formData.get("title") || ""),
@@ -57,18 +60,34 @@ export function AdminJobForm({ categories }: Props) {
         body: JSON.stringify(payload),
       });
 
+      const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.error || "Failed to create job");
+        const errorMsg =
+          data?.error ||
+          data?.details?.fieldErrors ||
+          `Failed to create job (${res.status})`;
+        throw new Error(
+          typeof errorMsg === "string"
+            ? errorMsg
+            : JSON.stringify(errorMsg),
+        );
       }
 
-      const data = await res.json();
       const slug: string | undefined = data?.job?.slug;
-      setSuccessSlug(slug ?? null);
+      if (!slug) {
+        throw new Error("Job created but no slug returned");
+      }
+
+      setSuccessSlug(slug);
+
+      // Reset form
+      e.currentTarget.reset();
 
       // Refresh jobs board
       router.refresh();
     } catch (err: any) {
+      console.error("[AdminJobForm] Error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setSubmitting(false);
@@ -77,7 +96,7 @@ export function AdminJobForm({ categories }: Props) {
 
   return (
     <form
-      action={handleSubmit}
+      onSubmit={handleSubmit}
       className="space-y-5 rounded-xl border border-zinc-200 bg-white p-5 text-sm text-zinc-900 shadow-sm"
     >
       <h2 className="text-base font-semibold">Create a new remote job</h2>
@@ -217,7 +236,14 @@ export function AdminJobForm({ categories }: Props) {
         </Button>
       </div>
 
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+          <p className="text-xs font-medium text-red-600">Error: {error}</p>
+          <p className="mt-1 text-xs text-red-500">
+            Check the browser console for more details.
+          </p>
+        </div>
+      )}
       {successSlug && (
         <p className="text-xs text-emerald-600">
           Job created.{" "}

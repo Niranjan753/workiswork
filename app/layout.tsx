@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "WorkIsWork – Remote Jobs, Curated.",
   description:
     "Discover curated remote jobs in software development, design, marketing, and more. Built for remote-first teams and talent.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

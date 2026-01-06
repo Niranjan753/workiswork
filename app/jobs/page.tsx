@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { JobsBoard } from "../../components/jobs/jobs-board";
+import { Logo } from "../../components/Logo";
 
 export const metadata: Metadata = {
   title: "Remote Jobs Board – WorkIsWork",
@@ -19,11 +20,11 @@ export default function JobsPage({
       <header className="border-b border-orange-200 bg-[#fde9d7]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-base font-bold text-white">
-              R
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500">
+              <Logo width={40} height={24} />
             </span>
             <span className="text-lg font-semibold tracking-tight">
-              Remotive-ish
+              WorkIsWork
             </span>
           </Link>
           <nav className="flex items-center gap-3 text-xs font-medium text-zinc-800">

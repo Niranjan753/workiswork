@@ -55,7 +55,7 @@ export const auth = betterAuth({
     process.env.BETTER_AUTH_URL ||
       process.env.NEXTAUTH_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
-    "https://workiswork.vercel.app", // Add your production domain
+    "https://workiswork.xyz", // Add your production domain
   ],
 });
 

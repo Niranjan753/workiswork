@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 
 import { db } from "../../../../db";
 import {
+  alerts,
   categories,
   companies,
   companyUsers,
@@ -14,6 +15,7 @@ import {
 } from "../../../../db/schema";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { guessLogoFromWebsite } from "../../../../lib/logo";
+import { sendAlertEmail } from "../../../../lib/resend";
 
 const createJobSchema = z.object({
   title: z.string().min(3),
@@ -132,6 +134,38 @@ export async function POST(request: Request) {
       title: jobs.title,
     })
     .then((rows) => rows[0]);
+
+  // Immediately notify matching alerts based on keyword in title/tags
+  try {
+    const jobText = [
+      data.title,
+      ...(data.tags || []),
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const activeAlerts = await db
+      .select()
+      .from(alerts)
+      .where(eq(alerts.isActive, true));
+
+    await Promise.all(
+      activeAlerts.map(async (alert) => {
+        if (!alert.keyword) return;
+        const kw = alert.keyword.toLowerCase();
+        if (!jobText.includes(kw)) return;
+
+        await sendAlertEmail({
+          to: alert.email,
+          keyword: alert.keyword,
+          frequency: (alert.frequency as "daily" | "weekly") || "daily",
+          jobTitles: [data.title],
+        });
+      }),
+    );
+  } catch {
+    // fail silently; job creation should still succeed
+  }
 
   return NextResponse.json({ job: inserted }, { status: 201 });
 }

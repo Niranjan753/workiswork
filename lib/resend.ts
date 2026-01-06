@@ -4,28 +4,37 @@ const apiKey = process.env.RESEND_API_KEY;
 
 export const resendClient = apiKey ? new Resend(apiKey) : null;
 
+// lib/resend.ts
+
 export async function sendAlertEmail({
   to,
   keyword,
   frequency,
+  jobTitles = [],
 }: {
   to: string;
   keyword: string;
   frequency: "daily" | "weekly";
+  jobTitles?: string[];
 }) {
   if (!resendClient) return;
 
   const subject =
     frequency === "daily"
-      ? `Daily alert saved for "${keyword}"`
-      : `Weekly alert saved for "${keyword}"`;
+      ? `New remote jobs for "${keyword}" (daily alert)`
+      : `New remote jobs for "${keyword}" (weekly alert)`;
+
+  const listHtml =
+    jobTitles.length > 0
+      ? `<ul>${jobTitles.map((t) => `<li>${t}</li>`).join("")}</ul>`
+      : "<p>No new jobs today, but we’ll keep watching.</p>";
 
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.5;">
-      <h2 style="margin: 0 0 8px 0;">Your alert is set!</h2>
-      <p>We&apos;ll email you ${frequency} when new remote jobs match:</p>
-      <p><strong>Keyword:</strong> ${keyword}</p>
-      <p style="color: #555;">Thanks for using WorkIsWork.</p>
+      <h2>Your ${frequency} alert for "${keyword}"</h2>
+      <p>Here are some recent matching jobs:</p>
+      ${listHtml}
+      <p style="color:#666;">Thanks for using WorkIsWork.</p>
     </div>
   `;
 
@@ -36,5 +45,4 @@ export async function sendAlertEmail({
     html,
   });
 }
-
 

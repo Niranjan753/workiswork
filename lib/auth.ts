@@ -21,12 +21,17 @@ const wrappedDb = new Proxy(db, {
             const processedValues = Array.isArray(values)
               ? values.map((v) => ({ ...v, id: makeUuid() }))
               : { ...values, id: makeUuid() };
+            const userData = Array.isArray(processedValues)
+              ? processedValues[0]
+              : processedValues;
             console.log(
-              "[Wrapped DB] Inserting user with UUID:",
-              (processedValues as any).id ??
-                (Array.isArray(processedValues)
-                  ? processedValues[0]?.id
-                  : undefined),
+              "[Wrapped DB] Inserting user:",
+              {
+                id: (userData as any).id,
+                email: (userData as any).email,
+                name: (userData as any).name,
+                role: (userData as any).role,
+              },
             );
             return originalValues(processedValues);
           };

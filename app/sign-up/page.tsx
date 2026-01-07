@@ -52,29 +52,29 @@ function SignUpForm() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-yellow-400">
       {/* Left Side - Sign Up Form */}
-      <div className="flex-1 bg-white text-zinc-900 flex items-center justify-center p-8 overflow-y-auto">
+      <div className="flex-1 bg-yellow-400 text-black flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-6">
           {/* Header */}
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-2">Create your account</h1>
-            <p className="text-zinc-600 text-sm">
+            <p className="text-black/80 text-sm font-medium">
               Join WorkIsWork and start your remote work journey
             </p>
           </div>
 
           {/* Role Selection */}
           <div className="space-y-2">
-            <Label className="text-sm text-zinc-700">I am a...</Label>
+            <Label className="text-sm text-black font-bold">I am a...</Label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 rounded-lg cursor-pointer border px-4 py-2.5 text-sm font-semibold transition-colors ${
+                className={`flex-1 rounded-lg cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
                   role === "user"
-                    ? "border-orange-500 bg-orange-50 text-orange-600"
-                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
+                    ? "border-black bg-black text-yellow-400 shadow-lg"
+                    : "border-black bg-yellow-500 text-black hover:bg-yellow-300"
                 }`}
               >
                 Job Seeker
@@ -82,10 +82,10 @@ function SignUpForm() {
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 rounded-lg border cursor-pointer px-4 py-2.5 text-sm font-semibold transition-colors ${
+                className={`flex-1 rounded-lg border-2 cursor-pointer px-4 py-2.5 text-sm font-bold transition-all ${
                   role === "employer"
-                    ? "border-orange-500 bg-orange-50 text-orange-600"
-                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
+                    ? "border-black bg-black text-yellow-400 shadow-lg"
+                    : "border-black bg-yellow-500 text-black hover:bg-yellow-300"
                 }`}
               >
                 Employer
@@ -97,31 +97,31 @@ function SignUpForm() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="first-name" className="text-sm text-zinc-700">First name</Label>
+                <Label htmlFor="first-name" className="text-sm text-black font-bold">First name</Label>
                 <Input
                   id="first-name"
                   placeholder="John"
                   required
                   onChange={(e) => setFirstName(e.target.value)}
                   value={firstName}
-                  className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
+                  className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last-name" className="text-sm text-zinc-700">Last name</Label>
+                <Label htmlFor="last-name" className="text-sm text-black font-bold">Last name</Label>
                 <Input
                   id="last-name"
                   placeholder="Doe"
                   required
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
-                  className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
+                  className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-zinc-700">Email</Label>
+              <Label htmlFor="email" className="text-sm text-black font-bold">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -129,12 +129,12 @@ function SignUpForm() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm text-zinc-700">Password</Label>
+              <Label htmlFor="password" className="text-sm text-black font-bold">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -142,12 +142,12 @@ function SignUpForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 placeholder="At least 8 characters"
-                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password_confirmation" className="text-sm text-zinc-700">Confirm Password</Label>
+              <Label htmlFor="password_confirmation" className="text-sm text-black font-bold">Confirm Password</Label>
               <Input
                 id="password_confirmation"
                 type="password"
@@ -155,15 +155,15 @@ function SignUpForm() {
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 autoComplete="new-password"
                 placeholder="Confirm your password"
-                className="bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500"
+                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-sm text-zinc-700">Profile Image (optional)</Label>
+              <Label htmlFor="image" className="text-sm text-black font-bold">Profile Image (optional)</Label>
               <div className="flex items-end gap-3">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-300">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border-2 border-black">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -178,7 +178,7 @@ function SignUpForm() {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="bg-white border-zinc-300 text-zinc-900 file:text-zinc-900 file:bg-zinc-100 file:border-0 file:rounded file:px-3 file:py-1 file:text-sm file:cursor-pointer"
+                    className="bg-yellow-400 border-2 border-black text-black file:text-black file:bg-yellow-500 file:border-0 file:rounded file:px-3 file:py-1 file:text-sm file:cursor-pointer file:font-bold"
                   />
                   {imagePreview && (
                     <button
@@ -187,9 +187,9 @@ function SignUpForm() {
                         setImage(null);
                         setImagePreview(null);
                       }}
-                      className="p-2 hover:bg-zinc-100 rounded"
+                      className="p-2 hover:bg-yellow-500 rounded border-2 border-black"
                     >
-                      <X className="w-4 h-4 text-zinc-600" />
+                      <X className="w-4 h-4 text-black" />
                     </button>
                   )}
                 </div>
@@ -198,7 +198,7 @@ function SignUpForm() {
 
             <Button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 cursor-pointer text-white font-semibold"
+              className="w-full bg-black hover:bg-yellow-500 text-yellow-400 hover:text-black cursor-pointer font-bold border-2 border-black transition-all shadow-lg"
               disabled={loading || password !== passwordConfirmation}
               onClick={async () => {
                 if (password !== passwordConfirmation) {
@@ -258,17 +258,17 @@ function SignUpForm() {
             </Button>
 
             {password && passwordConfirmation && password !== passwordConfirmation && (
-              <p className="text-xs text-red-400 text-center">
+              <p className="text-xs text-black font-bold text-center">
                 Passwords do not match
               </p>
             )}
 
             <div className="text-center">
-              <p className="text-sm text-zinc-600">
+              <p className="text-sm text-black/80 font-medium">
                 Already have an account?{" "}
                 <Link
                   href={`/sign-in${callbackUrl ? `?callbackUrl=${callbackUrl}` : ""}${roleParam ? `&role=${roleParam}` : ""}`}
-                  className="text-orange-600 hover:text-orange-700 font-semibold underline"
+                  className="text-black font-bold underline hover:text-black/80"
                 >
                   Sign In
                 </Link>
@@ -277,16 +277,16 @@ function SignUpForm() {
           </div>
 
           {/* Footer */}
-          <div className="text-center text-xs text-zinc-500 space-x-2 pt-4 border-t border-zinc-200">
-            <Link href="#" className="hover:text-zinc-700">Terms of Use</Link>
+          <div className="text-center text-xs text-black/80 space-x-2 pt-4 border-t-2 border-black font-medium">
+            <Link href="#" className="hover:text-black font-bold">Terms of Use</Link>
             <span>•</span>
-            <Link href="#" className="hover:text-zinc-700">Privacy Policy</Link>
+            <Link href="#" className="hover:text-black font-bold">Privacy Policy</Link>
           </div>
         </div>
       </div>
 
       {/* Right Side - Promotional Image Section */}
-      <div className="flex-1 bg-white text-white hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
+      <div className="flex-1 bg-yellow-500 text-black hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='50' height='60' viewBox='0 0 50 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -310,7 +310,7 @@ function SignUpForm() {
 export default function SignUp() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white text-zinc-900">
+      <div className="min-h-screen flex items-center justify-center bg-yellow-400 text-black">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     }>

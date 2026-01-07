@@ -30,14 +30,14 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-yellow-400">
       <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-zinc-900 mb-4">
+          <h1 className="text-4xl font-bold text-black mb-4">
             Get in Touch
           </h1>
-          <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+          <p className="text-lg text-black/80 max-w-2xl mx-auto font-medium">
             Have a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
         </div>
@@ -45,33 +45,33 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Info */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="p-6 rounded-xl border border-zinc-200 bg-white">
+            <div className="p-6 rounded-xl border-2 border-black bg-yellow-500 shadow-lg">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-orange-100">
-                  <Mail className="h-5 w-5 text-orange-600" />
+                <div className="p-2 rounded-lg bg-black">
+                  <Mail className="h-5 w-5 text-yellow-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-900">Email</h3>
+                <h3 className="text-lg font-bold text-black">Email</h3>
               </div>
-              <p className="text-zinc-600 text-sm mb-2">General inquiries</p>
+              <p className="text-black/80 text-sm mb-2 font-medium">General inquiries</p>
               <a
                 href="mailto:hello@workiswork.com"
-                className="text-orange-600 hover:text-orange-700 text-sm font-medium"
+                className="text-black font-bold underline hover:text-black/80 text-sm"
               >
                 hello@workiswork.com
               </a>
             </div>
 
-            <div className="p-6 rounded-xl border border-zinc-200 bg-white">
+            <div className="p-6 rounded-xl border-2 border-black bg-yellow-500 shadow-lg">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-orange-100">
-                  <MessageSquare className="h-5 w-5 text-orange-600" />
+                <div className="p-2 rounded-lg bg-black">
+                  <MessageSquare className="h-5 w-5 text-yellow-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-900">For Employers</h3>
+                <h3 className="text-lg font-bold text-black">For Employers</h3>
               </div>
-              <p className="text-zinc-600 text-sm mb-2">Sales & partnerships</p>
+              <p className="text-black/80 text-sm mb-2 font-medium">Sales & partnerships</p>
               <a
                 href="mailto:employers@workiswork.com"
-                className="text-orange-600 hover:text-orange-700 text-sm font-medium"
+                className="text-black font-bold underline hover:text-black/80 text-sm"
               >
                 employers@workiswork.com
               </a>
@@ -82,11 +82,11 @@ export default function ContactPage() {
           <div className="lg:col-span-2">
             <form
               onSubmit={handleSubmit}
-              className="p-8 rounded-xl border border-zinc-200 bg-white space-y-6"
+              className="p-8 rounded-xl border-2 border-black bg-yellow-500 shadow-lg space-y-6"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium text-zinc-700">
+                  <Label htmlFor="name" className="text-sm font-bold text-black">
                     Name
                   </Label>
                   <Input
@@ -97,13 +97,13 @@ export default function ContactPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="bg-white border-zinc-300 text-zinc-900"
+                    className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                     placeholder="Your name"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-zinc-700">
+                  <Label htmlFor="email" className="text-sm font-bold text-black">
                     Email
                   </Label>
                   <Input
@@ -114,14 +114,14 @@ export default function ContactPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="bg-white border-zinc-300 text-zinc-900"
+                    className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                     placeholder="you@example.com"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="subject" className="text-sm font-medium text-zinc-700">
+                <Label htmlFor="subject" className="text-sm font-bold text-black">
                   Subject
                 </Label>
                 <Input
@@ -132,13 +132,13 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, subject: e.target.value })
                   }
-                  className="bg-white border-zinc-300 text-zinc-900"
+                  className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                   placeholder="What's this about?"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="message" className="text-sm font-medium text-zinc-700">
+                <Label htmlFor="message" className="text-sm font-bold text-black">
                   Message
                 </Label>
                 <textarea
@@ -149,7 +149,7 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-orange-500 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-black bg-yellow-400 px-3 py-2 text-sm text-black placeholder:text-black/50 focus:border-black focus:outline-none"
                   placeholder="Tell us more..."
                 />
               </div>
@@ -157,7 +157,7 @@ export default function ContactPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
+                className="w-full bg-black hover:bg-yellow-500 text-yellow-400 hover:text-black font-bold border-2 border-black transition-all shadow-lg"
               >
                 {loading ? (
                   <>

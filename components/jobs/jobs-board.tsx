@@ -118,9 +118,9 @@ export function JobsBoard() {
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
       {/* Filters */}
-      <aside className="space-y-6 rounded-xl border border-orange-200/60 bg-orange-50/80 p-4 text-sm text-zinc-800">
+      <aside className="space-y-6 rounded-xl border border-yellow-300/70 bg-yellow-100/90 p-4 text-sm text-black">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-orange-900">
+          <p className="text-xs font-semibold uppercase tracking-wide text-yellow-900">
             I want to work remotely from...
           </p>
           <div className="space-y-1">
@@ -134,14 +134,14 @@ export function JobsBoard() {
                   onChange={(e) =>
                     setLocation(e.target.checked ? country : "")
                   }
-                  className="h-3 w-3 accent-orange-500"
+                  className="h-3 w-3 accent-yellow-500"
                 />
                 <span className="text-xs">{country}</span>
               </label>
             ))}
             <button
               type="button"
-              className="mt-1 text-[11px] font-medium text-orange-700 underline"
+              className="mt-1 text-[11px] font-medium text-yellow-700 underline"
               onClick={() => setLocation("")}
             >
               Clear location
@@ -150,7 +150,7 @@ export function JobsBoard() {
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-orange-900">
+          <p className="text-xs font-semibold uppercase tracking-wide text-yellow-900">
             Employment types
           </p>
           <div className="space-y-1">
@@ -161,7 +161,7 @@ export function JobsBoard() {
                   value={type.value}
                   checked={jobTypes.includes(type.value)}
                   onChange={() => toggleJobType(type.value)}
-                  className="h-3 w-3 accent-orange-500"
+                  className="h-3 w-3 accent-yellow-500"
                 />
                 <span className="text-xs capitalize">{type.label}</span>
               </label>
@@ -173,30 +173,30 @@ export function JobsBoard() {
       {/* Main list */}
       <section className="space-y-3">
         {/* Top bar */}
-        <div className="flex flex-col gap-3 rounded-xl border border-orange-200/80 bg-white/90 p-3 text-xs text-zinc-800 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 rounded-xl border border-yellow-300/70 bg-white p-3 text-xs text-black shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              className="rounded-lg bg-orange-500 px-3 py-1 text-xs font-semibold text-white hover:bg-orange-600"
+              className="rounded-lg bg-black px-3 py-1 text-xs font-semibold text-yellow-400 hover:bg-yellow-900 hover:text-white"
             >
               Unlock All Jobs
             </Button>
             <Button
               size="sm"
               variant="outline"
-              className="rounded-lg border-orange-300 px-3 py-1 text-xs font-semibold text-orange-700 hover:bg-orange-50"
+              className="rounded-lg border-yellow-400 px-3 py-1 text-xs font-semibold text-yellow-800 hover:bg-yellow-100"
               asChild
             >
               <Link href="/alerts">Create Custom Job Alert</Link>
             </Button>
           </div>
-          <p className="text-[11px] text-zinc-500">
+          <p className="text-[11px] text-black/50">
             {total.toLocaleString()} matching jobs
           </p>
         </div>
 
         {/* Jobs list */}
-        <div className="space-y-2 rounded-xl border border-orange-200/80 bg-white/90 p-2">
+        <div className="space-y-2 rounded-xl border border-yellow-300/70 bg-white p-2">
           {isLoading && <p className="px-3 py-4 text-xs">Loading jobs…</p>}
           {isError && (
             <p className="px-3 py-4 text-xs text-red-500">
@@ -204,7 +204,7 @@ export function JobsBoard() {
             </p>
           )}
           {!isLoading && jobs.length === 0 && (
-            <p className="px-3 py-4 text-xs text-zinc-500">
+            <p className="px-3 py-4 text-xs text-black/40">
               No jobs match your filters yet.
             </p>
           )}
@@ -216,26 +216,26 @@ export function JobsBoard() {
               className={cn(
                 "block rounded-lg border px-3 py-3 text-xs transition",
                 job.isFeatured
-                  ? "border-orange-300 bg-orange-50/80"
-                  : "border-zinc-200 bg-white hover:bg-orange-50/60",
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-zinc-200 bg-white hover:bg-yellow-50/80",
               )}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="min-w-0 space-y-1">
-                  <p className="truncate text-[13px] font-semibold text-zinc-900">
+                  <p className="truncate text-[13px] font-semibold text-black">
                     {job.title}
                   </p>
-                  <p className="truncate text-[11px] text-zinc-600">
+                  <p className="truncate text-[11px] text-black/60">
                     {job.companyName ?? "Remote company"} •{" "}
                     {job.location ?? "Remote"}
                   </p>
-                  <p className="text-[11px] text-zinc-500">
+                  <p className="text-[11px] text-black/35">
                     {job.jobType.replace("_", " ")} • {job.remoteScope}
                   </p>
                 </div>
                 <Button
                   size="sm"
-                  className="rounded-full bg-orange-500 px-3 py-1 text-[11px] font-semibold text-white hover:bg-orange-600"
+                  className="rounded-full bg-black px-3 py-1 text-[11px] font-semibold text-yellow-400 hover:bg-yellow-900 hover:text-white"
                 >
                   View job
                 </Button>
@@ -244,13 +244,13 @@ export function JobsBoard() {
           ))}
 
           {hasNextPage && (
-            <div className="flex justify-center border-t border-orange-100 pt-3">
+            <div className="flex justify-center border-t border-yellow-100 pt-3">
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className="rounded-full border-orange-300 cursor-pointer px-4 py-1 text-xs font-semibold text-orange-700 hover:bg-orange-50"
+                className="rounded-full border-yellow-400 cursor-pointer px-4 py-1 text-xs font-semibold text-yellow-900 hover:bg-yellow-100"
               >
                 {isFetchingNextPage ? "Loading more…" : "Load more jobs"}
               </Button>
@@ -261,5 +261,4 @@ export function JobsBoard() {
     </div>
   );
 }
-
 

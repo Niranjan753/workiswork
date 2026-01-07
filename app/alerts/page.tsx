@@ -53,19 +53,19 @@ export default async function AlertsPage() {
 
   if (!userRow || userRow.role === "employer") {
     return (
-      <div className="min-h-screen bg-[#fde9d7] text-zinc-900">
+      <div className="min-h-screen bg-yellow-400 text-black">
         <main className="mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-orange-200 bg-white p-8 text-center shadow-sm">
-            <h1 className="text-xl font-semibold text-zinc-900">
+          <div className="rounded-2xl border-2 border-black bg-yellow-500 p-8 text-center shadow-lg">
+            <h1 className="text-xl font-bold text-black">
               Job Seeker access required
             </h1>
-            <p className="mt-2 text-sm text-zinc-600">
+            <p className="mt-2 text-sm text-black/80 font-medium">
               This page is only available for job seekers. Employers can post jobs from the admin page.
             </p>
             <div className="mt-6">
               <Link
                 href="/admin"
-                className="block w-full rounded-full bg-orange-500 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-orange-600"
+                className="block w-full rounded-full bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
               >
                 Go to Employer Dashboard
               </Link>
@@ -77,13 +77,13 @@ export default async function AlertsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fde9d7] text-zinc-900">
+    <div className="min-h-screen bg-yellow-400 text-black">
       <main className="mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
         <section className="mb-6 space-y-3 text-center">
-          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-[32px]">
+          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-black sm:text-[32px]">
             Never miss a great remote job
           </h1>
-          <p className="text-xs text-zinc-600 sm:text-sm">
+          <p className="text-xs text-black/80 sm:text-sm font-medium">
             Pick the skills you care about and we&apos;ll send you curated
             roles when they go live.
           </p>

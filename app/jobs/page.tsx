@@ -63,13 +63,13 @@ export default function JobsPage({
   const q = searchParams?.q || "";
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900">
-      <main className="mx-auto outline max-w-6xl px-4 pb-10 pt-8 sm:px-6 bg-blacklg:px-8">
+    <div className="min-h-screen bg-yellow-400 text-black">
+      <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
         <section className="mb-6 mt-8 space-y-3 text-center">
-          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-[40px]">
+          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-black sm:text-[40px]">
             Find your dream remote job without the hassle
           </h1>
-          <p className="text-xs text-zinc-600 sm:text-sm">
+          <p className="text-xs text-black/80 sm:text-sm font-medium">
             Browse fully remote jobs from vetted companies and get more
             interviews.
           </p>
@@ -81,7 +81,7 @@ export default function JobsPage({
           {/* Category pills row */}
           <div className="mt-8 flex flex-wrap justify-center gap-2 text-[11px]">
             <div className="w-full flex justify-center">
-              <div className="rounded-xl bg-orange-50/80 p-2 flex flex-wrap justify-center gap-2 shadow-inner max-w-3xl">
+              <div className="rounded-xl bg-yellow-500/80 p-2 flex flex-wrap justify-center gap-2 shadow-lg border-2 border-black max-w-3xl">
                 {categoryChips.map(({ label, slug }) => {
                   const params = new URLSearchParams();
                   if (q) params.set("q", q);
@@ -94,10 +94,10 @@ export default function JobsPage({
                     <Link
                       key={slug}
                       href={href}
-                      className={`rounded-full px-3 py-1 shadow-sm transition-colors ${
+                      className={`rounded-full px-3 py-1 font-bold shadow-md transition-all border-2 ${
                         isActive
-                          ? "bg-orange-500 text-white"
-                          : "bg-white text-zinc-700"
+                          ? "bg-black text-yellow-400 border-black"
+                          : "bg-yellow-400 text-black border-black hover:bg-yellow-500"
                       }`}
                     >
                       {label}

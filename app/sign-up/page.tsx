@@ -52,9 +52,9 @@ function SignUpForm() {
   }
 
   return (
-    <div className="min-h-screen flex bg-yellow-400">
+    <div className="min-h-screen flex bg-white">
       {/* Left Side - Sign Up Form */}
-      <div className="flex-1 bg-yellow-400 text-black flex items-center justify-center p-8 overflow-y-auto">
+      <div className="flex-1 bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-6">
           {/* Header */}
           <div className="text-center">
@@ -71,10 +71,10 @@ function SignUpForm() {
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 rounded-lg cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
+                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
                   role === "user"
                     ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-yellow-500 text-black hover:bg-yellow-300"
+                    : "border-black bg-white text-black hover:bg-yellow-100"
                 }`}
               >
                 Job Seeker
@@ -82,10 +82,10 @@ function SignUpForm() {
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 rounded-lg border-2 cursor-pointer px-4 py-2.5 text-sm font-bold transition-all ${
+                className={`flex-1 border-2 cursor-pointer px-4 py-2.5 text-sm font-bold transition-all ${
                   role === "employer"
                     ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-yellow-500 text-black hover:bg-yellow-300"
+                    : "border-black bg-white text-black hover:bg-yellow-100"
                 }`}
               >
                 Employer
@@ -104,7 +104,7 @@ function SignUpForm() {
                   required
                   onChange={(e) => setFirstName(e.target.value)}
                   value={firstName}
-                  className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                  className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                 />
               </div>
               <div className="space-y-2">
@@ -115,7 +115,7 @@ function SignUpForm() {
                   required
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
-                  className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                  className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
                 />
               </div>
             </div>
@@ -129,7 +129,7 @@ function SignUpForm() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
@@ -142,7 +142,7 @@ function SignUpForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 placeholder="At least 8 characters"
-                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
@@ -155,7 +155,7 @@ function SignUpForm() {
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 autoComplete="new-password"
                 placeholder="Confirm your password"
-                className="bg-yellow-400 border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
               />
             </div>
 
@@ -163,7 +163,7 @@ function SignUpForm() {
               <Label htmlFor="image" className="text-sm text-black font-bold">Profile Image (optional)</Label>
               <div className="flex items-end gap-3">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border-2 border-black">
+                  <div className="relative w-16 h-16 overflow-hidden border-2 border-black">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -178,7 +178,7 @@ function SignUpForm() {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="bg-yellow-400 border-2 border-black text-black file:text-black file:bg-yellow-500 file:border-0 file:rounded file:px-3 file:py-1 file:text-sm file:cursor-pointer file:font-bold"
+                    className="bg-white border-2 border-black text-black file:text-black file:bg-yellow-400 file:border-0 file:px-3 file:py-1 file:text-sm file:cursor-pointer file:font-bold"
                   />
                   {imagePreview && (
                     <button
@@ -187,7 +187,7 @@ function SignUpForm() {
                         setImage(null);
                         setImagePreview(null);
                       }}
-                      className="p-2 hover:bg-yellow-500 rounded border-2 border-black"
+                      className="p-2 hover:bg-yellow-100 border-2 border-black"
                     >
                       <X className="w-4 h-4 text-black" />
                     </button>
@@ -286,7 +286,7 @@ function SignUpForm() {
       </div>
 
       {/* Right Side - Promotional Image Section */}
-      <div className="flex-1 bg-yellow-500 text-black hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
+      <div className="flex-1 bg-yellow-400 text-black hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='50' height='60' viewBox='0 0 50 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -298,7 +298,7 @@ function SignUpForm() {
             alt="Sign up promo"
             fill
             style={{ objectFit: "contain" }}
-            className="rounded-2xl shadow-xl"
+            className="shadow-xl"
             priority
           />
         </div>
@@ -310,7 +310,7 @@ function SignUpForm() {
 export default function SignUp() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-yellow-400 text-black">
+      <div className="min-h-screen flex items-center justify-center bg-white text-black">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     }>

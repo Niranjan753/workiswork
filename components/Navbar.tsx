@@ -84,7 +84,7 @@ export function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
         <Link href="/jobs" className="flex items-center min-w-fit">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400 px-2 py-1 shadow-md ring-2 ring-black">
+          <span className="flex h-10 w-10 items-center justify-center border-2 border-yellow-400 bg-yellow-400 px-2 py-1 shadow-md">
             <Logo width={32} height={20} />
           </span>
           {/* Brand name always visible to right of Logo in desktop */}
@@ -98,14 +98,14 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-yellow-400">
+        <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-white">
           <Link
             href="/jobs"
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
-                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
-                : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Remote Jobs
@@ -115,8 +115,8 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
-                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
-                : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Blog
@@ -127,10 +127,10 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isAlerts
-                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
                 : userRole === "employer"
-                  ? "text-yellow-400/40 cursor-not-allowed"
-                  : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
+                  ? "text-white/40 cursor-not-allowed"
+                  : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Job Alerts
@@ -141,10 +141,10 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isAdmin
-                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
                 : userRole === "user"
-                  ? "text-yellow-400/40 cursor-not-allowed"
-                  : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
+                  ? "text-white/40 cursor-not-allowed"
+                  : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             For Employers
@@ -155,7 +155,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-2 text-xs">
           <Link
             href="/pricing"
-            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
+            className="flex items-center gap-2 border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
           >
             <LockOpen className="w-4 h-4" />
             Unlock All Jobs
@@ -164,14 +164,15 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 cursor-pointer px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
+              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
             >
               Log out
             </button>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
+              style={{ borderRadius: "0.5rem" }}
             >
               Log in
             </Link>
@@ -181,7 +182,7 @@ export function Navbar() {
         {/* Hamburger Icon for Mobile */}
         <button
           type="button"
-          className="flex md:hidden items-center justify-center rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-black z-50"
+          className="flex md:hidden items-center justify-center border-2 border-yellow-400 p-2 focus:outline-none z-50"
           aria-label="Open menu"
           onClick={() => setMobileOpen((open) => !open)}
         >
@@ -232,14 +233,14 @@ export function Navbar() {
             </svg>
           </button>
         </div>
-        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold text-yellow-400">
+        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold text-white">
           <Link
             href="/jobs"
             className={cn(
-              "rounded-xl px-4 py-2 transition-all",
+              "px-4 py-2 transition-all border-2 border-yellow-400",
               isJobs
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-yellow-400 hover:bg-yellow-500"
+                : "text-white hover:bg-white hover:text-black"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -248,10 +249,10 @@ export function Navbar() {
           <Link
             href="/blog"
             className={cn(
-              "rounded-xl px-4 py-2 transition-all",
+              "px-4 py-2 transition-all border-2 border-yellow-400",
               isBlog
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-yellow-400 hover:bg-yellow-500"
+                : "text-white hover:bg-white hover:text-black"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -264,12 +265,12 @@ export function Navbar() {
               handleAlertsClick(e);
             }}
             className={cn(
-              "rounded-xl px-4 py-2 transition-all",
+              "px-4 py-2 transition-all border-2 border-yellow-400",
               isAlerts
                 ? "bg-yellow-400 text-black shadow-lg"
                 : userRole === "employer"
-                  ? "text-yellow-400/40 cursor-not-allowed"
-                  : "text-yellow-400 hover:bg-yellow-500"
+                  ? "text-white/40 cursor-not-allowed"
+                  : "text-white hover:bg-white hover:text-black"
             )}
           >
             Job Alerts
@@ -281,12 +282,12 @@ export function Navbar() {
               handleAdminClick(e);
             }}
             className={cn(
-              "rounded-xl px-4 py-2 transition-all",
+              "px-4 py-2 transition-all border-2 border-yellow-400",
               isAdmin
                 ? "bg-yellow-400 text-black shadow-lg"
                 : userRole === "user"
-                  ? "text-yellow-400/40 cursor-not-allowed"
-                  : "text-yellow-400 hover:bg-yellow-500"
+                  ? "text-white/40 cursor-not-allowed"
+                  : "text-white hover:bg-white hover:text-black"
             )}
           >
             For Employers
@@ -295,7 +296,7 @@ export function Navbar() {
         <div className="flex flex-col gap-2 px-3 pb-4">
           <Link
             href="/pricing"
-            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
+            className="flex items-center gap-2 border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
             onClick={() => setMobileOpen(false)}
           >
             <LockOpen className="w-4 h-4" />

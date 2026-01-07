@@ -230,7 +230,7 @@ export default async function JobDetailPage({ params }: Params) {
                       </p>
                     </div>
                     <div>
-                      <span className="inline-flex w-full items-center justify-center border-2 border-black bg-black px-4 py-2 text-xs font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all">
+                      <span className="inline-flex w-full items-center justify-center border-2 border-black bg-black px-4 py-2 text-xs font-bold text-yellow-400 hover:bg-white hover:text-black transition-all">
                         View job →
                       </span>
                     </div>

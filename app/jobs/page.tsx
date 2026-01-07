@@ -62,10 +62,10 @@ export default function JobsPage({
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white text-black">
+    <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
       <GridBackground />
       {/* Gumroad-style Hero Section - Yellow */}
-      <section className="relative z-10 bg-white py-12 sm:py-16 overflow-hidden">
+      <section className="relative z-10 bg-transparent py-12 sm:py-16 overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
             <h1 className="text-5xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
@@ -83,13 +83,13 @@ export default function JobsPage({
       </section>
 
       {/* Main Content Area - White */}
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-transparent">
         <section className="mb-4 space-y-4">
           {/* Search row with left CTA, aligned inline */}
           <div className="flex flex-nowrap items-center justify-center gap-3 pt-4">
             <Link
               href="/join"
-              className="flex h-12 items-center justify-center border-2 border-black bg-yellow-400 px-5 text-sm font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
+              className="flex py-4 items-center justify-center border-2 border-black bg-yellow-400 px-10 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
             >
               Join
             </Link>

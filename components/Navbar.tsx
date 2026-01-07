@@ -58,15 +58,15 @@ export function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-black shadow-lg">
+    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-[#fffdc4] shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
         <Link href="/jobs" className="flex items-center min-w-fit">
-          <span className="flex h-10 w-10 items-center justify-center border-2 border-yellow-400 bg-yellow-400 px-2 py-1 shadow-md">
-            <Logo width={32} height={20} />
+          <span className="flex h-10 w-10 items-center justify-center">
+            <Logo width={48} height={32} />
           </span>
           {/* Brand name always visible to right of Logo in desktop */}
-          <span className="text-lg font-bold tracking-tight text-yellow-400 ml-2 hidden md:inline">
+          <span className="text-lg font-bold tracking-tight text-black ml-2 hidden md:inline">
             WorkIsWork
           </span>
           {/* Show name on xs but hide on SM+ for only mobile (optional) */}
@@ -76,14 +76,14 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-white">
+        <nav className="hidden md:flex items-center gap-3 text-xs font-medium">
           <Link
             href="/jobs"
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Remote Jobs
@@ -94,7 +94,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Blog
@@ -105,7 +105,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isJoin
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Join
@@ -116,7 +116,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isPost
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Post a Job
@@ -174,7 +174,7 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black/60 transition-opacity duration-200 md:hidden",
+          "fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 md:hidden",
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
         aria-hidden={!mobileOpen}
@@ -184,7 +184,7 @@ export function Navbar() {
       {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-black border-l-2 border-yellow-400 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
+          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-[#fffdc4] border-l-2 border-yellow-400 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{ transitionProperty: 'transform' }}
@@ -199,19 +199,19 @@ export function Navbar() {
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
           >
-            <svg width={24} height={24} fill="none" stroke="black" strokeWidth={3}>
+            <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={3}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M6 18L18 6" />
             </svg>
           </button>
         </div>
-        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold text-white">
+        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold">
           <Link
             href="/jobs"
             className={cn(
               "px-4 py-2 transition-all border-2 border-yellow-400",
               isJobs
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-white hover:bg-white hover:text-black"
+                : "text-black hover:bg-white hover:text-black"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -223,7 +223,7 @@ export function Navbar() {
               "px-4 py-2 transition-all border-2 border-yellow-400",
               isBlog
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-white hover:bg-white hover:text-black"
+                : "text-black hover:bg-white hover:text-black"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -235,7 +235,7 @@ export function Navbar() {
               "px-4 py-2 transition-all border-2 border-yellow-400",
               isJoin
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-white hover:bg-white hover:text-black"
+                : "text-black hover:bg-white hover:text-black"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -248,7 +248,7 @@ export function Navbar() {
               "px-4 py-2 transition-all border-2 border-yellow-400",
               isPost
                 ? "bg-yellow-400 text-black shadow-lg"
-                : "text-white hover:bg-white hover:text-black"
+                : "text-black hover:bg-white hover:text-black"
             )}
           >
             Post a Job

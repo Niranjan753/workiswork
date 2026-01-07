@@ -85,7 +85,7 @@ export default function RootLayout({
         <meta property="twitter:image" content={ogImage} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black relative overflow-x-hidden`}
       >
         <AppProviders>
           <Navbar />

@@ -6,6 +6,7 @@ import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "../../lib/auth-server";
 import { AlertsForm } from "../../components/alerts/alerts-form";
+import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -53,8 +54,9 @@ export default async function AlertsPage() {
 
   if (!userRow || userRow.role === "employer") {
     return (
-      <div className="min-h-screen bg-yellow-400 text-black">
-        <main className="mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
+      <div className="relative min-h-screen bg-yellow-400 text-black overflow-hidden">
+        <GridBackground />
+        <main className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
           <div className="rounded-2xl border-2 border-black bg-yellow-500 p-8 text-center shadow-lg">
             <h1 className="text-xl font-bold text-black">
               Job Seeker access required
@@ -77,9 +79,10 @@ export default async function AlertsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="relative min-h-screen bg-white text-black overflow-hidden">
+      <GridBackground />
       {/* Hero Section - Yellow */}
-      <section className="bg-yellow-400 py-12 sm:py-16">
+      <section className="relative z-10 bg-yellow-400 py-12 sm:py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Never miss a great remote job
@@ -91,7 +94,7 @@ export default async function AlertsPage() {
         </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 bg-white">
         <AlertsForm />
       </main>
     </div>

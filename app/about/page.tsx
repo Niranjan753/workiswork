@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GridBackground } from "../../components/GridBackground";
 import { Briefcase, Users, Target, Heart } from "lucide-react";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
@@ -33,9 +34,10 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="relative min-h-screen overflow-hidden bg-white">
+      <GridBackground />
       {/* Hero Section - Yellow */}
-      <section className="bg-yellow-400 py-16 sm:py-20">
+      <section className="relative z-10 bg-yellow-400 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             About WorkIsWork
@@ -47,7 +49,7 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-black mb-4">

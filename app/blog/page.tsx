@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "../../data/blog";
+import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -35,9 +36,10 @@ export default function BlogPage() {
   const posts = blogPosts;
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="relative min-h-screen overflow-hidden bg-white text-black">
+      <GridBackground />
       {/* Gumroad-style Hero - Yellow */}
-      <section className="bg-yellow-400 py-16 sm:py-20">
+      <section className="relative z-10 bg-yellow-400 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Remote work, without the fluff
@@ -49,7 +51,7 @@ export default function BlogPage() {
         </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 bg-white">
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link

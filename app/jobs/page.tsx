@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
+import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -63,9 +64,10 @@ export default function JobsPage({
   const q = searchParams?.q || "";
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="relative min-h-screen overflow-hidden bg-white text-black">
+      <GridBackground />
       {/* Gumroad-style Hero Section - Yellow */}
-      <section className="relative bg-white py-12 sm:py-16 overflow-hidden">
+      <section className="relative z-10 bg-white py-12 sm:py-16 overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
             <h1 className="text-5xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
@@ -83,7 +85,7 @@ export default function JobsPage({
       </section>
 
       {/* Main Content Area - White */}
-      <main className="mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-white">
         <section className="mb-4 space-y-4">
           {/* Search row with left CTA, aligned inline */}
           <div className="flex flex-nowrap items-center justify-center gap-3 pt-4">

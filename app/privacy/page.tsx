@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -32,9 +33,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="relative min-h-screen bg-white overflow-hidden">
+      <GridBackground />
       {/* Hero Section - Yellow */}
-      <section className="bg-yellow-400 py-12 sm:py-16">
+      <section className="relative z-10 bg-yellow-400 py-12 sm:py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Privacy Policy
@@ -46,7 +48,7 @@ export default function PrivacyPage() {
       </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
         <div className="prose prose-zinc max-w-none">
           <p className="text-black/80 mb-8 font-medium">
             Last updated: January 6, 2026

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -31,9 +32,10 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="relative min-h-screen bg-white text-black overflow-hidden">
+      <GridBackground />
       {/* Hero Section - Yellow */}
-      <section className="bg-yellow-400 py-12 sm:py-16">
+      <section className="relative z-10 bg-yellow-400 py-12 sm:py-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Unlock All Jobs
@@ -46,7 +48,7 @@ export default function PricingPage() {
       </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-2xl px-4 pb-12 pt-8 sm:px-6 bg-white">
+      <main className="relative z-10 mx-auto max-w-2xl px-4 pb-12 pt-8 sm:px-6 bg-white">
       </main>
     </div>
   );

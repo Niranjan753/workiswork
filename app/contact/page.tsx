@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { GridBackground } from "../../components/GridBackground";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -30,9 +31,10 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="relative min-h-screen bg-white overflow-hidden">
+      <GridBackground />
       {/* Hero Section - Yellow */}
-      <section className="bg-yellow-400 py-12 sm:py-16">
+      <section className="relative z-10 bg-yellow-400 py-12 sm:py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Get in Touch
@@ -44,7 +46,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Content - White */}
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
+      <main className="relative z-10 mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Info */}

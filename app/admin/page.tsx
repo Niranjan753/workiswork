@@ -3,6 +3,7 @@ import { db } from "../../db";
 import { categories, users } from "../../db/schema";
 import { AdminJobForm } from "../../components/admin/job-form";
 import { Footer } from "../../components/Footer";
+import { GridBackground } from "../../components/GridBackground";
 import { getServerSession } from "../../lib/auth-server";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
@@ -53,7 +54,8 @@ export default async function AdminPage() {
 
   if (!session?.user) {
     return (
-      <div className="flex min-h-screen flex-col bg-white text-black">
+      <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
+        <GridBackground />
         <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
@@ -94,7 +96,8 @@ export default async function AdminPage() {
 
   if (!userRow || userRow.role !== "employer") {
     return (
-      <div className="flex min-h-screen flex-col bg-white text-black">
+      <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
+        <GridBackground />
         <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
@@ -126,7 +129,8 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-black">
+    <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
+      <GridBackground />
       <header className="border-b-2 border-black bg-yellow-400">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-bold text-black hover:underline">

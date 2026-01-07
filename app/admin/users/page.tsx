@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";
 import { Mail, User, Calendar, Shield } from "lucide-react";
+import { GridBackground } from "../../../components/GridBackground";
 
 const siteUrl = getSiteUrl();
 const ogImage = getOgImageUrl();
@@ -33,7 +34,8 @@ export default async function AdminUsersPage() {
 
   if (!userRow || userRow.role !== "employer") {
     return (
-      <div className="flex min-h-screen flex-col bg-white text-black">
+      <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
+        <GridBackground />
         <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/admin" className="text-sm font-bold text-black hover:underline">
@@ -74,7 +76,8 @@ export default async function AdminUsersPage() {
   const userRoleCount = allUsers.filter((u) => u.role === "user").length;
 
   return (
-    <div className="flex min-h-screen flex-col bg-yellow-400 text-black">
+    <div className="relative flex min-h-screen flex-col bg-yellow-400 text-black overflow-hidden">
+      <GridBackground />
       <header className="border-b-2 border-black bg-yellow-500">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div className="flex items-center gap-4">

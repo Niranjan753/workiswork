@@ -60,6 +60,7 @@ export function JobsBoard() {
   const [jobTypes, setJobTypes] = React.useState<string[]>(
     searchParams.getAll("job_type"),
   );
+  const [optimised, setOptimised] = React.useState(false);
 
   const queryKey = React.useMemo(
     () => ["jobs", { q, location, jobTypes, activeCategory }],
@@ -113,6 +114,33 @@ export function JobsBoard() {
         ? prev.filter((v) => v !== value)
         : [...prev, value],
     );
+  }
+
+  async function handleOptimise() {
+    try {
+      const res = await fetch("/api/user/preferences");
+      if (!res.ok) return;
+      const json = await res.json();
+      const prefs = json.preferences as
+        | { answersByQuestionId?: Record<string, string[]> }
+        | null;
+      if (!prefs || !prefs.answersByQuestionId) return;
+
+      const answers = prefs.answersByQuestionId;
+      const roleAnswers = answers["1"] ?? [];
+      const skillAnswers = answers["2"] ?? [];
+
+      const qString = [...roleAnswers, ...skillAnswers].join(" ").trim();
+      if (!qString) return;
+
+      const params = new URLSearchParams();
+      params.set("q", qString);
+
+      router.push(`/jobs${buildQueryString(params)}`);
+      setOptimised(true);
+    } catch {
+      // Fail silently – optimisation is a progressive enhancement
+    }
   }
 
   return (
@@ -174,7 +202,7 @@ export function JobsBoard() {
       <section className="space-y-3">
         {/* Top bar - Gumroad style */}
         <div className="flex flex-col gap-4 bg-white border-2 border-black p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/pricing"
               className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors"
@@ -187,6 +215,19 @@ export function JobsBoard() {
             >
               Create Job Alert
             </Link>
+            <button
+              type="button"
+              onClick={handleOptimise}
+              disabled={optimised}
+              className={cn(
+                "px-4 py-2 border-2 border-black text-sm font-bold transition-colors",
+                optimised
+                  ? "bg-yellow-400 text-black"
+                  : "text-black hover:bg-black hover:text-white",
+              )}
+            >
+              {optimised ? "Optimised" : "Optimise"}
+            </button>
           </div>
           <p className="text-sm font-medium text-black/60">
             {total.toLocaleString()} matching jobs

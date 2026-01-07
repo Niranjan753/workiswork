@@ -210,25 +210,28 @@ export default async function JobDetailPage({ params }: Params) {
         {similar.length > 0 && (
           <section className="mt-8 rounded-2xl border-2 border-black bg-white p-6 shadow-lg">
             <h2 className="mb-3 text-sm font-black text-black">Similar jobs</h2>
-            <div className="grid gap-2">
+            <div className="space-y-3">
               {similar.map((item) => (
                 <Link
                   key={item.id}
                   href={`/jobs/${item.slug}`}
-                  className="rounded-lg border border-black/10 px-4 py-4 text-xs text-black hover:bg-yellow-100 font-medium transition"
+                  className="block rounded-xl border border-black/10 px-4 py-4 text-xs text-black hover:bg-yellow-50 transition"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div className="space-y-3">
                     <div className="min-w-0">
                       <p className="truncate text-base font-bold text-black">
                         {item.title}
                       </p>
                       <p className="truncate text-xs text-black/60">
-                        {item.companyName || "Remote company"} • {item.location || "Remote"}
+                        {item.companyName || "Remote company"} •{" "}
+                        {item.location || "Remote"}
                       </p>
                     </div>
-                    <span className="mt-2 inline-flex items-center rounded-full border border-black/10 bg-yellow-100 px-2 py-1 text-[11px] font-bold text-yellow-900 sm:mt-0">
-                      View job
-                    </span>
+                    <div>
+                      <span className="inline-flex w-full items-center justify-center border-2 border-black bg-yellow-400 px-4 py-2 text-xs font-bold text-black">
+                        View job →
+                      </span>
+                    </div>
                   </div>
                 </Link>
               ))}

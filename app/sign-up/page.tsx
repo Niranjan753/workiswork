@@ -240,6 +240,20 @@ function SignUpForm() {
                         body: JSON.stringify({ role: "employer" }),
                       }).catch(() => {}); // Fail silently
                     }
+                    // If the user completed the join wizard before sign-up,
+                    // persist their onboarding preferences.
+                    if (typeof window !== "undefined") {
+                      const stored = window.localStorage.getItem(
+                        "workiswork_join_preferences",
+                      );
+                      if (stored) {
+                        fetch("/api/user/preferences", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: stored,
+                        }).catch(() => {});
+                      }
+                    }
                     router.push(callbackUrl);
                   }
                 } catch (err: any) {

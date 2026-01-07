@@ -17,7 +17,7 @@ export function Navbar() {
 
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
-  const isAlerts = pathname.startsWith("/alerts");
+  const isJoin = pathname.startsWith("/join");
   const isAdmin = pathname.startsWith("/admin");
 
   const userEmail = session?.user?.email;
@@ -40,18 +40,6 @@ export function Navbar() {
       setUserRole(null);
     }
   }, [session?.user?.id]);
-
-  const handleAlertsClick = (e: React.MouseEvent) => {
-    if (!userEmail) {
-      e.preventDefault();
-      router.push("/login?callbackUrl=/alerts");
-      return;
-    }
-    if (userRole === "employer") {
-      e.preventDefault();
-      return;
-    }
-  };
 
   const handleAdminClick = (e: React.MouseEvent) => {
     if (!userEmail) {
@@ -122,18 +110,15 @@ export function Navbar() {
             Blog
           </Link>
           <Link
-            href="/alerts"
-            onClick={handleAlertsClick}
+            href="/join"
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
-              isAlerts
+              isJoin
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : userRole === "employer"
-                  ? "text-white/40 cursor-not-allowed"
-                  : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
-            Job Alerts
+            Join
           </Link>
           <Link
             href="/admin"
@@ -259,21 +244,16 @@ export function Navbar() {
             Blog
           </Link>
           <Link
-            href="/alerts"
-            onClick={(e) => {
-              setMobileOpen(false);
-              handleAlertsClick(e);
-            }}
+            href="/join"
             className={cn(
               "px-4 py-2 transition-all border-2 border-yellow-400",
-              isAlerts
+              isJoin
                 ? "bg-yellow-400 text-black shadow-lg"
-                : userRole === "employer"
-                  ? "text-white/40 cursor-not-allowed"
-                  : "text-white hover:bg-white hover:text-black"
+                : "text-white hover:bg-white hover:text-black"
             )}
+            onClick={() => setMobileOpen(false)}
           >
-            Job Alerts
+            Join
           </Link>
           <Link
             href="/admin"

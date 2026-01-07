@@ -53,16 +53,16 @@ export default async function AdminPage() {
 
   if (!session?.user) {
     return (
-      <div className="flex min-h-screen flex-col bg-yellow-400 text-black">
-        <header className="border-b-2 border-black bg-yellow-500">
+      <div className="flex min-h-screen flex-col bg-white text-black">
+        <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
               ← Back to jobs
             </Link>
           </div>
         </header>
-        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6">
-          <div className="rounded-2xl border-2 border-black bg-yellow-500 p-8 text-center shadow-lg">
+        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
+          <div className="rounded-2xl border-2 border-black bg-white p-8 text-center shadow-lg">
             <h1 className="text-xl font-bold text-black">
               Company login required
             </h1>
@@ -94,16 +94,16 @@ export default async function AdminPage() {
 
   if (!userRow || userRow.role !== "employer") {
     return (
-      <div className="flex min-h-screen flex-col bg-yellow-400 text-black">
-        <header className="border-b-2 border-black bg-yellow-500">
+      <div className="flex min-h-screen flex-col bg-white text-black">
+        <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
               ← Back to jobs
             </Link>
           </div>
         </header>
-        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6">
-          <div className="rounded-2xl border-2 border-black bg-yellow-500 p-8 text-center shadow-lg">
+        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
+          <div className="rounded-2xl border-2 border-black bg-white p-8 text-center shadow-lg">
             <h1 className="text-xl font-bold text-black">
               Employer access required
             </h1>
@@ -126,8 +126,8 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-yellow-400 text-black">
-      <header className="border-b-2 border-black bg-yellow-500">
+    <div className="flex min-h-screen flex-col bg-white text-black">
+      <header className="border-b-2 border-black bg-yellow-400">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
             ← Back to jobs
@@ -138,7 +138,8 @@ export default async function AdminPage() {
         </div>
       </header>
 
-      <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      {/* Main Content - White */}
+      <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 bg-white">
         <div className="mb-6">
           <Link
             href="/admin/users"

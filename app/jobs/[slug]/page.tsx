@@ -115,8 +115,8 @@ export default async function JobDetailPage({ params }: Params) {
   if (!job) return notFound();
 
   return (
-    <div className="min-h-screen bg-yellow-400 text-black">
-      <header className="border-b-2 border-black bg-yellow-400 shadow-lg">
+    <div className="min-h-screen bg-white text-black">
+      <header className="border-b-2 border-black bg-white shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
             ← Back to jobs

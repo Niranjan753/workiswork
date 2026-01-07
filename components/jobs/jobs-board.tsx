@@ -118,7 +118,7 @@ export function JobsBoard() {
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
       {/* Filters */}
-      <aside className="space-y-6 rounded-xl border border-yellow-300/70 bg-yellow-100/90 p-4 text-sm text-black">
+      <aside className="space-y-6 border-2 border-black bg-white p-4 text-sm text-black">
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-yellow-900">
             I want to work remotely from...
@@ -177,7 +177,7 @@ export function JobsBoard() {
           <div className="flex items-center gap-3">
             <Link
               href="/pricing"
-              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-yellow-400 hover:text-black transition-colors"
+              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors"
             >
               Unlock All Jobs
             </Link>
@@ -213,7 +213,7 @@ export function JobsBoard() {
               href={`/jobs/${job.slug}`}
               className={cn(
                 "block bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
-                job.isFeatured && "bg-yellow-100"
+                job.isFeatured && "bg-gray-50"
               )}
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -234,7 +234,7 @@ export function JobsBoard() {
                   </div>
                 </div>
                 <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold hover:bg-yellow-400 hover:text-black transition-colors">
+                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors">
                     View job →
                   </span>
                 </div>

@@ -16,7 +16,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
   return (
     <footer className={cn(
       "border-t-2 border-black",
-      "bg-yellow-400 text-black"
+      "bg-white text-black"
     )}>
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">

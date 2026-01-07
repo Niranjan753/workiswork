@@ -80,32 +80,32 @@ export function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-yellow-400 shadow-lg">
+    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-black shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
         <Link href="/jobs" className="flex items-center min-w-fit">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500 px-2 py-1 shadow-md ring-2 ring-black">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400 px-2 py-1 shadow-md ring-2 ring-black">
             <Logo width={32} height={20} />
           </span>
           {/* Brand name always visible to right of Logo in desktop */}
-          <span className="text-lg font-bold tracking-tight text-black ml-2 hidden md:inline">
+          <span className="text-lg font-bold tracking-tight text-yellow-400 ml-2 hidden md:inline">
             WorkIsWork
           </span>
           {/* Show name on xs but hide on SM+ for only mobile (optional) */}
-          <span className="text-lg font-bold tracking-tight text-black ml-2 inline md:hidden xs:inline">
+          <span className="text-lg font-bold tracking-tight text-yellow-400 ml-2 inline md:hidden xs:inline">
             WorkIsWork
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-black">
+        <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-yellow-400">
           <Link
             href="/jobs"
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
-                ? "rounded-xl bg-black text-yellow-400 shadow-lg ring-2 ring-black"
-                : "text-black hover:bg-yellow-500 hover:shadow-md",
+                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
+                : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
             )}
           >
             Remote Jobs
@@ -115,8 +115,8 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
-                ? "rounded-xl bg-black text-yellow-400 shadow-lg ring-2 ring-black"
-                : "text-black hover:bg-yellow-500 hover:shadow-md",
+                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
+                : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
             )}
           >
             Blog
@@ -127,10 +127,10 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isAlerts
-                ? "rounded-xl bg-black text-yellow-400 shadow-lg ring-2 ring-black"
+                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
                 : userRole === "employer"
-                  ? "text-black/40 cursor-not-allowed"
-                  : "text-black hover:bg-yellow-500 hover:shadow-md",
+                  ? "text-yellow-400/40 cursor-not-allowed"
+                  : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
             )}
           >
             Job Alerts
@@ -141,10 +141,10 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isAdmin
-                ? "rounded-xl bg-black text-yellow-400 shadow-lg ring-2 ring-black"
+                ? "rounded-xl bg-yellow-400 text-black shadow-lg ring-2 ring-black"
                 : userRole === "user"
-                  ? "text-black/40 cursor-not-allowed"
-                  : "text-black hover:bg-yellow-500 hover:shadow-md",
+                  ? "text-yellow-400/40 cursor-not-allowed"
+                  : "text-yellow-400 hover:bg-yellow-500 hover:shadow-md",
             )}
           >
             For Employers
@@ -155,7 +155,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-2 text-xs">
           <Link
             href="/pricing"
-            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-yellow-400 shadow-lg hover:bg-yellow-500 hover:text-black transition-all"
+            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
           >
             <LockOpen className="w-4 h-4" />
             Unlock All Jobs
@@ -164,14 +164,14 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-xl border-2 border-black bg-yellow-500 cursor-pointer px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-black hover:text-yellow-400 transition-all"
+              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 cursor-pointer px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
             >
               Log out
             </button>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="rounded-xl border-2 border-black bg-yellow-500 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-black hover:text-yellow-400 transition-all"
+              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
             >
               Log in
             </Link>
@@ -186,7 +186,7 @@ export function Navbar() {
           onClick={() => setMobileOpen((open) => !open)}
         >
           {/* Hamburger icon */}
-          <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={3} className="text-black">
+          <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={3} className="text-yellow-400">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -212,7 +212,7 @@ export function Navbar() {
       {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-yellow-400 border-l-2 border-black shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
+          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-black border-l-2 border-yellow-400 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{ transitionProperty: 'transform' }}
@@ -223,7 +223,7 @@ export function Navbar() {
           <Link href="/jobs" className="flex items-center gap-2 min-w-fit" onClick={() => setMobileOpen(false)}>
           </Link>
           <button
-            className="p-2 rounded-full hover:bg-yellow-500"
+            className="p-2 rounded-full hover:bg-gray-100"
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
           >
@@ -232,14 +232,14 @@ export function Navbar() {
             </svg>
           </button>
         </div>
-        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold text-black">
+        <nav className="flex flex-col gap-1 px-3 py-4 text-base font-bold text-yellow-400">
           <Link
             href="/jobs"
             className={cn(
               "rounded-xl px-4 py-2 transition-all",
               isJobs
-                ? "bg-black text-yellow-400 shadow-lg"
-                : "text-black hover:bg-yellow-500"
+                ? "bg-yellow-400 text-black shadow-lg"
+                : "text-yellow-400 hover:bg-yellow-500"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -250,8 +250,8 @@ export function Navbar() {
             className={cn(
               "rounded-xl px-4 py-2 transition-all",
               isBlog
-                ? "bg-black text-yellow-400 shadow-lg"
-                : "text-black hover:bg-yellow-500"
+                ? "bg-yellow-400 text-black shadow-lg"
+                : "text-yellow-400 hover:bg-yellow-500"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -266,10 +266,10 @@ export function Navbar() {
             className={cn(
               "rounded-xl px-4 py-2 transition-all",
               isAlerts
-                ? "bg-black text-yellow-400 shadow-lg"
+                ? "bg-yellow-400 text-black shadow-lg"
                 : userRole === "employer"
-                  ? "text-black/40 cursor-not-allowed"
-                  : "text-black hover:bg-yellow-500"
+                  ? "text-yellow-400/40 cursor-not-allowed"
+                  : "text-yellow-400 hover:bg-yellow-500"
             )}
           >
             Job Alerts
@@ -283,10 +283,10 @@ export function Navbar() {
             className={cn(
               "rounded-xl px-4 py-2 transition-all",
               isAdmin
-                ? "bg-black text-yellow-400 shadow-lg"
+                ? "bg-yellow-400 text-black shadow-lg"
                 : userRole === "user"
-                  ? "text-black/40 cursor-not-allowed"
-                  : "text-black hover:bg-yellow-500"
+                  ? "text-yellow-400/40 cursor-not-allowed"
+                  : "text-yellow-400 hover:bg-yellow-500"
             )}
           >
             For Employers
@@ -295,7 +295,7 @@ export function Navbar() {
         <div className="flex flex-col gap-2 px-3 pb-4">
           <Link
             href="/pricing"
-            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-yellow-400 shadow-lg hover:bg-yellow-500 hover:text-black transition-all"
+            className="flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
             onClick={() => setMobileOpen(false)}
           >
             <LockOpen className="w-4 h-4" />
@@ -304,7 +304,7 @@ export function Navbar() {
           {userEmail ? (
             <button
               type="button"
-              className="rounded-xl border-2 border-black bg-yellow-500 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-black hover:text-yellow-400 transition-all text-left"
+              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all text-left"
               onClick={() => {
                 setMobileOpen(false);
                 handleSignOut();
@@ -315,7 +315,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="rounded-xl border-2 border-black cursor-pointer bg-yellow-500 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-black hover:text-yellow-400 transition-all"
+              className="rounded-xl border-2 border-yellow-400 cursor-pointer bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
               onClick={() => setMobileOpen(false)}
             >
               Log in

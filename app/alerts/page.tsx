@@ -77,18 +77,21 @@ export default async function AlertsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-yellow-400 text-black">
-      <main className="mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
-        <section className="mb-6 space-y-3 text-center">
-          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-black sm:text-[32px]">
+    <div className="min-h-screen bg-white text-black">
+      {/* Hero Section - Yellow */}
+      <section className="bg-yellow-400 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Never miss a great remote job
           </h1>
-          <p className="text-xs text-black/80 sm:text-sm font-medium">
-            Pick the skills you care about and we&apos;ll send you curated
-            roles when they go live.
+          <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
+            Pick the skills you care about and we&apos;ll send you curated roles when they go live.
           </p>
+        </div>
         </section>
 
+      {/* Main Content - White */}
+      <main className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 bg-white">
         <AlertsForm />
       </main>
     </div>

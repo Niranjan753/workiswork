@@ -35,8 +35,8 @@ export default function BlogPage() {
   const posts = blogPosts;
 
   return (
-    <div className="min-h-screen bg-yellow-400 text-black">
-      {/* Gumroad-style Hero */}
+    <div className="min-h-screen bg-white text-black">
+      {/* Gumroad-style Hero - Yellow */}
       <section className="bg-yellow-400 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
@@ -46,9 +46,10 @@ export default function BlogPage() {
             Short, opinionated essays on remote careers, hiring, and building great distributed teams.
           </p>
         </div>
-      </section>
+        </section>
 
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+      {/* Main Content - White */}
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 bg-white">
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link

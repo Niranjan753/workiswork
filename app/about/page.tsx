@@ -33,8 +33,21 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-yellow-400">
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Yellow */}
+      <section className="bg-yellow-400 py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
+            About WorkIsWork
+          </h1>
+          <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
+            We're on a mission to make remote work accessible to everyone, everywhere.
+          </p>
+        </div>
+      </section>
+
+      {/* Main Content - White */}
+      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-black mb-4">

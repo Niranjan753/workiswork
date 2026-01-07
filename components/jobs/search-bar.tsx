@@ -107,15 +107,13 @@ export function JobsSearchBar({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative mx-auto mt-4 flex max-w-3xl items-center gap-2 rounded-full border border-yellow-300 bg-yellow-50 px-4 py-2 shadow-sm"
-      // -- ADDED: border-yellow-300 bg-yellow-50
+      className="relative mx-auto mt-0 flex max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2"
     >
       <input
         type="text"
         name="q"
         placeholder="Search Job Title or Company name..."
-        className="h-10 flex-1 rounded-full border-none bg-transparent text-xs text-yellow-900 placeholder:text-yellow-700 focus:outline-none"
-        // -- ADDED: text-yellow-900 placeholder:text-yellow-700
+        className="h-12 flex-1 border-none bg-transparent text-sm text-black placeholder:text-black/50 focus:outline-none"
         value={q}
         onChange={(e) => {
           setQ(e.target.value);
@@ -133,38 +131,38 @@ export function JobsSearchBar({ categories }: Props) {
       <input type="hidden" name="category" value={selectedCategory} />
       <button
         type="submit"
-        className="h-8 rounded-full bg-yellow-500 px-4 text-xs font-semibold text-black cursor-pointer hover:bg-yellow-600 hover:text-white"
-        // -- ADDED: bg-yellow-500 text-black hover:bg-yellow-600 hover:text-white
+        className="px-4 py-2 bg-black text-white text-sm font-bold cursor-pointer hover:bg-gray-900 transition-colors"
       >
         Search
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-xl border border-yellow-300 bg-white shadow-lg">
-          <div className="max-h-72 overflow-auto text-xs text-yellow-900">
-            {/* -- ADDED: text-yellow-900 */}
+        <div className="absolute left-0 top-full z-30 mt-3 w-full overflow-hidden rounded-xl border-2 border-black bg-white shadow-lg"
+        // -- MADE BIGGER: mt-3
+        >
+          <div className="max-h-96 overflow-auto text-sm text-black">
+            {/* -- MADE BIGGER: max-h-96 text-sm */}
             {loading && (
-              <div className="px-4 py-2 text-[11px] text-yellow-600">
-                {/* -- CHANGED: text-yellow-600 */}
+              <div className="px-4 py-3 text-[13px] text-black/60">
+                {/* -- MADE BIGGER: py-3 text-[13px] */}
                 Searching…
               </div>
             )}
 
             {suggestions.titles.length > 0 && (
               <>
-                <div className="bg-yellow-100 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-yellow-900">
-                  {/* -- CHANGED: bg-yellow-100 text-yellow-900 */}
+                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
+                  {/* -- MADE BIGGER: py-3 text-[11px] */}
                   Job titles
                 </div>
-                <ul className="divide-y divide-yellow-200">
-                  {/* -- CHANGED: divide-yellow-200 */}
+                <ul className="divide-y divide-black/10">
                   {suggestions.titles.map((title) => (
                     <li key={title}>
                       <button
                         type="button"
                         onClick={() => selectTerm(title)}
-                        className="flex w-full items-center justify-between px-4 py-2 text-left hover:bg-yellow-100"
-                        // -- CHANGED: hover:bg-yellow-100
+                        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-100"
+                        // -- MADE BIGGER: py-3
                       >
                         <span>{title}</span>
                       </button>
@@ -176,19 +174,18 @@ export function JobsSearchBar({ categories }: Props) {
 
             {suggestions.companies.length > 0 && (
               <>
-                <div className="bg-yellow-100 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-yellow-900">
-                  {/* -- CHANGED: bg-yellow-100 text-yellow-900 */}
+                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
+                  {/* -- MADE BIGGER: py-3 text-[11px] */}
                   Companies
                 </div>
-                <ul className="divide-y divide-yellow-200">
-                  {/* -- CHANGED: divide-yellow-200 */}
+                <ul className="divide-y divide-black/10">
                   {suggestions.companies.map((comp) => (
                     <li key={comp}>
                       <button
                         type="button"
                         onClick={() => selectTerm(comp)}
-                        className="flex w-full items-center justify-between px-4 py-2 text-left hover:bg-yellow-100"
-                        // -- CHANGED: hover:bg-yellow-100
+                        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-100"
+                        // -- MADE BIGGER: py-3
                       >
                         <span>{comp}</span>
                       </button>
@@ -200,12 +197,11 @@ export function JobsSearchBar({ categories }: Props) {
 
             {matches.length > 0 && (
               <>
-                <div className="bg-yellow-100 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-yellow-900">
-                  {/* -- CHANGED: bg-yellow-100 text-yellow-900 */}
+                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
+                  {/* -- MADE BIGGER: py-3 text-[11px] */}
                   Categories
                 </div>
-                <ul className="divide-y divide-yellow-200">
-                  {/* -- CHANGED: divide-yellow-200 */}
+                <ul className="divide-y divide-black/10">
                   {matches.map((cat) => {
                     const isActive = selectedCategory === cat.slug;
                     return (
@@ -214,15 +210,15 @@ export function JobsSearchBar({ categories }: Props) {
                           type="button"
                           onClick={() => selectCategory(cat)}
                           className={cn(
-                            "flex w-full items-center justify-between px-4 py-2 text-left hover:bg-yellow-100",
-                            isActive && "bg-yellow-200 font-semibold",
+                            "flex w-full items-center justify-between px-4 py-3 text-left hover:bg-yellow-100",
+                            isActive && "bg-black text-white font-bold",
                           )}
-                          // -- CHANGED: hover:bg-yellow-100, isActive bg-yellow-200
+                          // -- MADE BIGGER: py-3
                         >
                           <span>{cat.label}</span>
                           {isActive && (
-                            <span className="rounded-full bg-yellow-500 px-2 py-0.5 text-[10px] font-semibold text-white">
-                              {/* -- CHANGED: bg-yellow-500 */}
+                            <span className="rounded-full bg-black px-3 py-1 text-[11px] font-bold text-white">
+                              {/* -- MADE BIGGER: px-3 py-1 text-[11px] */}
                               Selected
                             </span>
                           )}
@@ -237,8 +233,8 @@ export function JobsSearchBar({ categories }: Props) {
             {suggestions.titles.length === 0 &&
               suggestions.companies.length === 0 &&
               matches.length === 0 && (
-                <div className="px-4 py-3 text-[11px] text-yellow-600">
-                  {/* -- CHANGED: text-yellow-600 */}
+                <div className="px-4 py-4 text-[13px] text-black/60">
+                  {/* -- MADE BIGGER: py-4 text-[13px] */}
                   No matches yet
                 </div>
               )}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { db } from "../../db";
 import { categories, users } from "../../db/schema";
 import { AdminJobForm } from "../../components/admin/job-form";
+import { Footer } from "../../components/Footer";
 import { getServerSession } from "../../lib/auth-server";
 import { eq } from "drizzle-orm";
 import Link from "next/link";

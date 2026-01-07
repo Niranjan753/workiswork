@@ -36,35 +36,38 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-yellow-400 text-black">
-      <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
-        <section className="mb-6 space-y-3 text-center">
-          <h1 className="text-balance text-2xl font-bold tracking-tight text-black sm:text-3xl">
+      {/* Gumroad-style Hero */}
+      <section className="bg-yellow-400 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
             Remote work, without the fluff
           </h1>
-          <p className="text-xs text-black/80 sm:text-sm font-medium">
-            Short, opinionated essays on remote careers, hiring, and building
-            great distributed teams.
+          <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
+            Short, opinionated essays on remote careers, hiring, and building great distributed teams.
           </p>
-        </section>
-        <section className="grid gap-4 md:grid-cols-3">
+        </div>
+      </section>
+
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="flex flex-col rounded-2xl border-2 border-black bg-yellow-500 p-4 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl hover:bg-yellow-300"
+              className="flex flex-col bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
             >
-              <span className="text-[11px] font-bold uppercase tracking-wide text-black">
+              <span className="text-xs font-bold uppercase tracking-wider text-black/60 mb-2">
                 {post.category}
               </span>
-              <h2 className="mt-1 text-sm font-bold text-black">
+              <h2 className="text-lg font-black text-black mb-3 leading-tight">
                 {post.title}
               </h2>
-              <p className="mt-2 line-clamp-3 text-xs text-black/80 font-medium">
+              <p className="text-sm text-black/70 font-medium mb-4 line-clamp-3 leading-relaxed">
                 {post.excerpt}
               </p>
-              <div className="mt-4 flex items-center justify-between text-[11px] text-black/70 font-medium">
+              <div className="mt-auto flex items-center justify-between text-xs text-black/50 font-medium pt-4 border-t border-black/10">
                 <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
-                <span>{post.readTime}</span>
+                <span className="font-bold">Read More +</span>
               </div>
             </Link>
           ))}

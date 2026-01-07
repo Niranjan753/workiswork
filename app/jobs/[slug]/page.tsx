@@ -77,11 +77,11 @@ export async function generateMetadata({
       description: "This job is no longer available.",
     };
   }
-  
+
   const title = `${job.title} at ${job.companyName || "Remote company"} | WorkIsWork`;
   const description = `Remote ${job.jobType} role in ${job.location || "Remote"} – apply now.`;
   const url = `${siteUrl}/jobs/${resolved.slug}`;
-  
+
   return {
     title,
     description,
@@ -115,18 +115,18 @@ export default async function JobDetailPage({ params }: Params) {
   if (!job) return notFound();
 
   return (
-    <div className="min-h-screen bg-[#fde9d7] text-zinc-900">
-      <header className="border-b border-orange-200 bg-[#fde9d7]/95">
+    <div className="min-h-screen bg-yellow-400 text-black">
+      <header className="border-b-2 border-black bg-yellow-400 shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href="/jobs" className="text-sm font-semibold text-orange-700">
+          <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
             ← Back to jobs
           </Link>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="rounded-full border border-orange-300 bg-white px-3 py-1 font-semibold text-orange-700">
+          <div className="flex items-center gap-2 text-xs font-medium">
+            <span className="rounded-full border border-black bg-yellow-100 px-3 py-1 text-black">
               {job.remoteScope}
             </span>
             {job.isFeatured && (
-              <span className="rounded-full border border-orange-300 bg-orange-50 px-3 py-1 font-semibold text-orange-700">
+              <span className="rounded-full border border-black bg-yellow-100 px-3 py-1 text-black font-bold">
                 Featured
               </span>
             )}
@@ -135,47 +135,53 @@ export default async function JobDetailPage({ params }: Params) {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        <section className="rounded-2xl border border-orange-200 bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border-2 border-black bg-white p-8 shadow-lg">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide text-orange-600">
+              <p className="text-xs uppercase tracking-wide text-yellow-800 font-bold">
                 {job.categoryName}
               </p>
-              <h1 className="text-2xl font-semibold text-zinc-900">
+              <h1 className="text-3xl font-black text-black mb-1">
                 {job.title}
               </h1>
-              <p className="text-sm text-zinc-600">
-                {job.companyName || "Remote company"} •{" "}
-                {job.location || "Remote"}
+              <p className="text-sm text-black/70 font-medium">
+                {job.companyName || "Remote company"} • {job.location || "Remote"}
               </p>
+              {job.companyWebsite && (
+                <p className="mt-1 text-xs">
+                  <a href={job.companyWebsite} target="_blank" rel="noopener noreferrer" className="text-yellow-900 underline hover:text-yellow-700">
+                    {job.companyWebsite}
+                  </a>
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <a
                 href={job.applyUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full bg-orange-500 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-600"
+                className="rounded-full bg-black px-5 py-2 text-xs font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black border-2 border-black transition-colors"
               >
                 Apply now
               </a>
-              <a
+              <Link
                 href="/alerts"
-                className="rounded-full border border-orange-300 bg-white px-4 py-2 text-xs font-semibold text-orange-700 hover:bg-orange-50"
+                className="rounded-full border-2 border-black bg-yellow-400 px-5 py-2 text-xs font-bold text-black hover:bg-black hover:text-yellow-400 transition-colors"
               >
-                Save alert
-              </a>
+                Create alert
+              </Link>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-zinc-600">
-            <span className="rounded-full border border-orange-200 bg-orange-50 px-2 py-1 font-semibold">
+          <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-black/70">
+            <span className="rounded-full border border-black/10 bg-yellow-100 px-2 py-1">
               {job.jobType.replace("_", " ")}
             </span>
-            <span className="rounded-full border border-orange-200 bg-orange-50 px-2 py-1 font-semibold">
+            <span className="rounded-full border border-black/10 bg-yellow-100 px-2 py-1">
               {job.remoteScope}
             </span>
             {job.salaryMin && (
-              <span className="rounded-full border border-orange-200 bg-orange-50 px-2 py-1 font-semibold">
+              <span className="rounded-full border border-black/10 bg-yellow-100 px-2 py-1">
                 {job.salaryCurrency} {job.salaryMin}
                 {job.salaryMax ? ` - ${job.salaryMax}` : ""} / yr
               </span>
@@ -183,7 +189,7 @@ export default async function JobDetailPage({ params }: Params) {
           </div>
 
           <div
-            className="prose prose-sm mt-6 max-w-none text-zinc-800 prose-a:text-orange-600"
+            className="prose prose-sm mt-6 max-w-none text-black prose-a:text-yellow-700"
             dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
           />
 
@@ -192,7 +198,7 @@ export default async function JobDetailPage({ params }: Params) {
               {job.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-orange-200 bg-orange-50 px-2 py-1 font-semibold text-orange-700"
+                  className="rounded-full border border-black/10 bg-yellow-100 px-2 py-1 font-bold text-yellow-900"
                 >
                   {tag}
                 </span>
@@ -202,28 +208,25 @@ export default async function JobDetailPage({ params }: Params) {
         </section>
 
         {similar.length > 0 && (
-          <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-4 shadow-sm">
-            <h2 className="mb-3 text-sm font-semibold text-zinc-900">
-              Similar jobs
-            </h2>
+          <section className="mt-8 rounded-2xl border-2 border-black bg-white p-6 shadow-lg">
+            <h2 className="mb-3 text-sm font-black text-black">Similar jobs</h2>
             <div className="grid gap-2">
               {similar.map((item) => (
                 <Link
                   key={item.id}
                   href={`/jobs/${item.slug}`}
-                  className="rounded-lg border border-orange-100 px-3 py-3 text-xs text-zinc-800 hover:bg-orange-50"
+                  className="rounded-lg border border-black/10 px-4 py-4 text-xs text-black hover:bg-yellow-100 font-medium transition"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-semibold text-zinc-900">
+                      <p className="truncate text-base font-bold text-black">
                         {item.title}
                       </p>
-                      <p className="truncate text-[11px] text-zinc-600">
-                        {item.companyName || "Remote company"} •{" "}
-                        {item.location || "Remote"}
+                      <p className="truncate text-xs text-black/60">
+                        {item.companyName || "Remote company"} • {item.location || "Remote"}
                       </p>
                     </div>
-                    <span className="mt-2 inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2 py-1 text-[10px] font-semibold text-orange-700 sm:mt-0">
+                    <span className="mt-2 inline-flex items-center rounded-full border border-black/10 bg-yellow-100 px-2 py-1 text-[11px] font-bold text-yellow-900 sm:mt-0">
                       View job
                     </span>
                   </div>
@@ -236,5 +239,3 @@ export default async function JobDetailPage({ params }: Params) {
     </div>
   );
 }
-
-

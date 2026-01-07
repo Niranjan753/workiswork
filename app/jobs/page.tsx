@@ -64,48 +64,57 @@ export default function JobsPage({
 
   return (
     <div className="min-h-screen bg-yellow-400 text-black">
-      <main className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
-        <section className="mb-6 mt-8 space-y-3 text-center">
-          <h1 className="cooper-heading text-balance text-3xl font-bold tracking-tight text-black sm:text-[40px]">
-            Find your dream remote job without the hassle
-          </h1>
-          <p className="text-xs text-black/80 sm:text-sm font-medium">
-            Browse fully remote jobs from vetted companies and get more
-            interviews.
-          </p>
-          {/* Centered search bar like Remotive */}
-          <Suspense fallback={null}>
-            <JobsSearchBar categories={categoryChips} />
-          </Suspense>
+      {/* Gumroad-style Hero Section */}
+      <section className="relative bg-yellow-400 py-12 sm:py-16 overflow-hidden">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center space-y-4">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none">
+              The latest remote jobs and opportunities
+            </h1>
+            <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+              There's no roadmap for making your own road. But here's some how-to's, helpful tips, and curated remote jobs to help you.
+            </p>
+            <p className="text-sm text-black/70 font-medium">
+              Start browsing below or grab the RSS.
+            </p>
+          </div>
+        </div>
+        {/* Speech bubbles removed as requested */}
+      </section>
 
-          {/* Category pills row */}
-          <div className="mt-8 flex flex-wrap justify-center gap-2 text-[11px]">
-            <div className="w-full flex justify-center">
-              <div className="rounded-xl bg-yellow-500/80 p-2 flex flex-wrap justify-center gap-2 shadow-lg border-2 border-black max-w-3xl">
-                {categoryChips.map(({ label, slug }) => {
-                  const params = new URLSearchParams();
-                  if (q) params.set("q", q);
-                  if (slug !== "all-others") params.set("category", slug);
+      <main className="mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8">
+        <section className="mb-4 space-y-4">
+          {/* Centered search bar */}
+          <div className="flex justify-center pt-2">
+            <Suspense fallback={null}>
+              <JobsSearchBar categories={categoryChips} />
+            </Suspense>
+          </div>
 
-                  const href = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
-                  const isActive = activeCategory === slug;
+          {/* Category pills row - Gumroad style */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {categoryChips.map(({ label, slug }) => {
+              const params = new URLSearchParams();
+              if (q) params.set("q", q);
+              if (slug !== "all-others") params.set("category", slug);
 
-                  return (
-                    <Link
-                      key={slug}
-                      href={href}
-                      className={`rounded-full px-3 py-1 font-bold shadow-md transition-all border-2 ${
-                        isActive
-                          ? "bg-black text-yellow-400 border-black"
-                          : "bg-yellow-400 text-black border-black hover:bg-yellow-500"
-                      }`}
-                    >
-                      {label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+              const href = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
+              const isActive = activeCategory === slug;
+
+              return (
+                <Link
+                  key={slug}
+                  href={href}
+                  className={`px-4 py-2 text-sm font-bold transition-all border-2 border-black ${
+                    isActive
+                      ? "bg-black text-yellow-400"
+                      : "bg-white text-black hover:bg-yellow-100"
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
         </section>
 

@@ -51,7 +51,6 @@ export default async function AdminUsersPage() {
             </p>
           </div>
         </main>
-        <Footer variant="light" />
       </div>
     );
   }

@@ -325,7 +325,7 @@ export function AdminJobForm({ categories }: Props) {
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full border-2 border-black bg-black px-6 py-3 text-base font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
+          className="w-full border-2 border-black cursor-pointer bg-black px-6 py-3 text-base font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
         >
           {submitting ? "Posting job…" : "Post job - $299"}
         </Button>

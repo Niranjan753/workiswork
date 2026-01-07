@@ -41,17 +41,7 @@ export function Navbar() {
     }
   }, [session?.user?.id]);
 
-  const handlePostClick = (e: React.MouseEvent) => {
-    if (!userEmail) {
-      e.preventDefault();
-      router.push("/login?callbackUrl=/post&role=employer");
-      return;
-    }
-    if (userRole === "user") {
-      e.preventDefault();
-      return;
-    }
-  };
+  // Removed handlePostClick - no authentication required for posting jobs
 
   async function handleSignOut() {
     await authClient.signOut({
@@ -122,14 +112,11 @@ export function Navbar() {
           </Link>
           <Link
             href="/post"
-            onClick={handlePostClick}
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isPost
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : userRole === "user"
-                  ? "text-white/40 cursor-not-allowed"
-                  : "text-white hover:bg-white hover:text-black hover:shadow-md"
+                : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
             Post a Job
@@ -256,17 +243,12 @@ export function Navbar() {
           </Link>
           <Link
             href="/post"
-            onClick={(e) => {
-              setMobileOpen(false);
-              handlePostClick(e);
-            }}
+            onClick={() => setMobileOpen(false)}
             className={cn(
               "px-4 py-2 transition-all border-2 border-yellow-400",
               isPost
                 ? "bg-yellow-400 text-black shadow-lg"
-                : userRole === "user"
-                  ? "text-white/40 cursor-not-allowed"
-                  : "text-white hover:bg-white hover:text-black"
+                : "text-white hover:bg-white hover:text-black"
             )}
           >
             Post a Job

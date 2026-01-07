@@ -37,34 +37,23 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    // No authentication required - anyone can post a job
     const h = await headers();
     const session = await auth.api.getSession({ headers: h });
     
-    if (!session?.user?.email || !session.user?.id) {
-      console.error("[POST /api/admin/jobs] Unauthorized:", {
-        hasSession: !!session,
-        hasEmail: !!session?.user?.email,
-        hasId: !!session?.user?.id,
-      });
-      return NextResponse.json(
-        { error: "Unauthorized - please log in" },
-        { status: 401 },
-      );
-    }
-
-    // Check if user is an employer
-    const userRow = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, session.user.id))
-      .limit(1)
-      .then((rows) => rows[0]);
-
-    if (!userRow || userRow.role !== "employer") {
-      return NextResponse.json(
-        { error: "Forbidden - employer access required" },
-        { status: 403 },
-      );
+    // Optional: Link to user if they're logged in, but not required
+    let userId: string | null = null;
+    if (session?.user?.id) {
+      const userRow = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, session.user.id))
+        .limit(1)
+        .then((rows) => rows[0]);
+      
+      if (userRow) {
+        userId = userRow.id;
+      }
     }
 
     const body = await request.json();
@@ -138,12 +127,12 @@ export async function POST(request: Request) {
       }
     }
 
-    // link company owner if new (best-effort; don't block job creation)
-    if (!existingCompany) {
+    // link company owner if new and user is logged in (best-effort; don't block job creation)
+    if (!existingCompany && userId) {
       try {
         await db.insert(companyUsers).values({
           companyId: company.id,
-          userId: session.user.id as string,
+          userId: userId,
           role: "owner",
         });
       } catch (err) {

@@ -53,7 +53,7 @@ export function JobsBoard() {
   const router = useRouter();
 
   const q = searchParams.get("q") ?? "";
-  const activeCategory = searchParams.get("category") ?? "";
+  const activeCategories = searchParams.getAll("category").filter(Boolean);
   const [location, setLocation] = React.useState(
     searchParams.get("location") ?? "",
   );
@@ -63,8 +63,8 @@ export function JobsBoard() {
   const [optimised, setOptimised] = React.useState(false);
 
   const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes, activeCategory }],
-    [q, location, jobTypes, activeCategory],
+    () => ["jobs", { q, location, jobTypes, activeCategories }],
+    [q, location, jobTypes, activeCategories],
   );
 
   const fetchJobs = React.useCallback(
@@ -74,7 +74,7 @@ export function JobsBoard() {
       params.set("limit", "20");
       if (q) params.set("q", q);
       if (location) params.set("location", location);
-      if (activeCategory) params.set("category", activeCategory);
+      activeCategories.forEach((cat) => params.append("category", cat));
       jobTypes.forEach((jt) => params.append("job_type", jt));
 
       const res = await fetch(`/api/jobs${buildQueryString(params)}`);
@@ -83,7 +83,7 @@ export function JobsBoard() {
       }
       return res.json();
     },
-    [q, location, jobTypes, activeCategory],
+    [q, location, jobTypes, activeCategories],
   );
 
   const {
@@ -153,7 +153,7 @@ export function JobsBoard() {
           </p>
           <div className="space-y-1">
             {COUNTRIES.map((country) => (
-              <label key={country} className="flex items-center gap-2">
+              <label key={country} className="flex cursor-pointer items-center gap-2">
                 <input
                   type="radio"
                   name="country"
@@ -169,7 +169,7 @@ export function JobsBoard() {
             ))}
             <button
               type="button"
-              className="mt-1 text-[11px] font-medium text-yellow-700 underline"
+              className="mt-1 text-[11px] font-medium text-yellow-700 cursor-pointer underline"
               onClick={() => setLocation("")}
             >
               Clear location
@@ -183,7 +183,7 @@ export function JobsBoard() {
           </p>
           <div className="space-y-1">
             {EMPLOYMENT_TYPES.map((type) => (
-              <label key={type.value} className="flex items-center gap-2">
+              <label key={type.value} className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
                   value={type.value}
@@ -229,7 +229,7 @@ export function JobsBoard() {
               onClick={handleOptimise}
               disabled={optimised}
               className={cn(
-                "px-4 py-2 border-2 border-black text-sm font-bold transition-colors",
+                "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
                 optimised
                   ? "bg-yellow-400 text-black"
                   : "text-black hover:bg-black hover:text-white",

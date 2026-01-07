@@ -68,7 +68,7 @@ export default function JobsPage({
       <section className="relative bg-white py-12 sm:py-16 overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none">
+            <h1 className="text-5xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
               The latest remote jobs and opportunities
           </h1>
             <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">

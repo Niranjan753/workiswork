@@ -89,7 +89,7 @@ export default function JobsPage({
           <div className="flex flex-nowrap items-center justify-center gap-3 pt-4">
             <Link
               href="/join"
-              className="flex py-4 items-center justify-center border-2 border-black bg-yellow-400 px-10 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
+              className="flex h-12 items-center justify-center border-2 border-black bg-yellow-400 px-8 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
             >
               Join
             </Link>

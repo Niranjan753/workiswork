@@ -50,6 +50,7 @@ export async function sendAlertEmail({
     from: "onboarding@resend.dev",
     to,
     subject,
-    html: emailHtml,
+    html,
   });
 }
+

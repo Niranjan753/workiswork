@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
+import { CategoryFilters } from "../../components/jobs/category-filters";
 import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
@@ -60,9 +61,6 @@ export default function JobsPage({
     { label: "All Others", slug: "all-others" },
   ];
 
-  const activeCategory = (searchParams as any)?.category || "";
-  const q = searchParams?.q || "";
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-white text-black">
       <GridBackground />
@@ -101,30 +99,9 @@ export default function JobsPage({
           </div>
 
           {/* Category pills row - Gumroad style */}
-          <div className="flex flex-wrap justify-center gap-2">
-                {categoryChips.map(({ label, slug }) => {
-                  const params = new URLSearchParams();
-                  if (q) params.set("q", q);
-                  if (slug !== "all-others") params.set("category", slug);
-
-                  const href = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
-                  const isActive = activeCategory === slug;
-
-                  return (
-                    <Link
-                      key={slug}
-                      href={href}
-                  className={`px-4 py-2 text-sm font-bold transition-all border-2 border-black ${
-                        isActive
-                      ? "bg-black text-yellow-400"
-                      : "bg-white text-black hover:bg-yellow-100"
-                      }`}
-                    >
-                      {label}
-                    </Link>
-                  );
-                })}
-          </div>
+          <Suspense fallback={null}>
+            <CategoryFilters categories={categoryChips} />
+          </Suspense>
         </section>
 
         <Suspense fallback={null}>

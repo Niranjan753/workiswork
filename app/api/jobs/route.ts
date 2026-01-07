@@ -22,6 +22,8 @@ export async function GET(request: Request) {
 
   const q = searchParams.get("q") || "";
   const categorySlug = searchParams.get("category") || undefined;
+  // Allow multiple category filters (?category=software-development&category=design)
+  const categorySlugs = searchParams.getAll("category").filter(Boolean);
   const jobType = searchParams.get("job_type") || undefined;
   const remoteScope = searchParams.get("remote_scope") || undefined;
   const minSalary = searchParams.get("min_salary");
@@ -42,7 +44,11 @@ export async function GET(request: Request) {
     );
   }
 
-  if (categorySlug) {
+  // Handle multiple categories
+  if (categorySlugs.length > 0) {
+    filters.push(inArray(categories.slug, categorySlugs));
+  } else if (categorySlug) {
+    // Fallback for single value
     filters.push(eq(categories.slug, categorySlug));
   }
 

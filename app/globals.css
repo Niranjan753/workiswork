@@ -141,6 +141,10 @@
     letter-spacing: -0.02em;
     line-height: 1.1;
   }
+  /* Prevent scroll anchoring on jobs page */
+  html {
+    overflow-anchor: none;
+  }
 }
 
 /* Gumroad-style speech bubbles */

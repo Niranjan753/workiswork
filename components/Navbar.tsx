@@ -70,7 +70,7 @@ export function Navbar() {
             WorkIsWork
           </span>
           {/* Show name on xs but hide on SM+ for only mobile (optional) */}
-          <span className="text-lg font-bold tracking-tight text-yellow-400 ml-2 inline md:hidden xs:inline">
+          <span className="text-lg font-bold tracking-tight text-black ml-2 inline md:hidden xs:inline">
             WorkIsWork
           </span>
         </Link>

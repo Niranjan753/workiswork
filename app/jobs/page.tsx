@@ -85,11 +85,17 @@ export default function JobsPage({
       {/* Main Content Area - White */}
       <main className="mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-white">
         <section className="mb-4 space-y-4">
-          {/* Centered search bar */}
-          <div className="flex justify-center pt-2">
-          <Suspense fallback={null}>
-            <JobsSearchBar categories={categoryChips} />
-          </Suspense>
+          {/* Search row with left CTA, aligned inline */}
+          <div className="flex flex-nowrap items-center justify-center gap-3 pt-4">
+            <Link
+              href="/join"
+              className="flex h-12 items-center justify-center border-2 border-black bg-yellow-400 px-5 text-sm font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
+            >
+              Join
+            </Link>
+            <Suspense fallback={null}>
+              <JobsSearchBar categories={categoryChips} />
+            </Suspense>
           </div>
 
           {/* Category pills row - Gumroad style */}

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "../../lib/utils";
 
@@ -107,7 +108,7 @@ export function JobsSearchBar({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative mx-auto mt-0 flex max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2"
+      className="relative mt-0 flex w-full max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2"
     >
       <input
         type="text"

@@ -196,6 +196,15 @@ export function JobsBoard() {
             ))}
           </div>
         </div>
+
+        <div className="pt-2">
+          <Link
+            href="/join"
+            className="block w-full text-center border-2 border-black bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-colors"
+          >
+            Join
+          </Link>
+        </div>
       </aside>
 
       {/* Main list */}

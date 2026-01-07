@@ -49,13 +49,6 @@ Whether you're a developer in Lagos, a designer in Lisbon, or a marketer in Mani
 - **Email**: Resend
 - **Deployment**: Vercel
 
-## 📊 By the Numbers
-
-- **12,543+** Active Remote Jobs
-- **8,432+** Companies
-- **45,231+** Job Seekers
-- **150+** Countries Represented
-
 ## 🎯 Our Values
 
 - **Quality First** - We hand-curate every job listing to ensure you're seeing the best opportunities

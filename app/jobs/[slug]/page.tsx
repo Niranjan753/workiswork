@@ -116,9 +116,9 @@ export default async function JobDetailPage({ params }: Params) {
   if (!job) return notFound();
 
   return (
-    <div className="relative min-h-screen bg-white text-black overflow-hidden">
+    <div className="relative min-h-screen bg-transparent text-black overflow-hidden">
       <GridBackground />
-      <header className="relative z-10 border-b-2 border-black bg-white">
+      <header className="relative z-10 border-b-2 border-black bg-transparent">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
             ← Back to jobs

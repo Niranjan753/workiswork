@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { JoinQuestion } from "@/lib/join-questions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { GridBackground } from "@/components/GridBackground";
 
 type Props = {
   questions: JoinQuestion[];
@@ -65,12 +66,13 @@ export function JoinWizard({ questions }: Props) {
   }, [answers, questions]);
 
   return (
-    <div className="min-h-screen bg-white text-black flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-3xl border-2 border-black bg-white shadow-md">
+    <div className="relative min-h-screen bg-white text-black overflow-hidden flex items-center justify-center px-4 py-12">
+      <GridBackground />
+      <div className="relative z-10 w-full max-w-3xl border-2 border-black bg-white shadow-lg">
         {/* Progress bar */}
-        <div className="w-full h-1 bg-black/5">
+        <div className="w-full h-2 bg-white border-b-2 border-black">
           <div
-            className="h-1 bg-yellow-400"
+            className="h-full bg-yellow-400 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -99,17 +101,17 @@ export function JoinWizard({ questions }: Props) {
           {/* Options */}
           <div className="mt-4 space-y-2">
             {current.options.map((opt) => {
-          const selected = answers[step]?.includes(opt);
+              const selected = answers[step]?.includes(opt);
               return (
                 <button
                   key={opt}
                   type="button"
                   onClick={() => handleSelect(opt)}
                   className={
-                    "w-full text-left px-4 py-3 text-sm border border-black/20 bg-white transition " +
+                    "w-full text-left px-4 py-3 cursor-pointer text-sm font-bold border-2 border-black transition-all " +
                     (selected
-                      ? "border-black bg-yellow-400 font-bold"
-                      : "hover:bg-yellow-100")
+                      ? "bg-yellow-400 text-black shadow-lg"
+                      : "bg-white text-black hover:bg-yellow-100")
                   }
                 >
                   {opt}
@@ -123,8 +125,8 @@ export function JoinWizard({ questions }: Props) {
             <button
               type="button"
               onClick={goNext}
-            disabled={answers[step]?.length === 0 && !isLast}
-              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-black text-white hover:bg-yellow-400 hover:text-black transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={answers[step]?.length === 0 && !isLast}
+              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black disabled:hover:text-yellow-400"
             >
               {isLast ? "Finish" : "Keep going"}
             </button>
@@ -133,7 +135,7 @@ export function JoinWizard({ questions }: Props) {
               type="button"
               onClick={skipStep}
               disabled={isLast}
-              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
             >
               Skip this step
             </button>

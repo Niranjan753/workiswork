@@ -66,10 +66,10 @@ export default async function AlertsPage() {
             </p>
             <div className="mt-6">
               <Link
-                href="/admin"
-                className="block w-full rounded-full bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
+                href="/post"
+                className="block w-full border-2 border-black bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
               >
-                Go to Employer Dashboard
+                Go to Post a Job
               </Link>
             </div>
           </div>

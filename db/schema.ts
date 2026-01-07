@@ -145,6 +145,9 @@ export const jobs = pgTable("jobs", {
   isFeatured: boolean("is_featured").notNull().default(false),
   isPremium: boolean("is_premium").notNull().default(false),
   applyUrl: text("apply_url").notNull(),
+  receiveApplicationsByEmail: boolean("receive_applications_by_email").notNull().default(false),
+  companyEmail: text("company_email"), // For invoice and email applications
+  highlightColor: text("highlight_color"), // Brand color for highlighting
   source: text("source").notNull().default("internal"),
   sourceUrl: text("source_url"),
   descriptionHtml: text("description_html").notNull(),

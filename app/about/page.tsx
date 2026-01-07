@@ -180,8 +180,8 @@ export default function AboutPage() {
               Browse Jobs
             </Link>
             <Link
-              href="/admin"
-              className="rounded-xl border-2 border-black bg-yellow-500 px-6 py-3 text-sm font-bold text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
+              href="/post"
+              className="border-2 border-black bg-yellow-400 px-6 py-3 text-sm font-bold text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
             >
               Post a Job
             </Link>

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -22,6 +23,22 @@ export function AdminJobForm({ categories }: Props) {
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [successSlug, setSuccessSlug] = React.useState<string | null>(null);
+  const [tags, setTags] = React.useState<string[]>([]);
+  const [tagInput, setTagInput] = React.useState("");
+  const [receiveByEmail, setReceiveByEmail] = React.useState(false);
+  const [highlightColor, setHighlightColor] = React.useState(false);
+
+  function addTag() {
+    const trimmed = tagInput.trim();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags([...tags, trimmed]);
+      setTagInput("");
+    }
+  }
+
+  function removeTag(tag: string) {
+    setTags(tags.filter((t) => t !== tag));
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,21 +53,13 @@ export function AdminJobForm({ categories }: Props) {
       companyName: String(formData.get("companyName") || ""),
       companyWebsite: String(formData.get("companyWebsite") || ""),
       companyLogo: String(formData.get("companyLogo") || ""),
-      location: String(formData.get("location") || ""),
       categorySlug: String(formData.get("category") || ""),
-      jobType: String(formData.get("jobType") || "full_time"),
-      remoteScope: String(formData.get("remoteScope") || "worldwide"),
-      salaryMin: String(formData.get("salaryMin") || ""),
-      salaryMax: String(formData.get("salaryMax") || ""),
-      salaryCurrency: String(formData.get("salaryCurrency") || "USD"),
       applyUrl: String(formData.get("applyUrl") || ""),
-      isFeatured: formData.get("isFeatured") === "on",
-      isPremium: formData.get("isPremium") === "on",
+      receiveApplicationsByEmail: receiveByEmail,
+      companyEmail: String(formData.get("companyEmail") || ""),
+      highlightColor: highlightColor ? String(formData.get("highlightColor") || "") : undefined,
       descriptionHtml: String(formData.get("descriptionHtml") || ""),
-      tags: String(formData.get("tags") || "")
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
+      tags: tags,
     };
 
     try {
@@ -85,6 +94,10 @@ export function AdminJobForm({ categories }: Props) {
 
       // Reset form
       formRef.current?.reset();
+      setTags([]);
+      setTagInput("");
+      setReceiveByEmail(false);
+      setHighlightColor(false);
 
       // Refresh jobs board
       router.refresh();
@@ -100,49 +113,202 @@ export function AdminJobForm({ categories }: Props) {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-5 rounded-xl border border-zinc-200 bg-white p-5 text-sm text-zinc-900 shadow-sm"
+      className="space-y-6 border-2 border-black bg-white p-8 text-sm text-black shadow-lg"
     >
-      <h2 className="text-base font-semibold">Create a new remote job</h2>
+      <h2 className="text-2xl font-bold text-black">Post a job</h2>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Job title</label>
-          <Input name="title" required placeholder="Senior React Engineer" />
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Company name</label>
-          <Input name="companyName" required placeholder="Acme Inc." />
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Company website</label>
-          <Input
-            name="companyWebsite"
-            type="url"
-            placeholder="https://company.com"
+      <div className="space-y-5">
+        {/* Company Name */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Company Name
+          </label>
+          <p className="text-xs text-black/70">
+            Your company's brand/trade name: without Inc., Ltd., B.V., Pte., etc.
+          </p>
+          <Input 
+            name="companyName" 
+            required 
+            placeholder="Acme" 
+            className="border-2 border-black"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Company logo URL (optional)</label>
+
+        {/* Job Title */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Job Title
+          </label>
+          <p className="text-xs text-black/70">
+            Please specify as single job position like "Machine Learning Engineer"
+          </p>
+          <Input 
+            name="title" 
+            required 
+            placeholder="Machine Learning Engineer" 
+            className="border-2 border-black"
+          />
+        </div>
+
+        {/* Tags */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Tags, Keywords, or Stack
+          </label>
+          <p className="text-xs text-black/70">
+            Short tags are preferred. Use tags like industry and tech stack.
+          </p>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center gap-1 border-2 border-black bg-yellow-400 px-3 py-1 text-xs font-bold text-black"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeTag(tag)}
+                  className="hover:bg-black hover:text-yellow-400 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addTag();
+                }
+              }}
+              placeholder="Type a tag to search and add it"
+              className="border-2 border-black"
+            />
+            <Button
+              type="button"
+              onClick={addTag}
+              className="border-2 border-black bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black"
+            >
+              Add
+            </Button>
+          </div>
+        </div>
+
+        {/* Company Logo */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Company Logo
+          </label>
+          <p className="text-xs text-black/70">
+            Upload a square logo of at least 48x48 pixels for best aesthetic results. Supports: JPG, PNG, WebP, SVG, AVIF, and GIF formats.
+          </p>
           <Input
             name="companyLogo"
             type="url"
             placeholder="https://company.com/logo.png"
-          />
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Location label</label>
-          <Input
-            name="location"
-            required
-            placeholder="Worldwide, Europe, Americas, etc."
+            className="border-2 border-black"
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Category</label>
+        {/* Job Description */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Job Description
+          </label>
+          <textarea
+            name="descriptionHtml"
+            required
+            rows={8}
+            className="w-full border-2 border-black bg-white px-3 py-2 text-sm"
+            placeholder="Write the full job description here..."
+          />
+        </div>
+
+        {/* Apply URL */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Apply URL
+          </label>
+          <p className="text-xs text-black/70">
+            Apply URLs with a form an applicant can fill out generally receive a lot more applicants
+          </p>
+          <Input
+            name="applyUrl"
+            type="url"
+            required
+            placeholder="https://company.com/jobs/123"
+            className="border-2 border-black"
+          />
+        </div>
+
+        {/* Receive applications by email */}
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={receiveByEmail}
+              onChange={(e) => setReceiveByEmail(e.target.checked)}
+              className="h-4 w-4 border-2 border-black"
+            />
+            <span className="text-sm font-bold text-black">
+              I want to receive applications by email
+            </span>
+          </label>
+        </div>
+
+        {/* Company Email */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Company Email (For invoice)
+          </label>
+          <p className="text-xs text-black/70">
+            Make sure this email is accessible by you! We use this to send the invoice and edit link.
+          </p>
+          <Input
+            name="companyEmail"
+            type="email"
+            required
+            placeholder="contact@company.com"
+            className="border-2 border-black"
+          />
+        </div>
+
+        {/* Highlight with brand color */}
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={highlightColor}
+              onChange={(e) => setHighlightColor(e.target.checked)}
+              className="h-4 w-4 border-2 border-black"
+            />
+            <span className="text-sm font-bold text-black">
+              Highlight with a brand color (+$49)
+            </span>
+            <span className="text-xs text-black/70">2x more views</span>
+          </label>
+          {highlightColor && (
+            <Input
+              name="highlightColor"
+              type="color"
+              defaultValue="#facc15"
+              className="border-2 border-black w-20 h-10"
+            />
+          )}
+        </div>
+
+        {/* Category */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Category
+          </label>
           <select
             name="category"
-            className="h-10 w-full rounded-full border border-zinc-200 bg-white px-3 text-xs"
+            className="h-10 w-full border-2 border-black bg-white px-3 text-sm font-bold"
             required
             defaultValue={categories[0]?.slug}
           >
@@ -153,123 +319,37 @@ export function AdminJobForm({ categories }: Props) {
             ))}
           </select>
         </div>
-
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Job type</label>
-          <select
-            name="jobType"
-            className="h-10 w-full rounded-full border border-zinc-200 bg-white px-3 text-xs"
-            defaultValue="full_time"
-          >
-            <option value="full_time">Full-time</option>
-            <option value="part_time">Part-time</option>
-            <option value="freelance">Freelance</option>
-            <option value="contract">Contract</option>
-            <option value="internship">Internship</option>
-          </select>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Remote scope</label>
-          <select
-            name="remoteScope"
-            className="h-10 w-full rounded-full border border-zinc-200 bg-white px-3 text-xs"
-            defaultValue="worldwide"
-          >
-            <option value="worldwide">Worldwide</option>
-            <option value="europe">Europe</option>
-            <option value="north_america">North America</option>
-            <option value="latam">LATAM</option>
-            <option value="asia">Asia</option>
-          </select>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Min salary</label>
-          <Input name="salaryMin" type="number" placeholder="60000" />
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Max salary</label>
-          <Input name="salaryMax" type="number" placeholder="90000" />
-        </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium">Currency</label>
-          <Input name="salaryCurrency" defaultValue="USD" />
-        </div>
-
-        <div className="space-y-1 sm:col-span-2">
-          <label className="text-xs font-medium">Apply URL</label>
-          <Input
-            name="applyUrl"
-            type="url"
-            required
-            placeholder="https://company.com/jobs/123"
-          />
-        </div>
-
-        <div className="space-y-1 sm:col-span-2">
-          <label className="text-xs font-medium">
-            Tags (comma separated, e.g. React, TypeScript, Senior)
-          </label>
-          <Input name="tags" placeholder="React, TypeScript, Senior" />
-        </div>
-
-        <div className="space-y-1 sm:col-span-2">
-          <label className="text-xs font-medium">Description (HTML)</label>
-          <textarea
-            name="descriptionHtml"
-            required
-            rows={6}
-            className="w-full rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-xs"
-            placeholder="<p>Write the full job description here...</p>"
-          />
-        </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-4 text-xs">
-          <label className="flex items-center gap-1">
-            <input type="checkbox" name="isFeatured" className="h-3 w-3" />
-            <span>Featured</span>
-          </label>
-          <label className="flex items-center gap-1">
-            <input type="checkbox" name="isPremium" className="h-3 w-3" />
-            <span>Premium</span>
-          </label>
-        </div>
-
+      <div className="pt-4 border-t-2 border-black">
         <Button
           type="submit"
           disabled={submitting}
-          className="rounded-full bg-orange-500 px-5 py-2 text-xs font-semibold text-white hover:bg-orange-600"
+          className="w-full border-2 border-black bg-black px-6 py-3 text-base font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
         >
-          {submitting ? "Saving…" : "Publish job"}
+          {submitting ? "Posting job…" : "Post job - $299"}
         </Button>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-3">
-          <p className="text-xs font-medium text-red-600">Error: {error}</p>
-          <p className="mt-1 text-xs text-red-500">
-            Check the browser console for more details.
-          </p>
+        <div className="border-2 border-black bg-red-50 p-4">
+          <p className="text-sm font-bold text-red-600">Error: {error}</p>
         </div>
       )}
       {successSlug && (
-        <p className="text-xs text-emerald-600">
-          Job created.{" "}
-          <button
-            type="button"
-            className="underline"
-            onClick={() => router.push(`/jobs/${successSlug}`)}
-          >
-            View it on the board
-          </button>
-          .
-        </p>
+        <div className="border-2 border-black bg-green-50 p-4">
+          <p className="text-sm font-bold text-green-600">
+            Job created successfully!{" "}
+            <button
+              type="button"
+              className="underline"
+              onClick={() => router.push(`/jobs/${successSlug}`)}
+            >
+              View it on the board
+            </button>
+          </p>
+        </div>
       )}
     </form>
   );
 }
-
-

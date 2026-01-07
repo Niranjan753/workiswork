@@ -18,7 +18,7 @@ export function Navbar() {
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
-  const isAdmin = pathname.startsWith("/admin");
+  const isPost = pathname.startsWith("/post");
 
   const userEmail = session?.user?.email;
 
@@ -41,10 +41,10 @@ export function Navbar() {
     }
   }, [session?.user?.id]);
 
-  const handleAdminClick = (e: React.MouseEvent) => {
+  const handlePostClick = (e: React.MouseEvent) => {
     if (!userEmail) {
       e.preventDefault();
-      router.push("/login?callbackUrl=/admin&role=employer");
+      router.push("/login?callbackUrl=/post&role=employer");
       return;
     }
     if (userRole === "user") {
@@ -121,18 +121,18 @@ export function Navbar() {
             Join
           </Link>
           <Link
-            href="/admin"
-            onClick={handleAdminClick}
+            href="/post"
+            onClick={handlePostClick}
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
-              isAdmin
+              isPost
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
                 : userRole === "user"
                   ? "text-white/40 cursor-not-allowed"
                   : "text-white hover:bg-white hover:text-black hover:shadow-md"
             )}
           >
-            For Employers
+            Post a Job
           </Link>
         </nav>
 
@@ -255,21 +255,21 @@ export function Navbar() {
             Join
           </Link>
           <Link
-            href="/admin"
+            href="/post"
             onClick={(e) => {
               setMobileOpen(false);
-              handleAdminClick(e);
+              handlePostClick(e);
             }}
             className={cn(
               "px-4 py-2 transition-all border-2 border-yellow-400",
-              isAdmin
+              isPost
                 ? "bg-yellow-400 text-black shadow-lg"
                 : userRole === "user"
                   ? "text-white/40 cursor-not-allowed"
                   : "text-white hover:bg-white hover:text-black"
             )}
           >
-            For Employers
+            Post a Job
           </Link>
         </nav>
         <div className="flex flex-col gap-2 px-3 pb-4">

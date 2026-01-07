@@ -21,7 +21,7 @@ export default async function AdminUsersPage() {
   const session = await getServerSession();
 
   if (!session?.user) {
-    redirect("/login?callbackUrl=/admin/users&role=employer");
+    redirect("/login?callbackUrl=/admin/users&role=employer"); // Keep admin/users as separate route
   }
 
   // Check if user is an employer
@@ -38,8 +38,8 @@ export default async function AdminUsersPage() {
         <GridBackground />
         <header className="border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-            <Link href="/admin" className="text-sm font-bold text-black hover:underline">
-              ← Back to admin
+            <Link href="/post" className="text-sm font-bold text-black hover:underline">
+              ← Back to post job
             </Link>
           </div>
         </header>
@@ -81,8 +81,8 @@ export default async function AdminUsersPage() {
       <header className="border-b-2 border-black bg-yellow-500">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div className="flex items-center gap-4">
-            <Link href="/admin" className="text-sm font-bold text-black hover:underline">
-              ← Back to admin
+            <Link href="/post" className="text-sm font-bold text-black hover:underline">
+              ← Back to post job
             </Link>
             <span className="text-xs text-black/80 font-medium">|</span>
             <h1 className="text-lg font-bold text-black">Users Management</h1>

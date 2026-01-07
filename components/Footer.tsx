@@ -136,7 +136,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/admin"
+                  href="/post"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
                     "text-black"

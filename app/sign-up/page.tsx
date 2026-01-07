@@ -240,8 +240,7 @@ function SignUpForm() {
                         body: JSON.stringify({ role: "employer" }),
                       }).catch(() => {}); // Fail silently
                     }
-                    // If the user completed the join wizard before sign-up,
-                    // persist their onboarding preferences.
+                    // Save join preferences if they exist in localStorage
                     if (typeof window !== "undefined") {
                       const stored = window.localStorage.getItem(
                         "workiswork_join_preferences",
@@ -254,6 +253,7 @@ function SignUpForm() {
                         }).catch(() => {});
                       }
                     }
+                    toast.success("Account created successfully!");
                     router.push(callbackUrl);
                   }
                 } catch (err: any) {

@@ -62,7 +62,8 @@ Whether you're a developer in Lagos, a designer in Lisbon, or a marketer in Mani
 - **Job Details** (`/jobs/[slug]`) - View individual job postings
 - **Blog** (`/blog`) - Tips, stories, and resources for remote work
 - **Job Alerts** (`/alerts`) - Create and manage job alerts
-- **Employer Dashboard** (`/admin`) - Post and manage jobs
+- **Post a Job** (`/post`) - Post remote jobs to the board
+- **Admin Users** (`/admin/users`) - View and manage all users (employer only)
 - **About** (`/about`) - Learn more about WorkIsWork
 - **Pricing** (`/pricing`) - Premium plans and features
 - **Contact** (`/contact`) - Get in touch

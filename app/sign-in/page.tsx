@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Briefcase, Users, TrendingUp, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +136,10 @@ function SignInForm() {
                     },
                     onSuccess: () => {
                       router.push(callbackUrl);
+                    },
+                    onError: (error: any) => {
+                      const errorMsg = error?.message || String(error || "");
+                      toast.error(errorMsg || "Failed to sign in. Please check your credentials and try again.");
                     },
                   },
                 );

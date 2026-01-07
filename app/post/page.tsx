@@ -13,26 +13,26 @@ const siteUrl = getSiteUrl();
 const ogImage = getOgImageUrl();
 
 export const metadata: Metadata = {
-  title: "Admin – Create Remote Jobs | WorkIsWork",
-  description: "Curate and publish remote jobs to the WorkIsWork board.",
+  title: "Post a Job – WorkIsWork",
+  description: "Post your remote job to the WorkIsWork board.",
   openGraph: {
     type: "website",
-    url: `${siteUrl}/admin`,
-    title: "Admin – Create Remote Jobs | WorkIsWork",
-    description: "Curate and publish remote jobs to the WorkIsWork board.",
+    url: `${siteUrl}/post`,
+    title: "Post a Job – WorkIsWork",
+    description: "Post your remote job to the WorkIsWork board.",
     images: [
       {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: "WorkIsWork Admin",
+        alt: "WorkIsWork Post a Job",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Admin – Create Remote Jobs | WorkIsWork",
-    description: "Curate and publish remote jobs to the WorkIsWork board.",
+    title: "Post a Job – WorkIsWork",
+    description: "Post your remote job to the WorkIsWork board.",
     images: [ogImage],
   },
 };
@@ -48,7 +48,7 @@ async function getCategories() {
   return rows;
 }
 
-export default async function AdminPage() {
+export default async function PostJobPage() {
   const session = await getServerSession();
   const cats = await getCategories();
 
@@ -56,15 +56,15 @@ export default async function AdminPage() {
     return (
       <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
         <GridBackground />
-        <header className="border-b-2 border-black bg-yellow-400">
+        <header className="relative z-10 border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
               ← Back to jobs
             </Link>
           </div>
         </header>
-        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
-          <div className="rounded-2xl border-2 border-black bg-white p-8 text-center shadow-lg">
+        <main className="relative z-10 flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
+          <div className="border-2 border-black bg-white p-8 text-center shadow-lg">
             <h1 className="text-xl font-bold text-black">
               Company login required
             </h1>
@@ -73,8 +73,8 @@ export default async function AdminPage() {
             </p>
             <div className="mt-6">
               <Link
-                href="/login?callbackUrl=/admin&role=employer"
-                className="block w-full rounded-full bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
+                href="/login?callbackUrl=/post&role=employer"
+                className="block w-full border-2 border-black bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
               >
                 Log in as Employer
               </Link>
@@ -98,15 +98,15 @@ export default async function AdminPage() {
     return (
       <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
         <GridBackground />
-        <header className="border-b-2 border-black bg-yellow-400">
+        <header className="relative z-10 border-b-2 border-black bg-yellow-400">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
               ← Back to jobs
             </Link>
           </div>
         </header>
-        <main className="flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
-          <div className="rounded-2xl border-2 border-black bg-white p-8 text-center shadow-lg">
+        <main className="relative z-10 flex-1 mx-auto max-w-5xl px-4 py-16 sm:px-6 bg-white">
+          <div className="border-2 border-black bg-white p-8 text-center shadow-lg">
             <h1 className="text-xl font-bold text-black">
               Employer access required
             </h1>
@@ -115,8 +115,8 @@ export default async function AdminPage() {
             </p>
             <div className="mt-6">
               <Link
-                href="/login?callbackUrl=/admin&role=employer"
-                className="block w-full rounded-full bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
+                href="/login?callbackUrl=/post&role=employer"
+                className="block w-full border-2 border-black bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
               >
                 Log in as Employer
               </Link>
@@ -131,23 +131,23 @@ export default async function AdminPage() {
   return (
     <div className="relative flex min-h-screen flex-col bg-white text-black overflow-hidden">
       <GridBackground />
-      <header className="border-b-2 border-black bg-yellow-400">
+      <header className="relative z-10 border-b-2 border-black bg-yellow-400">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
             ← Back to jobs
           </Link>
           <span className="text-xs text-black/80 font-medium">
-            Simple admin – add jobs directly to the board
+            Post your remote job to the board
           </span>
         </div>
       </header>
 
       {/* Main Content - White */}
-      <main className="flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 bg-white">
+      <main className="relative z-10 flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 bg-white">
         <div className="mb-6">
           <Link
             href="/admin/users"
-            className="inline-flex items-center gap-2 rounded-xl border-2 border-black bg-black px-4 py-2 text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-lg"
+            className="inline-flex items-center gap-2 border-2 border-black bg-black px-4 py-2 text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-lg"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -160,5 +160,4 @@ export default async function AdminPage() {
     </div>
   );
 }
-
 

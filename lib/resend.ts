@@ -4,6 +4,14 @@ const apiKey = process.env.RESEND_API_KEY;
 
 export const resendClient = apiKey ? new Resend(apiKey) : null;
 
+// Log for debugging
+if (typeof process !== "undefined" && process.env.NODE_ENV === "development") {
+  console.log("[Resend] Client initialized:", {
+    hasApiKey: !!apiKey,
+    apiKeyPrefix: apiKey ? apiKey.substring(0, 10) + "..." : "none",
+  });
+}
+
 // lib/resend.ts
 
 export async function sendAlertEmail({
@@ -39,10 +47,9 @@ export async function sendAlertEmail({
   `;
 
   await resendClient.emails.send({
-    from: "niranjanr753@gmail.com",
+    from: "onboarding@resend.dev",
     to,
     subject,
-    html,
+    html: emailHtml,
   });
 }
-

@@ -22,6 +22,7 @@ const createJobSchema = z.object({
   title: z.string().min(3),
   companyName: z.string().min(2),
   companyWebsite: z.string().url().optional().or(z.literal("")),
+  companyLogo: z.string().url().optional().or(z.literal("")),
   location: z.string().min(2),
   categorySlug: z.string().min(2),
   jobType: z.enum(jobTypeEnum.enumValues),
@@ -125,10 +126,22 @@ export async function POST(request: Request) {
           name: data.companyName,
           slug: companySlug,
           websiteUrl: data.companyWebsite || null,
-          logoUrl: guessLogoFromWebsite(data.companyWebsite),
+          logoUrl: data.companyLogo || guessLogoFromWebsite(data.companyWebsite),
         })
         .returning()
         .then((rows) => rows[0]!));
+
+    // If company exists and a new logo was provided, update it (best-effort).
+    if (existingCompany && data.companyLogo) {
+      try {
+        await db
+          .update(companies)
+          .set({ logoUrl: data.companyLogo })
+          .where(eq(companies.id, existingCompany.id));
+      } catch (err) {
+        console.error("[POST /api/admin/jobs] Failed to update company logo", err);
+      }
+    }
 
     // link company owner if new (best-effort; don't block job creation)
     if (!existingCompany) {

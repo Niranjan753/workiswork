@@ -35,6 +35,7 @@ export function AdminJobForm({ categories }: Props) {
       title: String(formData.get("title") || ""),
       companyName: String(formData.get("companyName") || ""),
       companyWebsite: String(formData.get("companyWebsite") || ""),
+      companyLogo: String(formData.get("companyLogo") || ""),
       location: String(formData.get("location") || ""),
       categorySlug: String(formData.get("category") || ""),
       jobType: String(formData.get("jobType") || "full_time"),
@@ -118,6 +119,14 @@ export function AdminJobForm({ categories }: Props) {
             name="companyWebsite"
             type="url"
             placeholder="https://company.com"
+          />
+        </div>
+        <div className="space-y-1">
+          <label className="text-xs font-medium">Company logo URL (optional)</label>
+          <Input
+            name="companyLogo"
+            type="url"
+            placeholder="https://company.com/logo.png"
           />
         </div>
         <div className="space-y-1">

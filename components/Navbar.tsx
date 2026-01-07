@@ -149,15 +149,14 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
             >
               Log out
             </button>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
-              style={{ borderRadius: "0.5rem" }}
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
             >
               Log in
             </Link>
@@ -285,7 +284,7 @@ export function Navbar() {
           {userEmail ? (
             <button
               type="button"
-              className="rounded-xl border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all text-left"
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all text-left"
               onClick={() => {
                 setMobileOpen(false);
                 handleSignOut();
@@ -296,7 +295,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="rounded-xl border-2 border-yellow-400 cursor-pointer bg-yellow-400 px-4 py-2 text-sm text-black font-bold shadow-md hover:bg-yellow-500 transition-all"
+              className="border-2 border-yellow-400 cursor-pointer bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
               onClick={() => setMobileOpen(false)}
             >
               Log in

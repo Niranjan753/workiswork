@@ -92,11 +92,11 @@ export default function JobsPage({
       {/* Main Content Area - White */}
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-transparent">
         <section className="mb-4 space-y-4">
-          {/* Search row with left CTA, aligned inline */}
-          <div className="flex flex-nowrap items-center justify-center gap-3 pt-4">
+          {/* Search row with Join button above on mobile, inline on desktop */}
+          <div className="flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center gap-3 pt-4">
             <Link
               href="/join"
-              className="flex h-12 items-center justify-center border-2 border-black bg-yellow-400 px-8 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
+              className="flex h-12 w-full sm:w-auto items-center justify-center border-2 border-black bg-yellow-400 px-8 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
             >
               Join
             </Link>

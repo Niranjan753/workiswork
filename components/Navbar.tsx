@@ -58,7 +58,7 @@ export function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-[#fffdc4] shadow-lg">
+    <header className="fixed inset-x-0 top-0 z-40 border-b-2 border-black bg-white shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         {/* Logo & Brand */}
         <Link href="/jobs" className="flex items-center min-w-fit">
@@ -83,7 +83,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-black hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
             Remote Jobs
@@ -94,7 +94,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-black hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
             Blog
@@ -105,7 +105,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isJoin
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-black hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
             Join
@@ -116,7 +116,7 @@ export function Navbar() {
               "px-4 py-2 text-sm font-bold transition-all",
               isPost
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
-                : "text-black hover:bg-white hover:text-black hover:shadow-md"
+                : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
             Post a Job

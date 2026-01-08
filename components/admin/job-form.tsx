@@ -17,6 +17,13 @@ type Props = {
   categories: Category[];
 };
 
+function parseTags(input: string) {
+  return input
+    .split(/[,\\n]/)
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
 export function AdminJobForm({ categories }: Props) {
   const router = useRouter();
   const formRef = React.useRef<HTMLFormElement>(null);
@@ -29,11 +36,11 @@ export function AdminJobForm({ categories }: Props) {
   const [highlightColor, setHighlightColor] = React.useState(false);
 
   function addTag() {
-    const trimmed = tagInput.trim();
-    if (trimmed && !tags.includes(trimmed)) {
-      setTags([...tags, trimmed]);
-      setTagInput("");
-    }
+    const parsed = parseTags(tagInput);
+    if (parsed.length === 0) return;
+    const next = Array.from(new Set([...tags, ...parsed]));
+    setTags(next);
+    setTagInput("");
   }
 
   function removeTag(tag: string) {
@@ -48,6 +55,10 @@ export function AdminJobForm({ categories }: Props) {
 
     const formData = new FormData(e.currentTarget);
 
+    // If user typed comma-separated tags but didn't click Add, capture them
+    const pendingTags =
+      tags.length > 0 ? tags : parseTags(tagInput);
+
     const payload = {
       title: String(formData.get("title") || ""),
       companyName: String(formData.get("companyName") || ""),
@@ -59,7 +70,7 @@ export function AdminJobForm({ categories }: Props) {
       companyEmail: String(formData.get("companyEmail") || ""),
       highlightColor: highlightColor ? String(formData.get("highlightColor") || "") : undefined,
       descriptionHtml: String(formData.get("descriptionHtml") || ""),
-      tags: tags,
+      tags: pendingTags,
     };
 
     try {

@@ -108,6 +108,7 @@ export async function GET(request: Request) {
         postedAt: jobs.postedAt,
         companyName: companies.name,
         companyLogo: companies.logoUrl,
+        tags: jobs.tags,
         categorySlug: categories.slug,
       })
       .from(jobs)

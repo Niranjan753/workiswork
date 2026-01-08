@@ -23,6 +23,7 @@ type Job = {
   companyName: string | null;
   companyLogo: string | null;
   categorySlug: string | null;
+  tags: string[] | null;
 };
 
 type JobsResponse = {
@@ -274,6 +275,18 @@ export function JobsBoard() {
                   <p className="text-sm font-medium text-black/70">
                     {job.companyName ?? "Remote company"} • {job.location ?? "Remote"}
                   </p>
+                  {job.tags && job.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {job.tags.slice(0, 6).map((tag) => (
+                        <span
+                          key={tag}
+                          className="border-2 border-black bg-yellow-400 px-2 py-1 text-[11px] font-bold text-black shadow-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     <span className="text-xs font-bold uppercase tracking-wide text-black/50">
                       {job.jobType.replace("_", " ")}
@@ -297,7 +310,7 @@ export function JobsBoard() {
               <button
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className="px-6 py-3 border-2 border-black text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 border-2 border-black text-black text-sm font-bold hover:bg-black hover:text-white cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isFetchingNextPage ? "Loading more…" : "Load more jobs"}
               </button>

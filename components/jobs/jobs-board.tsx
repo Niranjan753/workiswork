@@ -6,6 +6,7 @@ import * as React from "react";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
+import { LockOpen } from "lucide-react";
 
 type Job = {
   id: number;
@@ -209,21 +210,22 @@ export function JobsBoard() {
         </div>
       </aside>
 
-      {/* Main list */}
+
       <section className="space-y-3">
-        {/* Top bar - Gumroad style */}
+
         <div className="flex flex-col gap-4 bg-white border-2 border-black p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/pricing"
-              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors"
+              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors flex items-center gap-2"
             >
+              <LockOpen className="w-4 h-4" />
               Unlock All Jobs
             </Link>
             <Link
               href="/alerts"
               className="px-4 py-2 border-2 border-black text-black text-sm font-bold hover:bg-black hover:text-white transition-colors"
-            >
+            > 
               Create Job Alert
             </Link>
             <button

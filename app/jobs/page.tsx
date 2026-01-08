@@ -5,8 +5,8 @@ import { JobsBoard } from "../../components/jobs/jobs-board";
 import { JobsSearchBar } from "../../components/jobs/search-bar";
 import { CategoryFilters } from "../../components/jobs/category-filters";
 import { GridBackground } from "../../components/GridBackground";
-import { Cover } from "../../components/ui/cover";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
+import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 
 const siteUrl = getSiteUrl();
 const ogImage = getOgImageUrl();
@@ -70,8 +70,14 @@ export default function JobsPage({
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
             <h1 className="text-5xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
-              The <Cover>latest</Cover> remote jobs and opportunities
-          </h1>
+              The{" "}
+              <span className="inline-block align-middle">
+                <ContainerTextFlip
+                  words={["better", "latest", "fastest"]}
+                />
+              </span>{" "}
+              remote jobs and opportunities
+            </h1>
             <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
               There's no roadmap for making your own road. But here's some how-to's, helpful tips, and curated remote jobs to help you.
             </p>
@@ -112,4 +118,3 @@ export default function JobsPage({
     </div>
   );
 }
-

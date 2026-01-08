@@ -6,6 +6,7 @@ import * as React from "react";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
+import { LockOpen } from "lucide-react";
 
 type Job = {
   id: number;
@@ -23,6 +24,7 @@ type Job = {
   companyName: string | null;
   companyLogo: string | null;
   categorySlug: string | null;
+  tags: string[] | null;
 };
 
 type JobsResponse = {
@@ -106,7 +108,8 @@ export function JobsBoard() {
   });
 
   const total = data?.pages?.[0]?.total ?? 0;
-  const jobs = data?.pages.flatMap((p) => p.jobs) ?? [];
+  const allJobs = data?.pages.flatMap((p) => p.jobs) ?? [];
+  const jobs = allJobs.slice(0, 25); // Limit to 25 jobs
 
   function toggleJobType(value: string) {
     setJobTypes((prev) =>
@@ -207,21 +210,22 @@ export function JobsBoard() {
         </div>
       </aside>
 
-      {/* Main list */}
+
       <section className="space-y-3">
-        {/* Top bar - Gumroad style */}
+
         <div className="flex flex-col gap-4 bg-white border-2 border-black p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/pricing"
-              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors"
+              className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors flex items-center gap-2"
             >
+              <LockOpen className="w-4 h-4" />
               Unlock All Jobs
             </Link>
             <Link
               href="/alerts"
               className="px-4 py-2 border-2 border-black text-black text-sm font-bold hover:bg-black hover:text-white transition-colors"
-            >
+            > 
               Create Job Alert
             </Link>
             <button
@@ -274,6 +278,18 @@ export function JobsBoard() {
                   <p className="text-sm font-medium text-black/70">
                     {job.companyName ?? "Remote company"} • {job.location ?? "Remote"}
                   </p>
+                  {job.tags && job.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {job.tags.slice(0, 6).map((tag) => (
+                        <span
+                          key={tag}
+                          className="border-2 border-black bg-yellow-400 px-2 py-1 text-[11px] font-bold text-black shadow-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     <span className="text-xs font-bold uppercase tracking-wide text-black/50">
                       {job.jobType.replace("_", " ")}
@@ -284,26 +300,67 @@ export function JobsBoard() {
                   </div>
                 </div>
                 <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors">
+                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
                     View job →
                   </span>
                 </div>
               </div>
             </Link>
           ))}
-
-          {hasNextPage && (
-            <div className="flex justify-center pt-6">
-              <button
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                className="px-6 py-3 border-2 border-black text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isFetchingNextPage ? "Loading more…" : "Load more jobs"}
-              </button>
-            </div>
-          )}
         </div>
+
+        {/* Want more remote jobs section */}
+        {jobs.length > 0 && allJobs.length > 25 && (
+          <div className="mt-12 space-y-8">
+            {/* Headline */}
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl sm:text-4xl font-black text-black">
+                Want more remote jobs?
+              </h2>
+              <p className="text-lg sm:text-xl font-bold text-black">
+                Upgrade to access {total.toLocaleString()} jobs!
+              </p>
+            </div>
+
+            {/* Feature highlights */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="border-2 border-black bg-yellow-100 p-6">
+                <h3 className="text-lg font-black text-black mb-3">
+                  Best Remote Job Listings
+                </h3>
+                <p className="text-sm text-black/80 font-medium">
+                  Only top quality remote jobs. We screen, curate & categorize all jobs.
+                </p>
+              </div>
+              <div className="border-2 border-black bg-yellow-100 p-6">
+                <h3 className="text-lg font-black text-black mb-3">
+                  Advanced Search Filters
+                </h3>
+                <p className="text-sm text-black/80 font-medium">
+                  Find remote jobs tailored to your location and experience. Entry level to executive.
+                </p>
+              </div>
+              <div className="border-2 border-black bg-yellow-100 p-6">
+                <h3 className="text-lg font-black text-black mb-3">
+                  Save Time
+                </h3>
+                <p className="text-sm text-black/80 font-medium">
+                  We spend hours scanning every job for you. Get a job faster with personalized job alerts.
+                </p>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <div className="flex justify-center pt-4">
+              <Link
+                href="/join"
+                className="px-10 py-5 border-2 border-black bg-yellow-400 text-black text-base font-bold hover:bg-black hover:text-yellow-400 cursor-pointer transition-all shadow-lg"
+              >
+                Find Your Remote Job! →
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

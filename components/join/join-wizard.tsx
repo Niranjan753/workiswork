@@ -126,7 +126,7 @@ export function JoinWizard({ questions }: Props) {
               type="button"
               onClick={goNext}
               disabled={answers[step]?.length === 0 && !isLast}
-              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black disabled:hover:text-yellow-400"
+              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-yellow-400 text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black cursor-pointer disabled:hover:text-yellow-400"
             >
               {isLast ? "Finish" : "Keep going"}
             </button>
@@ -135,7 +135,7 @@ export function JoinWizard({ questions }: Props) {
               type="button"
               onClick={skipStep}
               disabled={isLast}
-              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
+              className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black cursor-pointer"
             >
               Skip this step
             </button>

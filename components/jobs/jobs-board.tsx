@@ -297,7 +297,7 @@ export function JobsBoard() {
                   </div>
                 </div>
                 <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors">
+                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
                     View job →
                   </span>
                 </div>

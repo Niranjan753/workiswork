@@ -200,14 +200,13 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Hamburger Icon for Mobile */}
         <button
           type="button"
           className="flex md:hidden items-center justify-center border-2 border-yellow-400 p-2 focus:outline-none z-50"
           aria-label="Open menu"
           onClick={() => setMobileOpen((open) => !open)}
         >
-          {/* Hamburger icon */}
+
           <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={3} className="text-yellow-400">
             <path
               strokeLinecap="round"
@@ -221,7 +220,7 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+
       <div
         className={cn(
           "fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 md:hidden",
@@ -231,10 +230,9 @@ export function Navbar() {
         onClick={() => setMobileOpen(false)}
       />
 
-      {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-[#fffdc4] border-l-2 border-yellow-400 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
+          "fixed right-0 top-0 z-50 h-full w-4/5 max-w-xs bg-white border-l-2 border-yellow-400 shadow-2xl transition-transform duration-200 flex flex-col gap-0 md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{ transitionProperty: 'transform' }}

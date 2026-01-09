@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2, Briefcase, Users, TrendingUp, CheckCircle2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -29,8 +28,8 @@ function SignInForm() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Left Side - Sign In Form */}
-      <div className="flex-1 bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
+      {/* Sign In Form */}
+      <div className="w-full bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center">
@@ -171,20 +170,6 @@ function SignInForm() {
             <span>•</span>
             <Link href="#" className="hover:text-black font-bold">Privacy Policy</Link>
           </div>
-        </div>
-      </div>
-
-      {/* Right Side - Promotional Image Section */}
-      <div className="flex-1 bg-yellow-400 text-black hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
-        <div className="relative z-10 w-full h-full flex items-center justify-center">
-          <Image
-            src="/signin.jpg"
-            alt="Sign up promo"
-            fill
-            style={{ objectFit: "cover" }}
-            className="shadow-xl"
-            priority
-          />
         </div>
       </div>
     </div>

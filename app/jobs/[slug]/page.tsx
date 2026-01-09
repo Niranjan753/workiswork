@@ -6,6 +6,7 @@ import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
 import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";
 import { GridBackground } from "../../../components/GridBackground";
+import { CreateAlertButton } from "../../../components/jobs/create-alert-button";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -166,12 +167,7 @@ export default async function JobDetailPage({ params }: Params) {
               >
                 Apply now
               </a>
-              <Link
-                href="/alerts"
-                className="border-2 border-black bg-yellow-400 px-5 py-2 text-xs font-bold text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
-              >
-                Create alert
-              </Link>
+              <CreateAlertButton />
             </div>
           </div>
 

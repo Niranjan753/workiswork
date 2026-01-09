@@ -66,18 +66,39 @@ export function JoinWizard({ questions }: Props) {
   }, [answers, questions]);
 
   return (
-    <div className="relative min-h-screen bg-white text-black overflow-hidden flex items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen bg-white text-black overflow-hidden">
       <GridBackground />
-      <div className="relative z-10 w-full max-w-3xl border-2 border-black bg-white shadow-lg">
-        {/* Progress bar */}
-        <div className="w-full h-2 bg-white border-b-2 border-black">
-          <div
-            className="h-full bg-yellow-400 transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
 
-        <div className="px-6 py-6 space-y-4">
+      {/* Header Section */}
+      <section className="relative z-10 bg-transparent py-12 sm:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+              Join the{" "}
+              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+                WorkIsWork
+              </span>{" "}
+              community
+            </h1>
+            <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+              Answer a few quick questions so we can better match you with remote roles and opportunities.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Wizard Form */}
+      <div className="relative z-10 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-3xl border-2 border-black bg-white shadow-lg">
+          {/* Progress bar */}
+          <div className="w-full h-2 bg-white border-b-2 border-black">
+            <div
+              className="h-full bg-yellow-400 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          <div className="px-6 py-6 space-y-4">
           {/* Step label */}
           <div className="flex items-center justify-between text-xs font-medium text-black/60">
             <span>
@@ -149,6 +170,7 @@ export function JoinWizard({ questions }: Props) {
                 .
               </p>
             )}
+          </div>
           </div>
         </div>
       </div>

@@ -7,6 +7,14 @@ import { cn } from "../lib/utils";
 import * as React from "react";
 import { authClient } from "../lib/auth-client";
 import { LockOpen } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -14,7 +22,7 @@ export function Navbar() {
   const { data: session } = authClient.useSession();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [userRole, setUserRole] = React.useState<"user" | "employer" | null>(null);
-
+  const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
@@ -83,7 +91,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -94,7 +102,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -105,7 +113,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isPortfolio
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -116,7 +124,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJoin
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -127,7 +135,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isHire
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -137,25 +145,55 @@ export function Navbar() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-2 text-xs">
-          <Link
-            href="/pricing"
-            className="flex items-center gap-2 border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
-          >
-            <LockOpen className="w-4 h-4" />
-            Unlock All Jobs
-          </Link>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                if (!session?.user) {
+                  setShowUnlockDialog(true);
+                } else {
+                  router.push("/pricing");
+                }
+              }}
+              className="flex items-center gap-2 border-2 border-black bg-yellow-300 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all border-black border-b-2 hover:border-black cursor-pointer"
+            >
+              <LockOpen className="w-4 h-4" />
+              Unlock All Jobs
+            </button>
+            <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
+              <DialogContent className="border-2 border-black bg-white">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-black text-black">
+                    Join to Unlock All Jobs
+                  </DialogTitle>
+                  <DialogDescription className="text-sm font-medium text-black/80 pt-2">
+                    Join WorkIsWork to access all job listings and unlock premium features.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="sm:justify-start">
+                  <Link
+                    href="/join"
+                    className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                    onClick={() => setShowUnlockDialog(false)}
+                  >
+                    Join Now
+                  </Link>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
           {userEmail ? (
             <button
               type="button"
               onClick={handleSignOut}
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 cursor-pointer transition-all"
+              className="border-2 border-yellow-400 bg-yellow-300 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 cursor-pointer transition-all"
             >
               Log out
             </button>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
+              className="border-2 border-black bg-yellow-300 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all border-black border-b-2 hover:border-black cursor-pointer"
             >
               Log in
             </Link>
@@ -220,10 +258,10 @@ export function Navbar() {
           <Link
             href="/jobs"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isJobs
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -232,10 +270,10 @@ export function Navbar() {
           <Link
             href="/blog"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isBlog
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -244,10 +282,10 @@ export function Navbar() {
           <Link
             href="/portfolio"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isPortfolio
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -256,10 +294,10 @@ export function Navbar() {
           <Link
             href="/join"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isJoin
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -269,24 +307,31 @@ export function Navbar() {
             href="/hire"
             onClick={() => setMobileOpen(false)}
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isHire
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
           >
             Post a Job
           </Link>
         </nav>
         <div className="flex flex-col gap-2 px-3 pb-4">
-          <Link
-            href="/pricing"
-            className="flex items-center gap-2 border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all"
-            onClick={() => setMobileOpen(false)}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              if (!session?.user) {
+                setShowUnlockDialog(true);
+              } else {
+                router.push("/pricing");
+              }
+            }}
+            className="flex items-center gap-2 border-2 border-black bg-black px-4 py-2 text-sm font-bold text-white shadow-lg hover:bg-gray-900 transition-all text-left"
           >
             <LockOpen className="w-4 h-4" />
             Unlock All Jobs
-          </Link>
+          </button>
           {userEmail ? (
             <button
               type="button"

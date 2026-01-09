@@ -162,8 +162,8 @@ export default function TermsPage() {
             </h2>
             <p className="text-black/80 font-medium mb-4">
               If you have any questions about these Terms of Service, please contact us at{" "}
-              <Link href="mailto:hello@workiswork.com" className="text-orange-600 hover:text-orange-700">
-                hello@workiswork.com
+              <Link href="mailto:berlin@workiswork.xyz" className="text-orange-600 hover:text-orange-700">
+                berlin@workiswork.xyz
               </Link>
               .
             </p>

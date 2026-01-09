@@ -162,8 +162,8 @@ export default function PrivacyPage() {
             </ul>
             <p className="text-black/80 font-medium mb-4">
               To exercise these rights, please contact us at{" "}
-              <Link href="mailto:hello@workiswork.com" className="text-orange-600 hover:text-orange-700">
-                hello@workiswork.com
+              <Link href="mailto:berlin@workiswork.xyz" className="text-orange-600 hover:text-orange-700">
+                berlin@workiswork.xyz
               </Link>
               .
             </p>
@@ -209,8 +209,8 @@ export default function PrivacyPage() {
             </h2>
             <p className="text-black/80 font-medium mb-4">
               If you have any questions about this Privacy Policy, please contact us at{" "}
-              <Link href="mailto:hello@workiswork.com" className="text-orange-600 hover:text-orange-700">
-                hello@workiswork.com
+              <Link href="mailto:berlin@workiswork.xyz" className="text-orange-600 hover:text-orange-700">
+                berlin@workiswork.xyz
               </Link>
               .
             </p>

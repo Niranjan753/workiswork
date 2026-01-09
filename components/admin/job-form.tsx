@@ -6,11 +6,19 @@ import { X } from "lucide-react";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { cn } from "../../lib/utils";
 
 type Category = {
   id: number;
   slug: string;
   name: string;
+};
+
+type Company = {
+  id: number;
+  name: string;
+  slug: string;
+  websiteUrl: string | null;
 };
 
 type Props = {
@@ -34,6 +42,13 @@ export function AdminJobForm({ categories }: Props) {
   const [tagInput, setTagInput] = React.useState("");
   const [receiveByEmail, setReceiveByEmail] = React.useState(false);
   const [highlightColor, setHighlightColor] = React.useState(false);
+  
+  // Company autocomplete state
+  const [companyName, setCompanyName] = React.useState("");
+  const [companySuggestions, setCompanySuggestions] = React.useState<Company[]>([]);
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
+  const [selectedCompanyId, setSelectedCompanyId] = React.useState<number | null>(null);
+  const companyInputRef = React.useRef<HTMLInputElement>(null);
 
   function addTag() {
     const parsed = parseTags(tagInput);
@@ -45,6 +60,71 @@ export function AdminJobForm({ categories }: Props) {
 
   function removeTag(tag: string) {
     setTags(tags.filter((t) => t !== tag));
+  }
+
+  // Company search with debounce
+  React.useEffect(() => {
+    if (companyName.length < 2) {
+      setCompanySuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/companies/search?q=${encodeURIComponent(companyName)}`);
+        const data = await res.json();
+        setCompanySuggestions(data.companies || []);
+        setShowSuggestions(true);
+      } catch (err) {
+        console.error("Failed to search companies:", err);
+        setCompanySuggestions([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [companyName]);
+
+  function selectCompany(company: Company) {
+    setCompanyName(company.name);
+    setSelectedCompanyId(company.id);
+    setShowSuggestions(false);
+    // Set hidden input for company ID
+    const hiddenInput = document.querySelector('input[name="companyId"]') as HTMLInputElement;
+    if (hiddenInput) {
+      hiddenInput.value = String(company.id);
+    }
+  }
+
+  function handleCompanyNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCompanyName(e.target.value);
+    setSelectedCompanyId(null);
+    // Clear hidden input
+    const hiddenInput = document.querySelector('input[name="companyId"]') as HTMLInputElement;
+    if (hiddenInput) {
+      hiddenInput.value = "";
+    }
+  }
+
+  // Parse tags from input and highlight them
+  function getTagHighlights(input: string) {
+    if (!input) return null;
+    const parts = input.split(/(,)/);
+    return parts.map((part, index) => {
+      if (part === ",") return <span key={index}>,</span>;
+      const trimmed = part.trim();
+      if (trimmed) {
+        return (
+          <span
+            key={index}
+            className="bg-yellow-400 px-1 font-bold"
+          >
+            {trimmed}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -59,11 +139,12 @@ export function AdminJobForm({ categories }: Props) {
     const pendingTags =
       tags.length > 0 ? tags : parseTags(tagInput);
 
+    const companyId = formData.get("companyId");
     const jobData = {
       title: String(formData.get("title") || ""),
       companyName: String(formData.get("companyName") || ""),
       companyWebsite: String(formData.get("companyWebsite") || ""),
-      companyLogo: String(formData.get("companyLogo") || ""),
+      companyId: companyId ? Number(companyId) : undefined,
       categorySlug: String(formData.get("category") || ""),
       applyUrl: String(formData.get("applyUrl") || ""),
       receiveApplicationsByEmail: receiveByEmail,
@@ -123,20 +204,48 @@ export function AdminJobForm({ categories }: Props) {
       <h2 className="text-2xl font-bold text-black">Post a job</h2>
 
       <div className="space-y-5">
-        {/* Company Name */}
-        <div className="space-y-2">
+        {/* Company Name with Autocomplete */}
+        <div className="space-y-2 relative">
           <label className="text-sm font-bold text-black">
             Company Name
           </label>
           <p className="text-xs text-black/70">
-            Your company's brand/trade name: without Inc., Ltd., B.V., Pte., etc.
+            Your company's brand/trade name: without Inc., Ltd., B.V., Pte., etc. If your company already exists, select it from the suggestions.
           </p>
-          <Input 
-            name="companyName" 
-            required 
-            placeholder="Acme" 
-            className="border-2 border-black"
-          />
+          <div className="relative">
+            <Input
+              ref={companyInputRef}
+              name="companyName"
+              value={companyName}
+              onChange={handleCompanyNameChange}
+              onFocus={() => companySuggestions.length > 0 && setShowSuggestions(true)}
+              onBlur={() => {
+                // Delay to allow clicking on suggestions
+                setTimeout(() => setShowSuggestions(false), 200);
+              }}
+              required
+              placeholder="Acme"
+              className="border-2 border-black"
+            />
+            <input type="hidden" name="companyId" value={selectedCompanyId || ""} />
+            {showSuggestions && companySuggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border-2 border-black shadow-lg max-h-60 overflow-y-auto">
+                {companySuggestions.map((company) => (
+                  <button
+                    key={company.id}
+                    type="button"
+                    onClick={() => selectCompany(company)}
+                    className="w-full text-left px-4 py-2 hover:bg-yellow-100 border-b border-black/10 last:border-b-0 text-sm font-medium"
+                  >
+                    <div className="font-bold">{company.name}</div>
+                    {company.websiteUrl && (
+                      <div className="text-xs text-black/60">{company.websiteUrl}</div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Job Title */}
@@ -155,13 +264,13 @@ export function AdminJobForm({ categories }: Props) {
           />
         </div>
 
-        {/* Tags */}
+        {/* Tags with comma-separated highlighting */}
         <div className="space-y-2">
           <label className="text-sm font-bold text-black">
             Tags, Keywords, or Stack
           </label>
           <p className="text-xs text-black/70">
-            Short tags are preferred. Use tags like industry and tech stack.
+            Short tags are preferred. Use tags like industry and tech stack. You can enter comma-separated values (e.g., "React, TypeScript, Node.js").
           </p>
           <div className="flex flex-wrap gap-2 mb-2">
             {tags.map((tag) => (
@@ -180,43 +289,51 @@ export function AdminJobForm({ categories }: Props) {
               </span>
             ))}
           </div>
-          <div className="flex gap-2">
-            <Input
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addTag();
-                }
-              }}
-              placeholder="Type a tag to search and add it"
-              className="border-2 border-black"
-            />
+          <div className="space-y-2">
+            <div className="relative">
+              <div className="absolute inset-0 px-3 py-2 pointer-events-none text-sm border-2 border-transparent flex items-center">
+                {tagInput && getTagHighlights(tagInput)}
+              </div>
+              <Input
+                value={tagInput}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setTagInput(value);
+                  // Auto-add tags when comma is entered
+                  if (value.includes(",")) {
+                    const parts = value.split(",");
+                    const beforeComma = parts[0]?.trim();
+                    if (beforeComma) {
+                      const next = Array.from(new Set([...tags, beforeComma]));
+                      setTags(next);
+                      // Keep everything after the first comma
+                      const afterComma = parts.slice(1).join(",");
+                      setTagInput(afterComma);
+                    }
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addTag();
+                  }
+                }}
+                placeholder="Type tags separated by commas (e.g., React, TypeScript, Node.js)"
+                className="border-2 border-black"
+                style={{ 
+                  color: tagInput ? "transparent" : "inherit",
+                  caretColor: "black"
+                }}
+              />
+            </div>
             <Button
               type="button"
               onClick={addTag}
               className="border-2 border-black bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black"
             >
-              Add
+              Add Tags
             </Button>
           </div>
-        </div>
-
-        {/* Company Logo */}
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-black">
-            Company Logo
-          </label>
-          <p className="text-xs text-black/70">
-            Upload a square logo of at least 48x48 pixels for best aesthetic results. Supports: JPG, PNG, WebP, SVG, AVIF, and GIF formats.
-          </p>
-          <Input
-            name="companyLogo"
-            type="url"
-            placeholder="https://company.com/logo.png"
-            className="border-2 border-black"
-          />
         </div>
 
         {/* Job Description */}
@@ -306,7 +423,7 @@ export function AdminJobForm({ categories }: Props) {
           )}
         </div>
 
-        {/* Category */}
+        {/* Category - using jobs page categories */}
         <div className="space-y-2">
           <label className="text-sm font-bold text-black">
             Category
@@ -318,7 +435,7 @@ export function AdminJobForm({ categories }: Props) {
             defaultValue={categories[0]?.slug}
           >
             {categories.map((cat) => (
-              <option key={cat.id} value={cat.slug}>
+              <option key={cat.slug} value={cat.slug}>
                 {cat.name}
               </option>
             ))}

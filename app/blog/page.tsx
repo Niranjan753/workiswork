@@ -36,19 +36,24 @@ export default function BlogPage() {
   const posts = blogPosts;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white text-black">
+    <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
       <GridBackground />
-      {/* Gumroad-style Hero - Yellow */}
-      <section className="relative z-10 bg-yellow-400 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
-            Remote work, without the fluff
-          </h1>
-          <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
-            Short, opinionated essays on remote careers, hiring, and building great distributed teams.
-          </p>
+      <section className="relative z-10 bg-transparent py-12 sm:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+              Blog from the{" "}
+              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+                WorkIsWork
+              </span> community{" "}
+              
+            </h1>
+            <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+              Short, opinionated essays on remote careers, hiring, and building great distributed teams.
+            </p>
+          </div>
         </div>
-        </section>
+      </section>
 
       {/* Main Content - White */}
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 bg-transparent">

@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -25,36 +24,13 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<Role>(roleParam || "user");
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  async function convertImageToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Left Side - Sign Up Form */}
-      <div className="flex-1 bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
+      {/* Sign Up Form */}
+      <div className="w-full bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-6">
           {/* Header */}
           <div className="text-center">
@@ -159,43 +135,6 @@ function SignUpForm() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image" className="text-sm text-black font-bold">Profile Image (optional)</Label>
-              <div className="flex items-end gap-3">
-                {imagePreview && (
-                  <div className="relative w-16 h-16 overflow-hidden border-2 border-black">
-                    <Image
-                      src={imagePreview}
-                      alt="Profile preview"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                )}
-                <div className="flex items-center gap-2 flex-1">
-                  <Input
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="bg-white border-2 border-black text-black file:text-black file:bg-yellow-400 file:border-0 file:px-3 file:py-1 file:text-sm file:cursor-pointer file:font-bold"
-                  />
-                  {imagePreview && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setImage(null);
-                        setImagePreview(null);
-                      }}
-                      className="p-2 hover:bg-yellow-100 border-2 border-black"
-                    >
-                      <X className="w-4 h-4 text-black" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-
             <Button
               type="submit"
               className="w-full bg-black hover:bg-yellow-500 text-yellow-400 hover:text-black cursor-pointer font-bold border-2 border-black transition-all shadow-lg"
@@ -296,20 +235,6 @@ function SignUpForm() {
             <span>•</span>
             <Link href="#" className="hover:text-black font-bold">Privacy Policy</Link>
           </div>
-        </div>
-      </div>
-
-      {/* Right Side - Promotional Image Section */}
-      <div className="flex-1 bg-yellow-400 text-black hidden lg:flex items-center justify-center p-0 relative overflow-hidden">
-        <div className="relative z-10 w-full h-full flex items-center justify-center">
-          <Image
-            src="/signup.jpeg"
-            alt="Sign up promo"
-            fill
-            style={{ objectFit: "cover" }}
-            className="shadow-xl"
-            priority
-          />
         </div>
       </div>
     </div>

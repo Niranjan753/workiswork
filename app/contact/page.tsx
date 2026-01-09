@@ -60,10 +60,10 @@ export default function ContactPage() {
               </div>
               <p className="text-black/80 text-sm mb-2 font-medium">General inquiries</p>
               <a
-                href="mailto:hello@workiswork.com"
+                href="mailto:berlin@workiswork.xyz"
                 className="text-black font-bold underline hover:text-black/80 text-sm"
               >
-                hello@workiswork.com
+                berlin@workiswork.xyz
               </a>
             </div>
 

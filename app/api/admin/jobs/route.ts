@@ -22,7 +22,7 @@ const createJobSchema = z.object({
   title: z.string().min(3),
   companyName: z.string().min(2),
   companyWebsite: z.string().url().optional().or(z.literal("")),
-  companyLogo: z.string().url().optional().or(z.literal("")),
+  companyId: z.number().optional(),
   categorySlug: z.string().min(2),
   applyUrl: z.string().url(),
   receiveApplicationsByEmail: z.boolean().optional().default(false),
@@ -89,46 +89,77 @@ export async function POST(request: Request) {
       );
     }
 
-    // Find or create company tied to this user
-    const companySlug = data.companyName
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+    // Find or create company
+    let company;
+    let isNewCompany = false;
+    
+    // If companyId is provided, use that company
+    if (data.companyId) {
+      company = await db
+        .select()
+        .from(companies)
+        .where(eq(companies.id, data.companyId))
+        .limit(1)
+        .then((rows) => rows[0]);
+      
+      if (!company) {
+        return NextResponse.json(
+          { error: `Company with ID ${data.companyId} not found` },
+          { status: 400 }
+        );
+      }
+      
+      // Update company name and website if provided
+      if (data.companyName !== company.name || data.companyWebsite) {
+        try {
+          await db
+            .update(companies)
+            .set({
+              name: data.companyName,
+              websiteUrl: data.companyWebsite || company.websiteUrl,
+            })
+            .where(eq(companies.id, company.id));
+          company.name = data.companyName;
+          if (data.companyWebsite) {
+            company.websiteUrl = data.companyWebsite;
+          }
+        } catch (err) {
+          console.error("[POST /api/admin/jobs] Failed to update company", err);
+        }
+      }
+    } else {
+      // Find or create company by name
+      const companySlug = data.companyName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 
-    const existingCompany = await db
-      .select()
-      .from(companies)
-      .where(eq(companies.slug, companySlug))
-      .limit(1)
-      .then((rows) => rows[0]);
+      const existingCompany = await db
+        .select()
+        .from(companies)
+        .where(eq(companies.slug, companySlug))
+        .limit(1)
+        .then((rows) => rows[0]);
 
-    const company =
-      existingCompany ??
-      (await db
-        .insert(companies)
-        .values({
-          name: data.companyName,
-          slug: companySlug,
-          websiteUrl: data.companyWebsite || null,
-          logoUrl: data.companyLogo || guessLogoFromWebsite(data.companyWebsite),
-        })
-        .returning()
-        .then((rows) => rows[0]!));
-
-    // If company exists and a new logo was provided, update it (best-effort).
-    if (existingCompany && data.companyLogo) {
-      try {
-        await db
-          .update(companies)
-          .set({ logoUrl: data.companyLogo })
-          .where(eq(companies.id, existingCompany.id));
-      } catch (err) {
-        console.error("[POST /api/admin/jobs] Failed to update company logo", err);
+      if (existingCompany) {
+        company = existingCompany;
+      } else {
+        company = await db
+          .insert(companies)
+          .values({
+            name: data.companyName,
+            slug: companySlug,
+            websiteUrl: data.companyWebsite || null,
+            logoUrl: guessLogoFromWebsite(data.companyWebsite),
+          })
+          .returning()
+          .then((rows) => rows[0]!);
+        isNewCompany = true;
       }
     }
 
     // link company owner if new and user is logged in (best-effort; don't block job creation)
-    if (!existingCompany && userId) {
+    if (isNewCompany && userId) {
       try {
         await db.insert(companyUsers).values({
           companyId: company.id,

@@ -38,9 +38,15 @@ export async function GET(request: Request) {
       );
     }
 
+    // Determine environment - check for production domain or explicit env var
+    const isProduction = 
+      process.env.VERCEL_ENV === "production" ||
+      process.env.NODE_ENV === "production" ||
+      process.env.DODO_PAYMENTS_ENV === "live_mode";
+
     const client = new DodoPayments({
       bearerToken: apiKey,
-      environment: process.env.NODE_ENV === "production" ? "live_mode" : "test_mode",
+      environment: isProduction ? "live_mode" : "test_mode",
     });
 
     // Retrieve the payment to get the checkout session ID

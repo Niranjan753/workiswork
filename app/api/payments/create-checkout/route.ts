@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import DodoPayments from "dodopayments";
-
-// For now, use localhost for the return URL
-const returnUrl = "http://localhost:3000/api/payments/success";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,9 +15,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Determine environment - check for production domain or explicit env var
+    const isProduction = 
+      process.env.VERCEL_ENV === "production" ||
+      process.env.NODE_ENV === "production" ||
+      process.env.DODO_PAYMENTS_ENV === "live_mode";
+
     const client = new DodoPayments({
       bearerToken: apiKey,
-      environment: process.env.NODE_ENV === "production" ? "live_mode" : "test_mode",
+      environment: isProduction ? "live_mode" : "test_mode",
     });
 
     const body = await request.json();
@@ -31,6 +35,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Get the site URL dynamically for production
+    const siteUrl = getSiteUrl();
+    const returnUrl = `${siteUrl}/api/payments/success`;
 
     // Create checkout session with job data in metadata
     // Note: For highlight color (+$49), we'll handle that as a separate product or feature later

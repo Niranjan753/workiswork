@@ -59,7 +59,7 @@ export function AdminJobForm({ categories }: Props) {
     const pendingTags =
       tags.length > 0 ? tags : parseTags(tagInput);
 
-    const payload = {
+    const jobData = {
       title: String(formData.get("title") || ""),
       companyName: String(formData.get("companyName") || ""),
       companyWebsite: String(formData.get("companyWebsite") || ""),
@@ -74,12 +74,13 @@ export function AdminJobForm({ categories }: Props) {
     };
 
     try {
-      const res = await fetch("/api/admin/jobs", {
+      // Create checkout session with Dodo Payments
+      const res = await fetch("/api/payments/create-checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ jobData }),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -87,8 +88,7 @@ export function AdminJobForm({ categories }: Props) {
       if (!res.ok) {
         const errorMsg =
           data?.error ||
-          data?.details?.fieldErrors ||
-          `Failed to create job (${res.status})`;
+          `Failed to create checkout session (${res.status})`;
         throw new Error(
           typeof errorMsg === "string"
             ? errorMsg
@@ -96,26 +96,20 @@ export function AdminJobForm({ categories }: Props) {
         );
       }
 
-      const slug: string | undefined = data?.job?.slug;
-      if (!slug) {
-        throw new Error("Job created but no slug returned");
+      // Log the response for debugging
+      console.log("[AdminJobForm] Checkout response:", data);
+
+      // Redirect to Dodo Payments checkout
+      const checkoutUrl = data.url || data.checkout_url || data.redirect_url;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        console.error("[AdminJobForm] No URL in response:", data);
+        throw new Error(`No checkout URL returned. Response: ${JSON.stringify(data)}`);
       }
-
-      setSuccessSlug(slug);
-
-      // Reset form
-      formRef.current?.reset();
-      setTags([]);
-      setTagInput("");
-      setReceiveByEmail(false);
-      setHighlightColor(false);
-
-      // Refresh jobs board
-      router.refresh();
     } catch (err: any) {
       console.error("[AdminJobForm] Error:", err);
       setError(err.message || "Something went wrong");
-    } finally {
       setSubmitting(false);
     }
   }
@@ -338,7 +332,7 @@ export function AdminJobForm({ categories }: Props) {
           disabled={submitting}
           className="w-full border-2 border-black cursor-pointer bg-black px-6 py-3 text-base font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
         >
-          {submitting ? "Posting job…" : "Post job - $199"}
+          {submitting ? "Redirecting to payment…" : "Post job - $199"}
         </Button>
       </div>
 

@@ -103,7 +103,7 @@ export default function PortfolioPage() {
           <div className="text-center space-y-4">
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
               Portfolios from the{" "}
-              <span className="cooper-heading inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
                 WorkIsWork
               </span>{" "}
               community
@@ -113,7 +113,7 @@ export default function PortfolioPage() {
             </p>
             <p className="text-sm text-black/70 font-medium">
               Want to be featured here?{" "}
-              <Link href="/join" className="underline font-semibold">
+              <Link href="/join" className="underline text-black shadow-sm font-semibold hover:text-yellow-400 hover:shadow-md hover:bg-black hover:text-yellow-400 transition-all hover:px-2 hover:py-1">
                 Join WorkIsWork
               </Link>
               .

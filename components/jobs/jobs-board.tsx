@@ -7,6 +7,15 @@ import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
 import { LockOpen } from "lucide-react";
+import { authClient } from "../../lib/auth-client";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 type Job = {
   id: number;
@@ -53,6 +62,7 @@ function buildQueryString(params: URLSearchParams) {
 export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session } = authClient.useSession();
 
   const q = searchParams.get("q") ?? "";
   const activeCategories = searchParams.getAll("category").filter(Boolean);
@@ -63,6 +73,7 @@ export function JobsBoard() {
     searchParams.getAll("job_type"),
   );
   const [optimised, setOptimised] = React.useState(false);
+  const [showJoinDialog, setShowJoinDialog] = React.useState(false);
 
   const queryKey = React.useMemo(
     () => ["jobs", { q, location, jobTypes, activeCategories }],
@@ -120,6 +131,12 @@ export function JobsBoard() {
   }
 
   async function handleOptimise() {
+    // Check if user is signed in
+    if (!session?.user) {
+      setShowJoinDialog(true);
+      return;
+    }
+
     try {
       const res = await fetch("/api/user/preferences");
       if (!res.ok) return;
@@ -228,19 +245,42 @@ export function JobsBoard() {
             > 
               Create Job Alert
             </Link>
-            <button
-              type="button"
-              onClick={handleOptimise}
-              disabled={optimised}
-              className={cn(
-                "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
-                optimised
-                  ? "bg-yellow-400 text-black"
-                  : "text-black hover:bg-black hover:text-white",
-              )}
-            >
-              {optimised ? "Optimised" : "Optimise"}
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={handleOptimise}
+                disabled={optimised}
+                className={cn(
+                  "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
+                  optimised
+                    ? "bg-yellow-400 text-black"
+                    : "text-black hover:bg-black hover:text-white hover:shadow-md hover:bg-yellow-400 hover:text-black transition-all hover:px-6",
+                )}
+              >
+                {optimised ? "Optimised" : "Optimise"}
+              </button>
+              <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
+                <DialogContent className="border-2 border-black bg-white">
+                  <DialogHeader>
+                    <DialogTitle className="text-xl font-black text-black">
+                      Join to Optimise Your Job Search
+                    </DialogTitle>
+                    <DialogDescription className="text-sm font-medium text-black/80 pt-2">
+                      You can modify your preferences after joining to get personalized job recommendations.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="sm:justify-start">
+                    <Link
+                      href="/join"
+                      className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                      onClick={() => setShowJoinDialog(false)}
+                    >
+                      Join Now
+                    </Link>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
           <p className="text-sm font-medium text-black/60">
             {total.toLocaleString()} matching jobs

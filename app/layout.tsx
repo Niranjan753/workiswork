@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "../components/providers";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getSiteUrl, getOgImageUrl } from "../lib/site-url";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const basierCircle = localFont({
+  src: "../fonts/BasierCircle-Regular.ttf",
+  variable: "--font-basier-circle",
+  display: "swap",
 });
 
 const siteUrl = getSiteUrl();
@@ -88,7 +84,7 @@ export default function RootLayout({
         <meta property="twitter:image" content={ogImage} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black relative overflow-x-hidden`}
+        className={`${basierCircle.variable} font-sans antialiased bg-white text-black relative overflow-x-hidden`}
       >
         <AppProviders>
           <Navbar />

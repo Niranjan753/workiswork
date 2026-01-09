@@ -6,6 +6,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+
+  const environment = 
+    process.env.DODO_PAYMENTS_ENV === "live_mode" 
+      ? "live_mode" 
+      : "test_mode";
+  
+  const isProduction = environment === "live_mode";
+  
   try {
     const apiKey = process.env.DODO_PAYMENTS_API_KEY;
     if (!apiKey) {
@@ -14,15 +22,6 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-
-    // Determine environment - default to test_mode unless explicitly set to live
-    // This prevents 401 errors from using wrong environment
-    const environment = 
-      process.env.DODO_PAYMENTS_ENV === "live_mode" 
-        ? "live_mode" 
-        : "test_mode";
-    
-    const isProduction = environment === "live_mode";
     
     console.log("[POST /api/payments/create-checkout] Configuration:", {
       hasApiKey: !!apiKey,
@@ -102,6 +101,12 @@ export async function POST(request: Request) {
       errorMessage = error.message || `Dodo Payments API error: ${statusCode}`;
     }
     
+    // Handle 401 Authentication errors specifically
+    if (statusCode === 401 || error.constructor?.name === 'AuthenticationError') {
+      errorMessage = "Dodo Payments authentication failed. Please check your API key and ensure it matches the environment (test_mode or live_mode).";
+      statusCode = 401;
+    }
+    
     // Check for response body with error details
     if (error.body || error.data) {
       const errorBody = error.body || error.data;
@@ -120,10 +125,14 @@ export async function POST(request: Request) {
     console.error("[POST /api/payments/create-checkout] Full error details:", {
       message: errorMessage,
       status: statusCode,
-      error: error,
+      errorType: error.constructor?.name,
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
       apiKeyPresent: !!process.env.DODO_PAYMENTS_API_KEY,
       apiKeyLength: process.env.DODO_PAYMENTS_API_KEY?.length,
-      environment: process.env.VERCEL_ENV || process.env.NODE_ENV,
+      apiKeyPrefix: process.env.DODO_PAYMENTS_API_KEY?.substring(0, 15) + "...",
+      environment: environment,
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      NODE_ENV: process.env.NODE_ENV,
     });
     
     return NextResponse.json(
@@ -132,6 +141,7 @@ export async function POST(request: Request) {
         details: process.env.NODE_ENV === "development" ? {
           status: statusCode,
           type: error.constructor?.name,
+          hint: statusCode === 401 ? "Check that DODO_PAYMENTS_API_KEY is set correctly and matches the environment (test_mode/live_mode)" : undefined,
         } : undefined,
       },
       { status: statusCode >= 400 && statusCode < 600 ? statusCode : 500 }

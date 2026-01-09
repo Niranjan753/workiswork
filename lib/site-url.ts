@@ -4,7 +4,7 @@
 export function getSiteUrl(): string {
   return (
     process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://workiswork.vercel.app")
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://workiswork.xyz")
   );
 }
 

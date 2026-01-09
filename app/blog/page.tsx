@@ -43,10 +43,10 @@ export default function BlogPage() {
           <div className="text-center space-y-4">
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
               Blog from the{" "}
-              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+              <span className="inline-block bg-yellow-300 px-2 py-1 pb-1.5 mt-2 border-black relative">
                 WorkIsWork
-              </span> community{" "}
-              
+              </span>{" "}
+              community
             </h1>
             <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
               Short, opinionated essays on remote careers, hiring, and building great distributed teams.

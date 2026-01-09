@@ -19,6 +19,7 @@ export function Navbar() {
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
   const isPost = pathname.startsWith("/post");
+  const isPortfolio = pathname.startsWith("/portfolio");
 
   const userEmail = session?.user?.email;
 
@@ -98,6 +99,17 @@ export function Navbar() {
             )}
           >
             Blog
+          </Link>
+          <Link
+            href="/portfolio"
+            className={cn(
+              "px-4 py-2 text-sm font-bold transition-all",
+              isPortfolio
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                : "text-black hover:bg-black hover:text-white hover:shadow-md"
+            )}
+          >
+            Portfolio
           </Link>
           <Link
             href="/join"
@@ -228,6 +240,18 @@ export function Navbar() {
             onClick={() => setMobileOpen(false)}
           >
             Blog
+          </Link>
+          <Link
+            href="/portfolio"
+            className={cn(
+              "px-4 py-2 transition-all border-2 border-yellow-400",
+              isPortfolio
+                ? "bg-yellow-400 text-black shadow-lg"
+                : "text-black hover:bg-white hover:text-black"
+            )}
+            onClick={() => setMobileOpen(false)}
+          >
+            Portfolio
           </Link>
           <Link
             href="/join"

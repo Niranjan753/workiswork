@@ -46,6 +46,8 @@ async function getCategories() {
   return rows;
 }
 
+// Notice removed per instructions (was RemotiveDistributionNotice)
+
 export default async function PostJobPage() {
   const cats = await getCategories();
 
@@ -62,6 +64,7 @@ export default async function PostJobPage() {
 
       {/* Main Content - White */}
       <main className="relative z-10 flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6 bg-white">
+        {/* RemotiveDistributionNotice removed */}
         <AdminJobForm categories={cats} />
       </main>
     </div>

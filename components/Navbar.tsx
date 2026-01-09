@@ -18,7 +18,7 @@ export function Navbar() {
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
-  const isPost = pathname.startsWith("/post");
+  const isHire = pathname.startsWith("/hire");
   const isPortfolio = pathname.startsWith("/portfolio");
 
   const userEmail = session?.user?.email;
@@ -123,10 +123,10 @@ export function Navbar() {
             Join
           </Link>
           <Link
-            href="/post"
+            href="/hire"
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
-              isPost
+              isHire
                 ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
@@ -148,7 +148,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all"
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 cursor-pointer transition-all"
             >
               Log out
             </button>
@@ -266,11 +266,11 @@ export function Navbar() {
             Join
           </Link>
           <Link
-            href="/post"
+            href="/hire"
             onClick={() => setMobileOpen(false)}
             className={cn(
               "px-4 py-2 transition-all border-2 border-yellow-400",
-              isPost
+              isHire
                 ? "bg-yellow-400 text-black shadow-lg"
                 : "text-black hover:bg-white hover:text-black"
             )}
@@ -290,7 +290,7 @@ export function Navbar() {
           {userEmail ? (
             <button
               type="button"
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all text-left"
+              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all cursor-pointer text-left"
               onClick={() => {
                 setMobileOpen(false);
                 handleSignOut();

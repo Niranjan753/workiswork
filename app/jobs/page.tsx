@@ -90,8 +90,8 @@ export default function JobsPage({
             </div>
              <h1 className="text-4xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
                The{" "}
-               <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">quickest</span>{" "}
-               remote jobs and <span className="font-bold  font-monosm:inline">opportunities</span>
+               <span className="inline-block bg-yellow-300 px-2 py-1.5 border-2 border-black relative z-10">quickest</span>{" "}
+               remote jobs and opportunities
              </h1>
             <p className="text-base sm:text-xl text-black/90 max-w-2xl sm:mx-auto font-medium leading-relaxed">
               There's no roadmap for making your own road. But here's some how-to's, helpful tips, and curated remote jobs to help you.

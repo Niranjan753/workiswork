@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { db } from "../../db";
 import { categories } from "../../db/schema";
+import { inArray } from "drizzle-orm";
 import { AdminJobForm } from "../../components/admin/job-form";
-import { Footer } from "../../components/Footer";
 import { GridBackground } from "../../components/GridBackground";
 import Link from "next/link";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
@@ -35,15 +35,51 @@ export const metadata: Metadata = {
   },
 };
 
+// Use the same categories as the jobs page
+const categoryChips: { label: string; slug: string }[] = [
+  { label: "Software Development", slug: "software-development" },
+  { label: "Customer Service", slug: "customer-support" },
+  { label: "Design", slug: "design" },
+  { label: "Marketing", slug: "marketing" },
+  { label: "Sales / Business", slug: "sales" },
+  { label: "Product", slug: "product" },
+  { label: "Project Management", slug: "project" },
+  { label: "AI / ML", slug: "ai-ml" },
+  { label: "Data Analysis", slug: "data-analysis" },
+  { label: "Devops / Sysadmin", slug: "devops" },
+  { label: "Finance", slug: "finance" },
+  { label: "Human Resources", slug: "human-resources" },
+  { label: "QA", slug: "qa" },
+  { label: "Writing", slug: "writing" },
+  { label: "Legal", slug: "legal" },
+  { label: "Medical", slug: "medical" },
+  { label: "Education", slug: "education" },
+  { label: "All Others", slug: "all-others" },
+];
+
 async function getCategories() {
+  // Get categories from database that match the slugs from categoryChips
+  const slugs = categoryChips.map(c => c.slug);
   const rows = await db
     .select({
       id: categories.id,
       slug: categories.slug,
       name: categories.name,
     })
-    .from(categories);
-  return rows;
+    .from(categories)
+    .where(inArray(categories.slug, slugs));
+    
+  // Map categoryChips to database categories, creating a merged list
+  const mergedCategories = categoryChips.map(chip => {
+    const dbCategory = rows.find(c => c.slug === chip.slug);
+    return {
+      id: dbCategory?.id || 0,
+      slug: chip.slug,
+      name: chip.label, // Use the label from categoryChips
+    };
+  });
+  
+  return mergedCategories;
 }
 
 // Notice removed per instructions (was RemotiveDistributionNotice)

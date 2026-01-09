@@ -14,7 +14,6 @@ export function Navbar() {
   const { data: session } = authClient.useSession();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [userRole, setUserRole] = React.useState<"user" | "employer" | null>(null);
-
   const isJobs = pathname === "/" || pathname.startsWith("/jobs");
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
@@ -83,7 +82,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJobs
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -94,7 +93,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isBlog
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -105,7 +104,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isPortfolio
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -116,7 +115,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isJoin
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -127,7 +126,7 @@ export function Navbar() {
             className={cn(
               "px-4 py-2 text-sm font-bold transition-all",
               isHire
-                ? "bg-yellow-400 text-black shadow-lg border-2 border-yellow-400"
+                ? "bg-yellow-400 text-black shadow-lg border-2 border-black"
                 : "text-black hover:bg-black hover:text-white hover:shadow-md"
             )}
           >
@@ -220,10 +219,10 @@ export function Navbar() {
           <Link
             href="/jobs"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isJobs
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -232,10 +231,10 @@ export function Navbar() {
           <Link
             href="/blog"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isBlog
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -244,10 +243,10 @@ export function Navbar() {
           <Link
             href="/portfolio"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isPortfolio
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -256,10 +255,10 @@ export function Navbar() {
           <Link
             href="/join"
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isJoin
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
             onClick={() => setMobileOpen(false)}
           >
@@ -269,10 +268,10 @@ export function Navbar() {
             href="/hire"
             onClick={() => setMobileOpen(false)}
             className={cn(
-              "px-4 py-2 transition-all border-2 border-yellow-400",
+              "px-4 py-2 transition-all border-2",
               isHire
-                ? "bg-yellow-400 text-black shadow-lg"
-                : "text-black hover:bg-white hover:text-black"
+                ? "bg-yellow-400 text-black shadow-lg border-black"
+                : "text-black hover:bg-white hover:text-black border-yellow-400"
             )}
           >
             Post a Job

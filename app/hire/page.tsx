@@ -44,8 +44,11 @@ export default function HirePage() {
             FOR EMPLOYERS & TEAMS
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-black">
-            Hire remote talent
-            <span className="block sm:inline"> without the guesswork.</span>
+            Hire{" "}
+            <span className="inline-block bg-white px-2 py-1 border-2 border-black">
+              remote
+            </span>{" "}
+            talent without the guesswork.
           </h1>
           <p className="mt-4 text-base sm:text-lg font-medium text-black/80 max-w-2xl">
             Post a role once and reach people who already live and breathe remote work – across product, engineering,
@@ -54,7 +57,7 @@ export default function HirePage() {
           <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <Link
               href="/post"
-              className="inline-block w-full sm:w-auto text-center px-4 py-3 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg"
+              className="inline-block w-full sm:w-auto text-center px-4 py-3 bg-black text-white text-sm font-bold border-2 border-black hover:bg-white hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg"
             >
               Hire for $199 →
             </Link>
@@ -70,9 +73,9 @@ export default function HirePage() {
         {/* 3-column style value props similar to Remotive */}
         <section className="grid gap-6 sm:grid-cols-3 mb-10">
           <div className="border-2 border-black bg-white p-5">
-            <h2 className="text-lg font-black mb-2">Built for remote‑first teams</h2>
+            <h2 className="text-lg font-black mb-2">Built for <span className="bg-yellow-400 px-1">remote</span>‑first teams</h2>
             <p className="text-sm font-medium text-black/80">
-              WorkIsWork is 100% focused on remote roles, so you&apos;re not sifting through candidates who actually
+              WorkIsWork is 100% focused on <span className="bg-yellow-400 px-1">remote</span> roles, so you&apos;re not sifting through candidates who actually
               want to go back to an office.
             </p>
           </div>
@@ -98,7 +101,7 @@ export default function HirePage() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/60">PRICING</p>
               <h2 className="text-2xl sm:text-3xl font-black">One flat price. No surprises.</h2>
               <p className="text-sm font-medium text-black/70 max-w-xl">
-                Post a remote role to WorkIsWork for a simple, all‑in <span className="font-semibold">$199</span> per job. Your listing stays live for 30
+                Post a <span className="bg-yellow-400 px-1">remote</span> role to WorkIsWork for a simple, all‑in <span className="font-semibold">$199</span> per job. Your listing stays live for 30
                 days and is instantly visible to our audience.
               </p>
             </div>
@@ -121,7 +124,7 @@ export default function HirePage() {
           <ol className="space-y-3 text-sm font-medium text-black/80">
             <li>
               <span className="font-bold">1. Post your job.</span> Tell us who you&apos;re looking for – role, stack,
-              timezone, and what &quot;remote&quot; means at your company.
+              timezone, and what &quot;<span className="bg-yellow-400 px-1">remote</span>&quot; means at your company.
             </li>
             <li>
               <span className="font-bold">2. We feature it.</span> Your job goes live on the WorkIsWork board and is

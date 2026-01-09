@@ -203,7 +203,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
               </li>
               <li>
                 <a
-                  href="mailto:hello@workiswork.com"
+                  href="mailto:berlin@workiswork.xyz"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
                     "text-black"

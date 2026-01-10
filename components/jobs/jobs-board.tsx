@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
@@ -62,6 +62,7 @@ function buildQueryString(params: URLSearchParams) {
 export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: session } = authClient.useSession();
 
   const q = searchParams.get("q") ?? "";
@@ -91,9 +92,10 @@ export function JobsBoard() {
     setOptimised(newOptimised);
   }, [searchParams]);
 
+
   const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary }],
-    [q, location, jobTypes, activeCategories, remoteScope, minSalary],
+    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary, optimised: isOptimisedFromUrl }],
+    [q, location, jobTypes, activeCategories, remoteScope, minSalary, isOptimisedFromUrl],
   );
 
   const fetchJobs = React.useCallback(
@@ -124,7 +126,7 @@ export function JobsBoard() {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useInfiniteQuery({
+  } =   useInfiniteQuery({
     queryKey,
     queryFn: fetchJobs,
     initialPageParam: 1,
@@ -134,6 +136,8 @@ export function JobsBoard() {
       }
       return undefined;
     },
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   const total = data?.pages?.[0]?.total ?? 0;
@@ -156,7 +160,6 @@ export function JobsBoard() {
 
     if (optimised) {
       router.replace("/jobs");
-      router.refresh();
       return;
     }
 
@@ -272,7 +275,6 @@ export function JobsBoard() {
 
       if (params.toString()) {
         router.replace(`/jobs${buildQueryString(params)}`);
-        router.refresh();
       }
     } catch (error) {
       console.error("[Optimise] Error:", error);

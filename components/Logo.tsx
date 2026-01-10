@@ -7,7 +7,7 @@ export const Logo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
       height="32"
       viewBox="0 0 72 42"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="http://www.w3.org/2000/svg"//www.w3.org/2000/svg"
       {...props}
     >
       <path d="M69.6 5L70.6 4.3L69.6 3.6C66.3 1.3 62.4 0 58.4 0H51C48.7 0 46.5 0.399997 44.3 1.2L35.9 4.3L44.3 7.4C46.4 8.2 48.7 8.6 51 8.6H58.4C62.4 8.6 66.3 7.3 69.6 5Z" fill="#201B21"/>

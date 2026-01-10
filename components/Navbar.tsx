@@ -183,13 +183,21 @@ export function Navbar() {
             </Dialog>
           </div>
           {userEmail ? (
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="border-2 border-yellow-400 bg-yellow-300 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 cursor-pointer transition-all"
-            >
-              Log out
-            </button>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/profile"
+                className="border-2 border-black bg-white px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-black hover:text-yellow-400 transition-all cursor-pointer"
+              >
+                Profile
+              </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="border-2 border-black bg-yellow-300 px-4 py-2 text-sm font-bold text-black shadow-md border-b-2 hover:border-black hover:bg-yellow-500 cursor-pointer transition-all"
+              >
+                Log out
+              </button>
+            </div>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"
@@ -331,16 +339,25 @@ export function Navbar() {
             Unlock All Jobs
           </button>
           {userEmail ? (
-            <button
-              type="button"
-              className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all cursor-pointer text-left"
-              onClick={() => {
-                setMobileOpen(false);
-                handleSignOut();
-              }}
-            >
-              Log out
-            </button>
+            <>
+              <Link
+                href="/profile"
+                className="border-2 border-black bg-white px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-black hover:text-yellow-400 transition-all cursor-pointer text-left"
+                onClick={() => setMobileOpen(false)}
+              >
+                Profile
+              </Link>
+              <button
+                type="button"
+                className="border-2 border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-bold text-black shadow-md hover:bg-yellow-500 transition-all cursor-pointer text-left"
+                onClick={() => {
+                  setMobileOpen(false);
+                  handleSignOut();
+                }}
+              >
+                Log out
+              </button>
+            </>
           ) : (
             <Link
               href="/login?callbackUrl=/alerts"

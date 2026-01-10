@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 const preferencesSchema = z.object({
   answersByQuestionId: z.record(z.string(), z.array(z.string())),
+  selectedCategory: z.string().optional().nullable(),
 });
 
 export async function GET() {
@@ -56,7 +57,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const payload = JSON.stringify(parsed.data);
+  const dataToSave = {
+    answersByQuestionId: parsed.data.answersByQuestionId,
+    selectedCategory: parsed.data.selectedCategory || null,
+  };
+  const payload = JSON.stringify(dataToSave);
 
   // Upsert by userId – simple delete + insert
   await db.delete(userPreferences).where(eq(userPreferences.userId, session.user.id));

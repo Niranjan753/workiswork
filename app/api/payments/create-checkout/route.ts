@@ -48,8 +48,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get the site URL dynamically for production
-    const siteUrl = getSiteUrl();
+    // Always use production domain for payment redirects to avoid Vercel Preview Protection
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://workiswork.xyz";
     const returnUrl = `${siteUrl}/api/payments/success`;
 
     // Create checkout session with job data in metadata

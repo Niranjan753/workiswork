@@ -6,6 +6,7 @@ import { categories, companies, jobs } from "@/db/schema";
 import { guessLogoFromWebsite } from "@/lib/logo";
 import { sendAlertEmail } from "@/lib/resend";
 import { alerts } from "@/db/schema";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -188,7 +189,8 @@ export async function GET(request: Request) {
     }
 
     // Redirect to success page with job and company info
-    const successUrl = new URL(`/post/success`, request.url);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://workiswork.xyz";
+    const successUrl = new URL(`/post/success`, siteUrl);
     successUrl.searchParams.set("job_slug", inserted.slug);
     successUrl.searchParams.set("company_slug", companySlug);
     return NextResponse.redirect(successUrl);

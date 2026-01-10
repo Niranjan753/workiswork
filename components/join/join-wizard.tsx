@@ -23,7 +23,7 @@ export function JoinWizard() {
   const [maxSkills] = useState(3);
   const [preferencesSaved, setPreferencesSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   const questions = getJoinQuestions(selectedCategory || undefined);
 
   const current = questions[step] || questions[0];
@@ -65,12 +65,12 @@ export function JoinWizard() {
         next.push([]);
       }
       const set = new Set(next[step] || []);
-      
+
       if (step === 0) {
         next[step] = set.has(option) ? [] : [option];
         return next;
       }
-      
+
       if (set.has(option)) {
         set.delete(option);
       } else {
@@ -79,7 +79,7 @@ export function JoinWizard() {
         }
         set.add(option);
       }
-      
+
       next[step] = Array.from(set);
       return next;
     });
@@ -156,7 +156,7 @@ export function JoinWizard() {
     return (
       <div className="relative min-h-screen bg-white text-black overflow-hidden">
         <GridBackground />
-        
+
         <section className="relative z-10 bg-transparent py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-4">
@@ -244,24 +244,33 @@ export function JoinWizard() {
       </section>
 
       <div className="relative z-10 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-3xl border-2 border-black bg-white shadow-lg">
-          <div className="w-full h-2 bg-white border-b-2 border-black">
+        <div className="w-full max-w-2xl border-2 border-black bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="w-full h-1 bg-gray-100">
             <div
               className="h-full bg-yellow-400 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
 
-          <div className="px-6 py-6 space-y-4">
-            <div className="flex items-center justify-between text-xs font-medium text-black/60">
-              <span>
-                Step {step + 1} of {total}
-              </span>
-              <span>{Math.round(progress)}% complete</span>
+          <div className="px-8 py-8 space-y-6">
+            <div className="space-y-3">
+              <h1 className="text-2xl sm:text-3xl font-bold text-black">
+                {current.label}
+              </h1>
+              {current.helper && (
+                <p className="text-sm text-black/70 font-medium">
+                  {current.helper}
+                </p>
+              )}
+              {isSkillsQuestion && (
+                <p className="text-xs text-black/60 font-medium pt-1">
+                  Select up to {maxSkills} skills ({currentAnswers.length}/{maxSkills} selected)
+                </p>
+              )}
             </div>
 
             {selectedCategory && step > 0 && (
-              <div className="flex items-center gap-2 text-xs font-medium text-black/70 bg-yellow-100 px-3 py-2 border border-black">
+              <div className="flex items-center gap-2 text-xs font-medium text-black/70 bg-yellow-50 px-3 py-2 border border-black rounded">
                 <span className="font-bold">Category:</span>
                 <span>{selectedCategory}</span>
                 {step < 3 && (
@@ -278,27 +287,11 @@ export function JoinWizard() {
               </div>
             )}
 
-            <div className="space-y-2">
-              <h1 className="text-lg sm:text-xl font-bold">
-                {current.label}
-              </h1>
-              {current.helper && (
-                <p className="text-sm text-black/70 font-medium">
-                  {current.helper}
-                </p>
-              )}
-              {isSkillsQuestion && (
-                <p className="text-xs text-black/60 font-medium pt-1">
-                  Select up to {maxSkills} skills ({currentAnswers.length}/{maxSkills} selected)
-                </p>
-              )}
-            </div>
-
-            <div className="mt-4 space-y-2">
+            <div className="flex flex-wrap gap-3">
               {current.options.map((opt) => {
                 const selected = currentAnswers.includes(opt);
                 const disabled = isSkillsQuestion && !selected && currentAnswers.length >= maxSkills;
-                
+
                 return (
                   <button
                     key={opt}
@@ -306,54 +299,46 @@ export function JoinWizard() {
                     onClick={() => handleSelect(opt)}
                     disabled={disabled}
                     className={
-                      "w-full text-left px-4 py-3 cursor-pointer text-sm font-bold border-2 border-black transition-all " +
+                      "flex-1 min-w-[200px] max-w-[300px] px-5 py-4 cursor-pointer text-base font-medium border border-black rounded transition-all text-center " +
                       (disabled
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-300"
                         : selected
-                        ? "bg-yellow-400 text-black shadow-lg"
-                        : "bg-white text-black hover:bg-yellow-100")
+                        ? "bg-yellow-400 text-black border-2 border-black shadow-md"
+                        : "bg-white text-black hover:bg-yellow-50 hover:border-black/50")
                     }
                   >
-                    <div className="flex items-center justify-between">
-                      <span>{opt}</span>
-                      {selected && (
-                        <span className="text-lg font-black">✓</span>
-                      )}
-                    </div>
+                    {opt}
                   </button>
                 );
               })}
             </div>
 
-            <div className="mt-6 space-y-3">
-              <div className="flex gap-3">
-                {!isFirst && (
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    className="flex-1 px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                  </button>
-                )}
+            <div className="pt-4 space-y-3">
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={!canProceed || isSaving}
+                className="w-full px-6 py-4 text-base font-bold bg-yellow-400 text-black rounded hover:bg-yellow-500 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-yellow-400 cursor-pointer"
+              >
+                {isSaving ? "Saving..." : isLast ? (isSignedIn ? "Save Preferences" : "Get Started") : "Continue"}
+              </button>
+
+              {!isFirst && (
                 <button
                   type="button"
-                  onClick={goNext}
-                  disabled={!canProceed || isSaving}
-                  className={`${isFirst ? "w-full" : "flex-1"} px-4 py-3 text-sm font-bold border-2 border-black bg-yellow-400 text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black cursor-pointer disabled:hover:text-yellow-400 flex items-center justify-center gap-2`}
+                  onClick={goBack}
+                  className="w-full px-6 py-3 text-sm font-medium text-black/70 hover:text-black transition-colors cursor-pointer"
                 >
-                  {isSaving ? "Saving..." : isLast ? (isSignedIn ? "Save Preferences" : "Finish") : "Continue"}
-                  {!isLast && !isSaving && <ArrowRight className="w-4 h-4" />}
+                  ← Back
                 </button>
-              </div>
+              )}
 
               {!isLast && (
                 <button
                   type="button"
                   onClick={skipStep}
                   disabled={isSaving}
-                  className="w-full px-4 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-6 py-3 text-sm font-medium border border-black bg-white text-black rounded hover:bg-gray-50 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Skip this step
                 </button>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { JOIN_QUESTIONS } from "@/lib/join-questions";
 import { JoinWizard } from "@/components/join/join-wizard";
 
 export const metadata: Metadata = {
@@ -11,7 +10,7 @@ export const metadata: Metadata = {
 export default function JoinPage() {
   return (
     <Suspense fallback={null}>
-      <JoinWizard questions={JOIN_QUESTIONS} />
+      <JoinWizard />
     </Suspense>
   );
 }

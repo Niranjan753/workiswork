@@ -9,7 +9,6 @@ type Role = "user" | "employer";
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/alerts";
 
   const [isSignUp, setIsSignUp] = React.useState(false);
   const [role, setRole] = React.useState<Role>("user");
@@ -30,7 +29,7 @@ export function LoginForm() {
           email,
           password,
           name: name || (role === "employer" ? "Employer" : "Job Seeker"),
-          callbackURL: callbackUrl,
+          callbackURL: "/jobs",
         });
 
         if (signUpError) {
@@ -45,15 +44,15 @@ export function LoginForm() {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ role: "employer" }),
-            }).catch(() => {}); // Fail silently
+            }).catch(() => {});
           }
-          router.push(callbackUrl);
+          router.push("/jobs");
         }
       } else {
         const { data, error: signInError } = await authClient.signIn.email({
           email,
           password,
-          callbackURL: callbackUrl,
+          callbackURL: "/jobs",
         });
 
         if (signInError) {
@@ -62,7 +61,7 @@ export function LoginForm() {
         }
 
         if (data) {
-          router.push(callbackUrl);
+          router.push("/jobs");
         }
       }
     } catch (err: any) {

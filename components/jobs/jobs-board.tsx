@@ -133,7 +133,6 @@ export function JobsBoard() {
   }
 
   async function handleOptimise() {
-    // Check if user is signed in
     if (!session?.user) {
       setShowJoinDialog(true);
       return;
@@ -144,24 +143,55 @@ export function JobsBoard() {
       if (!res.ok) return;
       const json = await res.json();
       const prefs = json.preferences as
-        | { answersByQuestionId?: Record<string, string[]> }
+        | { answersByQuestionId?: Record<string, string[]>; selectedCategory?: string }
         | null;
       if (!prefs || !prefs.answersByQuestionId) return;
 
       const answers = prefs.answersByQuestionId;
+      const categoryAnswers = answers["0"] ?? [];
       const roleAnswers = answers["1"] ?? [];
       const skillAnswers = answers["2"] ?? [];
 
-      const qString = [...roleAnswers, ...skillAnswers].join(" ").trim();
-      if (!qString) return;
+      const categoryLabel = prefs.selectedCategory || categoryAnswers[0];
+      
+      const categorySlugMap: Record<string, string> = {
+        "Software Development": "software-development",
+        "Customer Service": "customer-support",
+        "Design": "design",
+        "Marketing": "marketing",
+        "Sales / Business": "sales",
+        "Product": "product",
+        "Project Management": "project",
+        "AI / ML": "ai-ml",
+        "Data Analysis": "data-analysis",
+        "Devops / Sysadmin": "devops",
+        "Finance": "finance",
+        "Human Resources": "human-resources",
+        "QA": "qa",
+        "Writing": "writing",
+        "Legal": "legal",
+        "Medical": "medical",
+        "Education": "education",
+        "All Others": "all-others",
+      };
 
       const params = new URLSearchParams();
-      params.set("q", qString);
 
-      router.push(`/jobs${buildQueryString(params)}`);
-      setOptimised(true);
-    } catch {
-      // Fail silently – optimisation is a progressive enhancement
+      if (categoryLabel && categorySlugMap[categoryLabel]) {
+        params.append("category", categorySlugMap[categoryLabel]);
+      }
+
+      const searchTerms = [...roleAnswers, ...skillAnswers].join(" ").trim();
+      if (searchTerms) {
+        params.set("q", searchTerms);
+      }
+
+      if (params.toString()) {
+        router.push(`/jobs${buildQueryString(params)}`);
+        setOptimised(true);
+      }
+    } catch (error) {
+      console.error("[Optimise] Error:", error);
     }
   }
 

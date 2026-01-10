@@ -17,7 +17,6 @@ type Role = "user" | "employer";
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/alerts";
   const roleParam = searchParams.get("role") as Role | null;
 
   const [email, setEmail] = useState("");
@@ -125,6 +124,7 @@ function SignInForm() {
                   {
                     email,
                     password,
+                    callbackURL: "/jobs",
                   },
                   {
                     onRequest: () => {
@@ -134,7 +134,7 @@ function SignInForm() {
                       setLoading(false);
                     },
                     onSuccess: () => {
-                      router.push(callbackUrl);
+                      router.push("/jobs");
                     },
                     onError: (error: any) => {
                       const errorMsg = error?.message || String(error || "");
@@ -155,7 +155,7 @@ function SignInForm() {
               <p className="text-sm text-black/80 font-medium">
                 Are you a new member?{" "}
                 <Link
-                  href={`/sign-up${callbackUrl ? `?callbackUrl=${callbackUrl}` : ""}${roleParam ? `&role=${roleParam}` : ""}`}
+                  href={`/sign-up${roleParam ? `?role=${roleParam}` : ""}`}
                   className="text-black font-bold underline hover:text-black/80 cursor-pointer"
                 >
                   Create Account

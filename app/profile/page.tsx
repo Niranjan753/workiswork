@@ -77,8 +77,8 @@ export default async function ProfilePage() {
     "0": "Category Interest",
     "1": "Remote Role",
     "2": "Top Skills",
-    "3": "Time Zones",
-    "4": "Company Types",
+    "3": "Contract Types",
+    "4": "Work Regions",
     "5": "Salary Range",
     "6": "Work Authorization",
   };

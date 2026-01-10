@@ -30,6 +30,11 @@ const createJobSchema = z.object({
   highlightColor: z.string().optional(),
   descriptionHtml: z.string().min(10),
   tags: z.array(z.string()).optional().default([]),
+  jobType: z.enum(["full_time", "part_time", "freelance", "contract", "internship"]).optional().default("full_time"),
+  remoteScope: z.enum(["worldwide", "europe", "north_america", "latam", "asia"]).optional().default("worldwide"),
+  location: z.string().min(1).optional().default("Worldwide"),
+  salaryMin: z.number().optional(),
+  salaryMax: z.number().optional(),
 });
 
 export const runtime = "nodejs";
@@ -186,9 +191,12 @@ export async function POST(request: Request) {
         slug: uniqueSlug,
         companyId: company.id,
         categoryId: category.id,
-        location: "Worldwide", // All jobs are worldwide remote
-        jobType: "full_time", // Default
-        remoteScope: "worldwide", // Default
+        location: data.location || "Worldwide",
+        jobType: data.jobType || "full_time",
+        remoteScope: data.remoteScope || "worldwide",
+        salaryMin: data.salaryMin ? String(data.salaryMin) : null,
+        salaryMax: data.salaryMax ? String(data.salaryMax) : null,
+        salaryCurrency: "USD",
         applyUrl: data.applyUrl,
         receiveApplicationsByEmail: data.receiveApplicationsByEmail ?? false,
         companyEmail: data.companyEmail,

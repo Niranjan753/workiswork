@@ -226,6 +226,19 @@ export function JoinWizard() {
                 : "Answer a few quick questions so we can better match you with remote roles and opportunities."
               }
             </p>
+            {!isSignedIn && (
+              <div className="mt-6">
+                <p className="text-sm text-black/70 font-medium">
+                  Already joined?{" "}
+                  <Link
+                    href="/sign-in?callbackUrl=/jobs"
+                    className="font-bold text-black hover:underline"
+                  >
+                    Login now
+                  </Link>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>

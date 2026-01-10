@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
@@ -62,24 +62,40 @@ function buildQueryString(params: URLSearchParams) {
 export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: session } = authClient.useSession();
 
   const q = searchParams.get("q") ?? "";
   const activeCategories = searchParams.getAll("category").filter(Boolean);
+  const remoteScope = searchParams.get("remote_scope") ?? "";
+  const minSalary = searchParams.get("min_salary") ?? "";
+  const isOptimisedFromUrl = searchParams.get("optimised") === "true";
+  
   const [location, setLocation] = React.useState(
     searchParams.get("location") ?? "",
   );
   const [jobTypes, setJobTypes] = React.useState<string[]>(
     searchParams.getAll("job_type"),
   );
-  const [optimised, setOptimised] = React.useState(false);
+  const [optimised, setOptimised] = React.useState(isOptimisedFromUrl);
   const [showJoinDialog, setShowJoinDialog] = React.useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
 
+  React.useEffect(() => {
+    const newLocation = searchParams.get("location") ?? "";
+    const newJobTypes = searchParams.getAll("job_type");
+    const newOptimised = searchParams.get("optimised") === "true";
+    
+    setLocation(newLocation);
+    setJobTypes(newJobTypes);
+    setOptimised(newOptimised);
+  }, [searchParams]);
+
+
   const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes, activeCategories }],
-    [q, location, jobTypes, activeCategories],
+    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary, optimised: isOptimisedFromUrl }],
+    [q, location, jobTypes, activeCategories, remoteScope, minSalary, isOptimisedFromUrl],
   );
 
   const fetchJobs = React.useCallback(
@@ -91,6 +107,8 @@ export function JobsBoard() {
       if (location) params.set("location", location);
       activeCategories.forEach((cat) => params.append("category", cat));
       jobTypes.forEach((jt) => params.append("job_type", jt));
+      if (remoteScope) params.set("remote_scope", remoteScope);
+      if (minSalary) params.set("min_salary", minSalary);
 
       const res = await fetch(`/api/jobs${buildQueryString(params)}`);
       if (!res.ok) {
@@ -98,7 +116,7 @@ export function JobsBoard() {
       }
       return res.json();
     },
-    [q, location, jobTypes, activeCategories],
+    [q, location, jobTypes, activeCategories, remoteScope, minSalary],
   );
 
   const {
@@ -108,7 +126,7 @@ export function JobsBoard() {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useInfiniteQuery({
+  } =   useInfiniteQuery({
     queryKey,
     queryFn: fetchJobs,
     initialPageParam: 1,
@@ -118,6 +136,8 @@ export function JobsBoard() {
       }
       return undefined;
     },
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   const total = data?.pages?.[0]?.total ?? 0;
@@ -138,6 +158,11 @@ export function JobsBoard() {
       return;
     }
 
+    if (optimised) {
+      router.replace("/jobs");
+      return;
+    }
+
     try {
       const res = await fetch("/api/user/preferences");
       if (!res.ok) return;
@@ -151,6 +176,10 @@ export function JobsBoard() {
       const categoryAnswers = answers["0"] ?? [];
       const roleAnswers = answers["1"] ?? [];
       const skillAnswers = answers["2"] ?? [];
+      const jobTypeAnswers = answers["3"] ?? [];
+      const remoteScopeAnswers = answers["4"] ?? [];
+      const salaryAnswers = answers["5"] ?? [];
+      const locationAnswers = answers["6"] ?? [];
 
       const categoryLabel = prefs.selectedCategory || categoryAnswers[0];
       
@@ -175,7 +204,24 @@ export function JobsBoard() {
         "All Others": "all-others",
       };
 
+      const jobTypeMap: Record<string, string> = {
+        "Full-time": "full_time",
+        "Part-time": "part_time",
+        "Freelance": "freelance",
+        "Contract": "contract",
+        "Internship": "internship",
+      };
+
+      const remoteScopeMap: Record<string, string> = {
+        "Worldwide / Any": "worldwide",
+        "North America (US, Canada, Mexico)": "north_america",
+        "Europe": "europe",
+        "Latin America": "latam",
+        "Asia-Pacific": "asia",
+      };
+
       const params = new URLSearchParams();
+      params.set("optimised", "true");
 
       if (categoryLabel && categorySlugMap[categoryLabel]) {
         params.append("category", categorySlugMap[categoryLabel]);
@@ -186,9 +232,49 @@ export function JobsBoard() {
         params.set("q", searchTerms);
       }
 
+      if (jobTypeAnswers.length > 0) {
+        const jobTypes = jobTypeAnswers
+          .map((jt) => jobTypeMap[jt])
+          .filter(Boolean);
+        if (jobTypes.length > 0) {
+          jobTypes.forEach((jt) => params.append("job_type", jt));
+        }
+      }
+
+      if (remoteScopeAnswers.length > 0) {
+        const remoteScope = remoteScopeMap[remoteScopeAnswers[0]];
+        if (remoteScope) {
+          params.set("remote_scope", remoteScope);
+        }
+      }
+
+      if (locationAnswers.length > 0) {
+        const location = locationAnswers[0];
+        if (location && location !== "Other / Not Listed") {
+          params.set("location", location);
+        }
+      }
+
+      if (salaryAnswers.length > 0) {
+        const salaryRange = salaryAnswers[0];
+        if (salaryRange && salaryRange !== "Flexible / Open" && salaryRange !== "Prefer not to say") {
+          const salaryMap: Record<string, number> = {
+            "$50k–$70k": 50000,
+            "$70k–$90k": 70000,
+            "$90k–$110k": 90000,
+            "$110k–$130k": 110000,
+            "$130k–$150k": 130000,
+            "$150k+": 150000,
+          };
+          const minSalary = salaryMap[salaryRange];
+          if (minSalary) {
+            params.set("min_salary", String(minSalary));
+          }
+        }
+      }
+
       if (params.toString()) {
-        router.push(`/jobs${buildQueryString(params)}`);
-        setOptimised(true);
+        router.replace(`/jobs${buildQueryString(params)}`);
       }
     } catch (error) {
       console.error("[Optimise] Error:", error);
@@ -341,15 +427,14 @@ export function JobsBoard() {
               <button
                 type="button"
                 onClick={handleOptimise}
-                disabled={optimised}
                 className={cn(
                   "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
                   optimised
-                    ? "bg-yellow-400 text-black"
-                    : "text-black hover:bg-black hover:text-white hover:shadow-md hover:bg-yellow-400 hover:text-black transition-all hover:px-6",
+                    ? "bg-yellow-400 text-black shadow-lg"
+                    : "bg-white text-black hover:bg-black hover:text-white hover:shadow-md transition-all",
                 )}
               >
-                {optimised ? "Optimised" : "Optimise"}
+                {optimised ? "Optimised ✓" : "Optimise"}
               </button>
               <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
                 <DialogContent className="border-2 border-black bg-white">

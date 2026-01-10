@@ -140,6 +140,8 @@ export function AdminJobForm({ categories }: Props) {
       tags.length > 0 ? tags : parseTags(tagInput);
 
     const companyId = formData.get("companyId");
+    const salaryMin = formData.get("salaryMin");
+    const salaryMax = formData.get("salaryMax");
     const jobData = {
       title: String(formData.get("title") || ""),
       companyName: String(formData.get("companyName") || ""),
@@ -152,6 +154,11 @@ export function AdminJobForm({ categories }: Props) {
       highlightColor: highlightColor ? String(formData.get("highlightColor") || "") : undefined,
       descriptionHtml: String(formData.get("descriptionHtml") || ""),
       tags: pendingTags,
+      jobType: String(formData.get("jobType") || "full_time"),
+      remoteScope: String(formData.get("remoteScope") || "worldwide"),
+      location: String(formData.get("location") || "Worldwide"),
+      salaryMin: salaryMin ? Number(salaryMin) : undefined,
+      salaryMax: salaryMax ? Number(salaryMax) : undefined,
     };
 
     try {
@@ -440,6 +447,94 @@ export function AdminJobForm({ categories }: Props) {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Job Type */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Job Type
+          </label>
+          <p className="text-xs text-black/70">
+            What type of employment contract is this?
+          </p>
+          <select
+            name="jobType"
+            className="h-10 w-full border-2 border-black bg-white px-3 text-sm font-bold"
+            required
+            defaultValue="full_time"
+          >
+            <option value="full_time">Full-time</option>
+            <option value="part_time">Part-time</option>
+            <option value="freelance">Freelance</option>
+            <option value="contract">Contract</option>
+            <option value="internship">Internship</option>
+          </select>
+        </div>
+
+        {/* Remote Scope / Time Zones */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Remote Scope / Time Zones
+          </label>
+          <p className="text-xs text-black/70">
+            Which regions or time zones can candidates work from?
+          </p>
+          <select
+            name="remoteScope"
+            className="h-10 w-full border-2 border-black bg-white px-3 text-sm font-bold"
+            required
+            defaultValue="worldwide"
+          >
+            <option value="worldwide">Worldwide / Any</option>
+            <option value="north_america">North America (US, Canada, Mexico)</option>
+            <option value="europe">Europe</option>
+            <option value="latam">Latin America</option>
+            <option value="asia">Asia-Pacific</option>
+          </select>
+        </div>
+
+        {/* Salary Range */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Salary Range (USD)
+          </label>
+          <p className="text-xs text-black/70">
+            Optional: Provide salary range to attract more candidates
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Input
+                name="salaryMin"
+                type="number"
+                placeholder="Min (e.g., 90000)"
+                className="border-2 border-black"
+              />
+            </div>
+            <div>
+              <Input
+                name="salaryMax"
+                type="number"
+                placeholder="Max (e.g., 130000)"
+                className="border-2 border-black"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Location / Work Authorization */}
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-black">
+            Location / Work Authorization
+          </label>
+          <p className="text-xs text-black/70">
+            Where should candidates be legally authorized to work? (e.g., "US only", "EU", "Remote contractor worldwide")
+          </p>
+          <Input
+            name="location"
+            placeholder="e.g., US only, EU, Remote contractor worldwide"
+            className="border-2 border-black"
+            required
+          />
         </div>
       </div>
 

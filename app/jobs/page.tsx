@@ -6,7 +6,7 @@ import { JobsSearchBar } from "../../components/jobs/search-bar";
 import { CategoryFilters } from "../../components/jobs/category-filters";
 import { GridBackground } from "../../components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
-import { ContainerTextFlip } from "@/components/ui/container-text-flip";
+
 
 const siteUrl = getSiteUrl();
 const ogImage = getOgImageUrl();

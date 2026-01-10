@@ -31,17 +31,16 @@ export function JobsSearchBar({ categories }: Props) {
   const [suggestions, setSuggestions] = React.useState<Suggestion>({
     titles: [],
     companies: [],
-    categories: categories.slice(0, 6),
+    categories: categories,
   });
   const [loading, setLoading] = React.useState(false);
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const matches = React.useMemo(() => {
-    if (!q.trim()) return categories.slice(0, 6);
+    if (!q.trim()) return categories;
     const lower = q.toLowerCase();
     return categories
-      .filter((c) => c.label.toLowerCase().includes(lower))
-      .slice(0, 6);
+      .filter((c) => c.label.toLowerCase().includes(lower));
   }, [q, categories]);
 
   // Fetch live suggestions for titles/companies when typing
@@ -108,7 +107,7 @@ export function JobsSearchBar({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative mt-0 flex w-full max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2"
+      className="relative mt-0 flex w-full max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2 rounded-lg"
     >
       <input
         type="text"
@@ -122,107 +121,53 @@ export function JobsSearchBar({ categories }: Props) {
         }}
         onFocus={() => setOpen(true)}
         onBlur={() => {
-          // If the input is cleared and focus leaves, hide suggestions
-          if (!q.trim()) {
+          // Delay closing to allow clicks on dropdown items
+          setTimeout(() => {
             setOpen(false);
-          }
+          }, 200);
         }}
         autoComplete="off"
       />
       <input type="hidden" name="category" value={selectedCategory} />
       <button
         type="submit"
-        className="px-4 py-2 bg-black text-white text-sm font-bold cursor-pointer hover:bg-gray-900 transition-colors"
+        className="px-6 py-2 bg-black text-white text-sm font-bold cursor-pointer hover:bg-gray-900 transition-colors rounded-md"
       >
         Search
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-3 w-full overflow-hidden rounded-xl border-2 border-black bg-white shadow-lg"
-        // -- MADE BIGGER: mt-3
+        <div 
+          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-xl bg-white border-2 border-black shadow-lg"
+          onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking dropdown
         >
-          <div className="max-h-96 overflow-auto text-sm text-black">
-            {/* -- MADE BIGGER: max-h-96 text-sm */}
+          <div className="max-h-96 overflow-y-auto">
             {loading && (
-              <div className="px-4 py-3 text-[13px] text-black/60">
-                {/* -- MADE BIGGER: py-3 text-[13px] */}
+              <div className="px-4 py-3 text-sm text-black/60">
                 Searching…
               </div>
             )}
 
-            {suggestions.titles.length > 0 && (
+            {!loading && !q.trim() && matches.length > 0 && (
               <>
-                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
-                  {/* -- MADE BIGGER: py-3 text-[11px] */}
-                  Job titles
+                <div className="px-4 py-3 text-sm font-bold text-black">
+                  CATEGORIES
                 </div>
-                <ul className="divide-y divide-black/10">
-                  {suggestions.titles.map((title) => (
-                    <li key={title}>
-                      <button
-                        type="button"
-                        onClick={() => selectTerm(title)}
-                        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-100"
-                        // -- MADE BIGGER: py-3
-                      >
-                        <span>{title}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {suggestions.companies.length > 0 && (
-              <>
-                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
-                  {/* -- MADE BIGGER: py-3 text-[11px] */}
-                  Companies
-                </div>
-                <ul className="divide-y divide-black/10">
-                  {suggestions.companies.map((comp) => (
-                    <li key={comp}>
-                      <button
-                        type="button"
-                        onClick={() => selectTerm(comp)}
-                        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-100"
-                        // -- MADE BIGGER: py-3
-                      >
-                        <span>{comp}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {matches.length > 0 && (
-              <>
-                <div className="bg-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-black">
-                  {/* -- MADE BIGGER: py-3 text-[11px] */}
-                  Categories
-                </div>
-                <ul className="divide-y divide-black/10">
-                  {matches.map((cat) => {
+                <ul>
+                  {matches.map((cat, index) => {
                     const isActive = selectedCategory === cat.slug;
                     return (
                       <li key={cat.slug}>
+                        {index > 0 && <hr className="border-0 border-t border-gray-200 mx-0" />}
                         <button
                           type="button"
                           onClick={() => selectCategory(cat)}
                           className={cn(
-                            "flex w-full items-center justify-between px-4 py-3 text-left hover:bg-yellow-100",
-                            isActive && "bg-black text-white font-bold",
+                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-black hover:bg-gray-50 transition-colors",
+                            isActive && "bg-black text-white hover:bg-gray-900",
                           )}
-                          // -- MADE BIGGER: py-3
                         >
                           <span>{cat.label}</span>
-                          {isActive && (
-                            <span className="rounded-full bg-black px-3 py-1 text-[11px] font-bold text-white">
-                              {/* -- MADE BIGGER: px-3 py-1 text-[11px] */}
-                              Selected
-                            </span>
-                          )}
                         </button>
                       </li>
                     );
@@ -231,14 +176,87 @@ export function JobsSearchBar({ categories }: Props) {
               </>
             )}
 
-            {suggestions.titles.length === 0 &&
-              suggestions.companies.length === 0 &&
-              matches.length === 0 && (
-                <div className="px-4 py-4 text-[13px] text-black/60">
-                  {/* -- MADE BIGGER: py-4 text-[13px] */}
-                  No matches yet
-                </div>
-              )}
+            {!loading && q.trim() && (
+              <>
+                {suggestions.titles.length > 0 && (
+                  <>
+                    <div className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-black bg-gray-50">
+                      Job titles
+                    </div>
+                    <ul className="divide-y divide-gray-200">
+                      {suggestions.titles.map((title) => (
+                        <li key={title} className="border-t border-gray-200 first:border-t-0">
+                          <button
+                            type="button"
+                            onClick={() => selectTerm(title)}
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 text-sm text-black"
+                          >
+                            <span>{title}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {suggestions.companies.length > 0 && (
+                  <>
+                    <div className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-black bg-gray-50">
+                      Companies
+                    </div>
+                    <ul className="divide-y divide-gray-200">
+                      {suggestions.companies.map((comp) => (
+                        <li key={comp} className="border-t border-gray-200 first:border-t-0">
+                          <button
+                            type="button"
+                            onClick={() => selectTerm(comp)}
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 text-sm text-black"
+                          >
+                            <span>{comp}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {matches.length > 0 && (
+                  <>
+                    <div className="px-4 py-3 text-sm font-bold text-black">
+                      CATEGORIES
+                    </div>
+                    <ul>
+                      {matches.map((cat, index) => {
+                        const isActive = selectedCategory === cat.slug;
+                        return (
+                          <li key={cat.slug}>
+                            {index > 0 && <hr className="border-0 border-t border-gray-200 mx-0" />}
+                            <button
+                              type="button"
+                              onClick={() => selectCategory(cat)}
+                              className={cn(
+                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-black hover:bg-gray-50 transition-colors",
+                                isActive && "bg-black text-white hover:bg-gray-900",
+                              )}
+                            >
+                              <span>{cat.label}</span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                )}
+
+                {suggestions.titles.length === 0 &&
+                  suggestions.companies.length === 0 &&
+                  matches.length === 0 && (
+                    <div className="px-4 py-4 text-sm text-black/60">
+                      No matches yet
+                    </div>
+                  )}
+              </>
+            )}
           </div>
         </div>
       )}

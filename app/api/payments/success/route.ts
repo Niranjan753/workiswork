@@ -189,11 +189,12 @@ export async function GET(request: Request) {
     }
 
     // Redirect to success page with job and company info
+    // Always use production domain to avoid Vercel Preview Protection issues
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://workiswork.xyz";
     const successUrl = new URL(`/post/success`, siteUrl);
     successUrl.searchParams.set("job_slug", inserted.slug);
     successUrl.searchParams.set("company_slug", companySlug);
-    return NextResponse.redirect(successUrl);
+    return NextResponse.redirect(successUrl.toString(), { status: 307 });
   } catch (error: any) {
     console.error("[GET /api/payments/success] Error:", error);
     return NextResponse.json(

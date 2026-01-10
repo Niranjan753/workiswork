@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
@@ -44,6 +44,26 @@ type JobsResponse = {
   jobs: Job[];
 };
 
+type Company = {
+  id: number;
+  slug: string;
+  name: string;
+  websiteUrl: string | null;
+  twitterUrl: string | null;
+  linkedinUrl: string | null;
+  location: string | null;
+  logoUrl: string | null;
+  createdAt: string | null;
+};
+
+type CompaniesResponse = {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  companies: Company[];
+};
+
 const COUNTRIES = ["USA", "UK", "Germany", "France", "Canada", "Spain"];
 
 const EMPLOYMENT_TYPES: { value: string; label: string }[] = [
@@ -81,6 +101,7 @@ export function JobsBoard() {
   const [showJoinDialog, setShowJoinDialog] = React.useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
+  const [viewMode, setViewMode] = React.useState<"jobs" | "companies">("jobs");
 
   React.useEffect(() => {
     const newLocation = searchParams.get("location") ?? "";
@@ -143,6 +164,41 @@ export function JobsBoard() {
   const total = data?.pages?.[0]?.total ?? 0;
   const allJobs = data?.pages.flatMap((p) => p.jobs) ?? [];
   const jobs = allJobs.slice(0, 25); // Limit to 25 jobs
+
+  // Companies query with pagination
+  const companiesPage = Number(searchParams.get("companiesPage") || "1");
+  const companiesQueryKey = React.useMemo(
+    () => ["companies", { q, location, page: companiesPage }],
+    [q, location, companiesPage],
+  );
+
+  const {
+    data: companiesData,
+    isLoading: isLoadingCompanies,
+    isError: isCompaniesError,
+  } = useQuery({
+    queryKey: companiesQueryKey,
+    queryFn: async (): Promise<CompaniesResponse> => {
+      const params = new URLSearchParams();
+      params.set("page", String(companiesPage));
+      params.set("limit", "20");
+      if (q) params.set("q", q);
+      if (location) params.set("location", location);
+
+      const res = await fetch(`/api/companies${buildQueryString(params)}`);
+      if (!res.ok) {
+        throw new Error("Failed to load companies");
+      }
+      return res.json();
+    },
+    enabled: viewMode === "companies",
+    staleTime: 0,
+    refetchOnMount: true,
+  });
+
+  const totalCompanies = companiesData?.total ?? 0;
+  const companies = companiesData?.companies ?? [];
+  const companiesTotalPages = companiesData?.totalPages ?? 1;
 
   function toggleJobType(value: string) {
     setJobTypes((prev) =>
@@ -353,132 +409,176 @@ export function JobsBoard() {
             <div className="relative">
               <button
                 type="button"
-                onClick={() => {
-                  if (!session?.user) {
-                    setShowUnlockDialog(true);
-                  } else {
-                    router.push("/pricing");
-                  }
-                }}
-                className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors cursor-pointer flex items-center gap-2"
-              >
-                <LockOpen className="w-4 h-4" />
-                Unlock All Jobs
-              </button>
-              <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
-                <DialogContent className="border-2 border-black bg-white">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-black text-black">
-                      Join to Unlock All Jobs
-                    </DialogTitle>
-                    <DialogDescription className="text-sm font-medium text-black/80 pt-2">
-                      Join WorkIsWork to access all job listings and unlock premium features.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter className="sm:justify-start">
-                    <Link
-                      href="/join"
-                      className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
-                      onClick={() => setShowUnlockDialog(false)}
-                    >
-                      Join Now
-                    </Link>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => {
-                  if (!session?.user) {
-                    setShowAlertDialog(true);
-                  } else {
-                    router.push("/alerts");
-                  }
-                }}
-                className="px-4 py-2 border-2 border-black text-black text-sm font-bold hover:bg-black cursor-pointer hover:text-white transition-colors"
-              > 
-                Create Job Alert
-              </button>
-              <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
-                <DialogContent className="border-2 border-black bg-white">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-black text-black">
-                      Join to Create Job Alerts
-                    </DialogTitle>
-                    <DialogDescription className="text-sm font-medium text-black/80 pt-2">
-                      Join WorkIsWork to create personalized job alerts and get notified about new opportunities.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter className="sm:justify-start">
-                    <Link
-                      href="/join"
-                      className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
-                      onClick={() => setShowAlertDialog(false)}
-                    >
-                      Join Now
-                    </Link>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={handleOptimise}
+                onClick={() => setViewMode("jobs")}
                 className={cn(
-                  "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
-                  optimised
-                    ? "bg-yellow-400 text-black shadow-lg"
-                    : "bg-white text-black hover:bg-black hover:text-white hover:shadow-md transition-all",
+                  "px-4 py-2 text-sm font-bold border-2 border-black transition-colors cursor-pointer",
+                  viewMode === "jobs"
+                    ? "bg-black text-white"
+                    : "bg-white text-black hover:bg-gray-100"
                 )}
               >
-                {optimised ? "Optimised ✓" : "Optimise"}
+                Jobs
               </button>
-              <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
-                <DialogContent className="border-2 border-black bg-white">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-black text-black">
-                      Join to Optimise Your Job Search
-                    </DialogTitle>
-                    <DialogDescription className="text-sm font-medium text-black/80 pt-2">
-                      You can modify your preferences after joining to get personalized job recommendations.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter className="sm:justify-start">
-                    <Link
-                      href="/join"
-                      className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
-                      onClick={() => setShowJoinDialog(false)}
-                    >
-                      Join Now
-                    </Link>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
             </div>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setViewMode("companies")}
+                className={cn(
+                  "px-4 py-2 text-sm font-bold border-2 border-black transition-colors cursor-pointer",
+                  viewMode === "companies"
+                    ? "bg-black text-white"
+                    : "bg-white text-black hover:bg-gray-100"
+                )}
+              >
+                Companies
+              </button>
+            </div>
+            {viewMode === "jobs" && (
+              <>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!session?.user) {
+                        setShowUnlockDialog(true);
+                      } else {
+                        router.push("/pricing");
+                      }
+                    }}
+                    className="px-4 py-2 bg-black text-white text-sm font-bold hover:bg-gray-900 transition-colors cursor-pointer flex items-center gap-2"
+                  >
+                    <LockOpen className="w-4 h-4" />
+                    Unlock All Jobs
+                  </button>
+                </div>
+                <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
+                  <DialogContent className="border-2 border-black bg-white">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-black text-black">
+                        Join to Unlock All Jobs
+                      </DialogTitle>
+                      <DialogDescription className="text-sm font-medium text-black/80 pt-2">
+                        Join WorkIsWork to access all job listings and unlock premium features.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-start">
+                      <Link
+                        href="/join"
+                        className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                        onClick={() => setShowUnlockDialog(false)}
+                      >
+                        Join Now
+                      </Link>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
+            {viewMode === "jobs" && (
+              <>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!session?.user) {
+                        setShowAlertDialog(true);
+                      } else {
+                        router.push("/alerts");
+                      }
+                    }}
+                    className="px-4 py-2 border-2 border-black text-black text-sm font-bold hover:bg-black cursor-pointer hover:text-white transition-colors"
+                  > 
+                    Create Job Alert
+                  </button>
+                </div>
+                <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
+                  <DialogContent className="border-2 border-black bg-white">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-black text-black">
+                        Join to Create Job Alerts
+                      </DialogTitle>
+                      <DialogDescription className="text-sm font-medium text-black/80 pt-2">
+                        Join WorkIsWork to create personalized job alerts and get notified about new opportunities.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-start">
+                      <Link
+                        href="/join"
+                        className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                        onClick={() => setShowAlertDialog(false)}
+                      >
+                        Join Now
+                      </Link>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
+            {viewMode === "jobs" && (
+              <>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={handleOptimise}
+                    className={cn(
+                      "px-4 py-2 border-2 border-black cursor-pointer text-sm font-bold transition-colors",
+                      optimised
+                        ? "bg-yellow-400 text-black shadow-lg"
+                        : "bg-white text-black hover:bg-black hover:text-white hover:shadow-md transition-all",
+                    )}
+                  >
+                    {optimised ? "Optimised ✓" : "Optimise"}
+                  </button>
+                </div>
+                <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
+                  <DialogContent className="border-2 border-black bg-white">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-black text-black">
+                        Join to Optimise Your Job Search
+                      </DialogTitle>
+                      <DialogDescription className="text-sm font-medium text-black/80 pt-2">
+                        You can modify your preferences after joining to get personalized job recommendations.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-start">
+                      <Link
+                        href="/join"
+                        className="px-6 py-3 border-2 border-black bg-yellow-400 text-black text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                        onClick={() => setShowJoinDialog(false)}
+                      >
+                        Join Now
+                      </Link>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
           </div>
           <p className="text-sm font-medium text-black/60">
-            {total.toLocaleString()} matching jobs
+            {viewMode === "jobs" 
+              ? `${total.toLocaleString()} matching jobs`
+              : `${totalCompanies.toLocaleString()} companies`
+            }
           </p>
         </div>
 
         {/* Jobs list - Gumroad style */}
-        <div className="space-y-4">
-          {isLoading && <p className="px-3 py-4 text-sm font-medium">Loading jobs…</p>}
-          {isError && (
-            <p className="px-3 py-4 text-sm font-medium text-red-600">
-              Failed to load jobs. Please try again.
-            </p>
-          )}
-          {!isLoading && jobs.length === 0 && (
-            <p className="px-3 py-4 text-sm font-medium text-black/40">
-              No jobs match your filters yet.
-            </p>
-          )}
+        {viewMode === "jobs" && (
+          <div className="space-y-4">
+            {isLoading && <p className="px-3 py-4 text-sm font-medium">Loading jobs…</p>}
+            {isError && (
+              <p className="px-3 py-4 text-sm font-medium text-red-600">
+                Failed to load jobs. Please try again.
+              </p>
+            )}
+            {!isLoading && jobs.length === 0 && (
+              <p className="px-3 py-4 text-sm font-medium text-black/40">
+                No jobs match your filters yet.
+              </p>
+            )}
 
-          {jobs.map((job) => (
+            {jobs.map((job) => (
             <Link
               key={job.id}
               href={`/jobs/${job.slug}`}
@@ -523,11 +623,131 @@ export function JobsBoard() {
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {/* Companies list */}
+        {viewMode === "companies" && (
+          <>
+            <div className="space-y-4">
+              {isLoadingCompanies && <p className="px-3 py-4 text-sm font-medium">Loading companies…</p>}
+              {isCompaniesError && (
+                <p className="px-3 py-4 text-sm font-medium text-red-600">
+                  Failed to load companies. Please try again.
+                </p>
+              )}
+              {!isLoadingCompanies && companies.length === 0 && (
+                <p className="px-3 py-4 text-sm font-medium text-black/40">
+                  No companies found.
+                </p>
+              )}
+
+              {companies.map((company) => (
+                <div
+                  key={company.id}
+                  onClick={() => router.push(`/companies/${company.slug}`)}
+                  className="block bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 cursor-pointer"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <h3 className="text-lg font-black text-black leading-tight">
+                        {company.name}
+                      </h3>
+                      {company.location && (
+                        <p className="text-sm font-medium text-black/70">
+                          {company.location}
+                        </p>
+                      )}
+                      {company.websiteUrl && (
+                        <a
+                          href={company.websiteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-sm text-yellow-600 hover:underline font-medium"
+                        >
+                          {company.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                        </a>
+                      )}
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {company.twitterUrl && (
+                          <a
+                            href={company.twitterUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-xs text-black/60 hover:text-black"
+                          >
+                            Twitter
+                          </a>
+                        )}
+                        {company.linkedinUrl && (
+                          <a
+                            href={company.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-xs text-black/60 hover:text-black"
+                          >
+                            LinkedIn
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <div className="shrink-0">
+                      <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
+                        View company →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination for companies */}
+            {!isLoadingCompanies && totalCompanies > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t-2 border-black">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (companiesPage > 1) {
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.set("companiesPage", String(companiesPage - 1));
+                      router.push(`/jobs?${params.toString()}`);
+                    }
+                  }}
+                  disabled={companiesPage <= 1}
+                  className="px-4 py-2 border-2 border-black bg-white text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                <span className="px-4 py-2 text-sm font-medium text-black">
+                  Page {companiesPage} of {companiesTotalPages}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (companiesPage < companiesTotalPages) {
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.set("companiesPage", String(companiesPage + 1));
+                      router.push(`/jobs?${params.toString()}`);
+                    }
+                  }}
+                  disabled={companiesPage >= companiesTotalPages}
+                  className="px-4 py-2 border-2 border-black bg-white text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
 
         {/* Want more remote jobs section */}
-        {jobs.length > 0 && allJobs.length > 25 && (
+        {viewMode === "jobs" && jobs.length > 0 && allJobs.length > 25 && (
           <div className="mt-12 space-y-8">
             {/* Headline */}
             <div className="text-center space-y-2">

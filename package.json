@@ -11,7 +11,8 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun scripts/seed.ts",
-    "db:import-companies": "bun scripts/import-companies.ts"
+    "db:import-companies": "bun scripts/import-companies.ts",
+    "db:create-jobs-from-companies": "bun scripts/create-jobs-from-companies.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

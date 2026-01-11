@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
@@ -114,15 +114,22 @@ export function JobsBoard() {
   }, [searchParams]);
 
 
+  // Jobs query with pagination
+  const jobsPage = Number(searchParams.get("jobsPage") || "1");
   const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary, optimised: isOptimisedFromUrl }],
-    [q, location, jobTypes, activeCategories, remoteScope, minSalary, isOptimisedFromUrl],
+    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary, optimised: isOptimisedFromUrl, page: jobsPage }],
+    [q, location, jobTypes, activeCategories, remoteScope, minSalary, isOptimisedFromUrl, jobsPage],
   );
 
-  const fetchJobs = React.useCallback(
-    async ({ pageParam = 1 }): Promise<JobsResponse> => {
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey,
+    queryFn: async (): Promise<JobsResponse> => {
       const params = new URLSearchParams();
-      params.set("page", String(pageParam));
+      params.set("page", String(jobsPage));
       params.set("limit", "20");
       if (q) params.set("q", q);
       if (location) params.set("location", location);
@@ -137,33 +144,14 @@ export function JobsBoard() {
       }
       return res.json();
     },
-    [q, location, jobTypes, activeCategories, remoteScope, minSalary],
-  );
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-  } =   useInfiniteQuery({
-    queryKey,
-    queryFn: fetchJobs,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.totalPages) {
-        return lastPage.page + 1;
-      }
-      return undefined;
-    },
+    enabled: viewMode === "jobs",
     staleTime: 0,
     refetchOnMount: true,
   });
 
-  const total = data?.pages?.[0]?.total ?? 0;
-  const allJobs = data?.pages.flatMap((p) => p.jobs) ?? [];
-  const jobs = allJobs.slice(0, 25); // Limit to 25 jobs
+  const total = data?.total ?? 0;
+  const jobs = data?.jobs ?? [];
+  const jobsTotalPages = data?.totalPages ?? 1;
 
   // Companies query with pagination
   const companiesPage = Number(searchParams.get("companiesPage") || "1");
@@ -565,66 +553,107 @@ export function JobsBoard() {
 
         {/* Jobs list - Gumroad style */}
         {viewMode === "jobs" && (
-          <div className="space-y-4">
-            {isLoading && <p className="px-3 py-4 text-sm font-medium">Loading jobs…</p>}
-            {isError && (
-              <p className="px-3 py-4 text-sm font-medium text-red-600">
-                Failed to load jobs. Please try again.
-              </p>
-            )}
-            {!isLoading && jobs.length === 0 && (
-              <p className="px-3 py-4 text-sm font-medium text-black/40">
-                No jobs match your filters yet.
-              </p>
-            )}
-
-            {jobs.map((job) => (
-            <Link
-              key={job.id}
-              href={`/jobs/${job.slug}`}
-              className={cn(
-                "block bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
-                job.isFeatured && "bg-gray-50"
+          <>
+            <div className="space-y-4">
+              {isLoading && <p className="px-3 py-4 text-sm font-medium">Loading jobs…</p>}
+              {isError && (
+                <p className="px-3 py-4 text-sm font-medium text-red-600">
+                  Failed to load jobs. Please try again.
+                </p>
               )}
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="min-w-0 flex-1 space-y-2">
-                  <h3 className="text-lg font-black text-black leading-tight">
-                    {job.title}
-                  </h3>
-                  <p className="text-sm font-medium text-black/70">
-                    {job.companyName ?? "Remote company"} • {job.location ?? "Remote"}
-                  </p>
-                  {job.tags && job.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {job.tags.slice(0, 6).map((tag) => (
-                        <span
-                          key={tag}
-                          className="border-2 border-black bg-yellow-400 px-2 py-1 text-[11px] font-bold text-black shadow-sm"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+              {!isLoading && jobs.length === 0 && (
+                <p className="px-3 py-4 text-sm font-medium text-black/40">
+                  No jobs match your filters yet.
+                </p>
+              )}
+
+              {jobs.map((job) => (
+                <Link
+                  key={job.id}
+                  href={`/jobs/${job.slug}`}
+                  className={cn(
+                    "block bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
+                    job.isFeatured && "bg-gray-50"
                   )}
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wide text-black/50">
-                      {job.jobType.replace("_", " ")}
-                    </span>
-                    <span className="text-xs font-bold uppercase tracking-wide text-black/50">
-                      {job.remoteScope}
-                    </span>
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <h3 className="text-lg font-black text-black leading-tight">
+                        {job.title}
+                      </h3>
+                      <p className="text-sm font-medium text-black/70">
+                        {job.companyName ?? "Remote company"} • {job.location ?? "Remote"}
+                      </p>
+                      {job.tags && job.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {job.tags.slice(0, 6).map((tag) => (
+                            <span
+                              key={tag}
+                              className="border-2 border-black bg-yellow-400 px-2 py-1 text-[11px] font-bold text-black shadow-sm"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wide text-black/50">
+                          {job.jobType.replace("_", " ")}
+                        </span>
+                        <span className="text-xs font-bold uppercase tracking-wide text-black/50">
+                          {job.remoteScope}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="shrink-0">
+                      <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
+                        View job →
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
-                    View job →
-                  </span>
-                </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Pagination for jobs */}
+            {!isLoading && total > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t-2 border-black">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (jobsPage > 1) {
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.set("jobsPage", String(jobsPage - 1));
+                      router.push(`/jobs?${params.toString()}`);
+                    }
+                  }}
+                  disabled={jobsPage <= 1}
+                  className="px-4 py-2 border-2 border-black bg-white text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                <span className="px-4 py-2 text-sm font-medium text-black">
+                  Page {jobsPage} of {jobsTotalPages}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (jobsPage < jobsTotalPages) {
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.set("jobsPage", String(jobsPage + 1));
+                      router.push(`/jobs?${params.toString()}`);
+                    }
+                  }}
+                  disabled={jobsPage >= jobsTotalPages}
+                  className="px-4 py-2 border-2 border-black bg-white text-black text-sm font-bold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
               </div>
-            </Link>
-            ))}
-          </div>
+            )}
+          </>
         )}
 
         {/* Companies list */}
@@ -746,58 +775,6 @@ export function JobsBoard() {
           </>
         )}
 
-        {/* Want more remote jobs section */}
-        {viewMode === "jobs" && jobs.length > 0 && allJobs.length > 25 && (
-          <div className="mt-12 space-y-8">
-            {/* Headline */}
-            <div className="text-center space-y-2">
-              <h2 className="text-3xl sm:text-4xl font-black text-black">
-                Want more remote jobs?
-              </h2>
-              <p className="text-lg sm:text-xl font-bold text-black">
-                Upgrade to access {total.toLocaleString()} jobs!
-              </p>
-            </div>
-
-            {/* Feature highlights */}
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="border-2 border-black bg-yellow-100 p-6">
-                <h3 className="text-lg font-black text-black mb-3">
-                  Best Remote Job Listings
-                </h3>
-                <p className="text-sm text-black/80 font-medium">
-                  Only top quality remote jobs. We screen, curate & categorize all jobs.
-                </p>
-              </div>
-              <div className="border-2 border-black bg-yellow-100 p-6">
-                <h3 className="text-lg font-black text-black mb-3">
-                  Advanced Search Filters
-                </h3>
-                <p className="text-sm text-black/80 font-medium">
-                  Find remote jobs tailored to your location and experience. Entry level to executive.
-                </p>
-              </div>
-              <div className="border-2 border-black bg-yellow-100 p-6">
-                <h3 className="text-lg font-black text-black mb-3">
-                  Save Time
-                </h3>
-                <p className="text-sm text-black/80 font-medium">
-                  We spend hours scanning every job for you. Get a job faster with personalized job alerts.
-                </p>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <div className="flex justify-center pt-4">
-              <Link
-                href="/join"
-                className="px-10 py-5 border-2 border-black bg-yellow-400 text-black text-base font-bold hover:bg-black hover:text-yellow-400 cursor-pointer transition-all shadow-lg"
-              >
-                Find Your Remote Job! →
-              </Link>
-            </div>
-          </div>
-        )}
       </section>
     </div>
   );

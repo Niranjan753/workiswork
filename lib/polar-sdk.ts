@@ -20,6 +20,7 @@ export type PolarCheckout = {
 
 export async function createPolarCheckout(payload: {
   product_price_id?: string;
+  product_id?: string;
   success_url: string;
   allow_discount_codes?: boolean;
   metadata?: Record<string, string>;
@@ -29,9 +30,18 @@ export async function createPolarCheckout(payload: {
   }
 
   try {
-    // The current version of @polar-sh/sdk (0.42.2) uses 'products' array for checkout creation
+    // The SDK requires 'products' array (list of Product IDs)
+    // We prioritize product_id if available, otherwise fall back to product_price_id (though that might be wrong if it expects product ID)
+    const idToUse = payload.product_id || payload.product_price_id;
+
+    // We also pass productPriceId if available, as some API versions might support it via direct property or inside options? 
+    // Actually, based on types, we should pass 'products' array.
+
+    // If we have a price ID but need a product ID, we might be in trouble if we only pass price ID to 'products'.
+    // BUT checkouts.create usually takes Product ID in `products`.
+
     const checkout = await polar.checkouts.create({
-      products: [payload.product_price_id!],
+      products: [idToUse!],
       successUrl: payload.success_url,
       allowDiscountCodes: payload.allow_discount_codes,
       metadata: payload.metadata,

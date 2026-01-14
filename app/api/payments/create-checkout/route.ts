@@ -99,13 +99,13 @@ export async function POST(request: Request) {
     const metadata = buildJobMetadata(jobData);
 
     console.log('[Create Checkout] Creating Polar checkout with:', {
-      product_price_id: process.env.POLAR_JOB_PRICE_ID,
+      product_id: process.env.POLAR_JOB_PRODUCT_ID,
       success_url: `${siteUrl}/api/payments/success?checkout_id={CHECKOUT_ID}`,
       metadata_keys: Object.keys(metadata),
     });
 
     const checkout = await createPolarCheckout({
-      product_price_id: process.env.POLAR_JOB_PRICE_ID,
+      product_id: process.env.POLAR_JOB_PRODUCT_ID,
       success_url: `${siteUrl}/api/payments/success?checkout_id={CHECKOUT_ID}`,
       allow_discount_codes: true,
       metadata,

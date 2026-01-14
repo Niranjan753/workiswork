@@ -1,89 +1,79 @@
 import { NextResponse } from "next/server";
-import DodoPayments from "dodopayments";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
-import { categories, companies, jobs } from "@/db/schema";
+import { alerts, categories, companies, jobs } from "@/db/schema";
 import { guessLogoFromWebsite } from "@/lib/logo";
 import { sendAlertEmail } from "@/lib/resend";
-import { alerts } from "@/db/schema";
 import { getSiteUrl } from "@/lib/site-url";
+import { ensurePolarConfig, retrievePolarCheckout } from "@/lib/polar";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+type MetadataMap = Record<string, unknown>;
+
+function reconstructJobData(metadata: MetadataMap) {
+  if (!metadata || metadata["flow"] !== "job_posting") {
+    throw new Error("Invalid checkout flow for job creation");
+  }
+
+  const description = Object.entries(metadata)
+    .filter(([key]) => key.startsWith("job_desc_"))
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, value]) => (value ?? "").toString())
+    .join("");
+
+  const tagsValue = metadata["job_tags"];
+  const tags = typeof tagsValue === "string" ? tagsValue.split(",").map((t) => t.trim()).filter(Boolean) : [];
+
+  const jobData = {
+    title: (metadata["job_title"] || "").toString(),
+    companyName: (metadata["company_name"] || "").toString(),
+    companyWebsite: (metadata["company_website"] || "").toString(),
+    categorySlug: (metadata["category_slug"] || "").toString(),
+    applyUrl: (metadata["apply_url"] || "").toString(),
+    receiveApplicationsByEmail: Boolean(metadata["receive_email"]),
+    companyEmail: (metadata["company_email"] || "").toString(),
+    highlightColor: (metadata["highlight_color"] || "").toString() || null,
+    descriptionHtml: description,
+    tags,
+    jobType: (metadata["job_type"] || "").toString() || "full_time",
+    remoteScope: (metadata["remote_scope"] || "").toString() || "worldwide",
+    location: (metadata["location"] || "").toString() || "Worldwide",
+    salaryMin: metadata["salary_min"] ? Number(metadata["salary_min"]) : undefined,
+    salaryMax: metadata["salary_max"] ? Number(metadata["salary_max"]) : undefined,
+  };
+
+  if (!jobData.title || !jobData.companyName || !jobData.categorySlug || !jobData.applyUrl) {
+    throw new Error("Missing required job metadata");
+  }
+
+  return jobData;
+}
+
 export async function GET(request: Request) {
+  const polarCheck = ensurePolarConfig({ jobProductId: process.env.POLAR_JOB_PRODUCT_ID });
+  if (polarCheck) return polarCheck;
+
   try {
     const { searchParams } = new URL(request.url);
-    const paymentId = searchParams.get("payment_id");
-    const status = searchParams.get("status");
+    const checkoutId = searchParams.get("checkout_id");
 
-    if (!paymentId) {
+    if (!checkoutId) {
+      return NextResponse.json({ error: "Missing checkout_id" }, { status: 400 });
+    }
+
+    const checkout = await retrievePolarCheckout(checkoutId);
+
+    if (!checkout || !checkout.status || !["succeeded", "confirmed"].includes(checkout.status)) {
       return NextResponse.json(
-        { error: "Missing payment_id" },
-        { status: 400 }
+        { error: `Checkout status ${checkout?.status ?? "unknown"} is not paid` },
+        { status: 400 },
       );
     }
 
-    if (status !== "succeeded") {
-      return NextResponse.json(
-        { error: `Payment status is ${status}, expected succeeded` },
-        { status: 400 }
-      );
-    }
+    const jobData = reconstructJobData((checkout.metadata as MetadataMap) || {});
 
-    const apiKey = process.env.DODO_PAYMENTS_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "Dodo Payments API key not configured" },
-        { status: 500 }
-      );
-    }
-
-    // Determine environment - default to test_mode unless explicitly set to live
-    const environment = 
-      process.env.DODO_PAYMENTS_ENV === "live_mode" 
-        ? "live_mode" 
-        : "test_mode";
-
-    const client = new DodoPayments({
-      bearerToken: apiKey,
-      environment: environment,
-    });
-
-    // Retrieve the payment to get the checkout session ID
-    const payment = await client.payments.retrieve(paymentId);
-
-    if (!payment || !payment.checkout_session_id) {
-      return NextResponse.json(
-        { error: "Payment not found or not associated with a checkout session" },
-        { status: 400 }
-      );
-    }
-
-    // Retrieve the checkout session to verify it's completed
-    const session = await client.checkoutSessions.retrieve(payment.checkout_session_id);
-
-    if (!session || session.payment_status !== "succeeded") {
-      return NextResponse.json(
-        { error: "Checkout session payment not succeeded" },
-        { status: 400 }
-      );
-    }
-
-    // Extract job data from payment metadata (metadata is passed through from checkout session)
-    const jobDataStr = payment.metadata?.jobData;
-    if (!jobDataStr) {
-      // Fallback: try to get from payment metadata directly
-      console.error("[GET /api/payments/success] Job data not found in payment metadata:", payment.metadata);
-      return NextResponse.json(
-        { error: "Job data not found in payment metadata" },
-        { status: 400 }
-      );
-    }
-
-    const jobData = JSON.parse(jobDataStr);
-
-    // Find category
     const [category] = await db
       .select()
       .from(categories)
@@ -91,13 +81,9 @@ export async function GET(request: Request) {
       .limit(1);
 
     if (!category) {
-      return NextResponse.json(
-        { error: `Category "${jobData.categorySlug}" not found` },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: `Category "${jobData.categorySlug}" not found` }, { status: 400 });
     }
 
-    // Find or create company
     const companySlug = jobData.companyName
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -118,16 +104,14 @@ export async function GET(request: Request) {
           name: jobData.companyName,
           slug: companySlug,
           websiteUrl: jobData.companyWebsite || null,
-          logoUrl: jobData.companyLogo || (jobData.companyWebsite ? await guessLogoFromWebsite(jobData.companyWebsite) : null),
+          logoUrl: jobData.companyWebsite ? await guessLogoFromWebsite(jobData.companyWebsite) : null,
         })
         .returning()
         .then((rows) => rows[0]));
 
-    // Create job slug
     const baseSlug = `${jobData.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}-${companySlug}`;
     const uniqueSlug = `${baseSlug}-${Date.now().toString(36)}`;
 
-    // Create the job
     const inserted = await db
       .insert(jobs)
       .values({
@@ -135,16 +119,16 @@ export async function GET(request: Request) {
         slug: uniqueSlug,
         companyId: company.id,
         categoryId: category.id,
-        location: "Worldwide",
-        jobType: "full_time",
-        remoteScope: "worldwide",
+        location: jobData.location || "Worldwide",
+        jobType: (jobData.jobType as any) || "full_time",
+        remoteScope: (jobData.remoteScope as any) || "worldwide",
         applyUrl: jobData.applyUrl,
         receiveApplicationsByEmail: jobData.receiveApplicationsByEmail ?? false,
         companyEmail: jobData.companyEmail,
-        highlightColor: jobData.highlightColor || null,
+        highlightColor: jobData.highlightColor,
         isFeatured: false,
         isPremium: false,
-        source: "admin",
+        source: "polar",
         descriptionHtml: jobData.descriptionHtml,
         tags: jobData.tags || [],
       })
@@ -155,12 +139,9 @@ export async function GET(request: Request) {
       })
       .then((rows) => rows[0]);
 
-    // Notify matching alerts
+    // Notify alerts (best-effort)
     try {
-      const jobText = [jobData.title, ...(jobData.tags || [])]
-        .join(" ")
-        .toLowerCase();
-
+      const jobText = [jobData.title, ...(jobData.tags || [])].join(" ").toLowerCase();
       const activeAlerts = await db
         .select()
         .from(alerts)
@@ -182,27 +163,25 @@ export async function GET(request: Request) {
         });
 
         notifiedEmails.add(alert.email);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 250));
       }
     } catch {
-      // fail silently
+      // ignore alert failures
     }
 
-    // Redirect to success page with job and company info
-    // Always use production domain to avoid Vercel Preview Protection issues
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://workiswork.xyz";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getSiteUrl() || "https://workiswork.xyz";
     const successUrl = new URL(`/post/success`, siteUrl);
     successUrl.searchParams.set("job_slug", inserted.slug);
     successUrl.searchParams.set("company_slug", companySlug);
+
     return NextResponse.redirect(successUrl.toString(), { status: 307 });
   } catch (error: any) {
-    console.error("[GET /api/payments/success] Error:", error);
+    console.error("[GET /api/payments/success] Polar flow error:", error);
     return NextResponse.json(
       {
-        error: error.message || "Failed to process payment",
+        error: error?.message || "Failed to process payment",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

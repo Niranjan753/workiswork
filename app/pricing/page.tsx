@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GridBackground } from "../../components/GridBackground";
+import { MembershipCTA } from "../../components/join/membership-cta";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -41,9 +42,11 @@ export default function PricingPage() {
             Unlock All Jobs
           </h1>
           <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
-          Billing and premium plans are not wired up yet in this version, but
-          this page is reserved for your Stripe subscription flow.
-        </p>
+            Join the WorkIsWork membership to access premium alerts and unlock remote roles. Payments are now powered by Polar.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <MembershipCTA label="Join membership" />
+          </div>
         </div>
       </section>
 

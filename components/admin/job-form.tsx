@@ -162,7 +162,7 @@ export function AdminJobForm({ categories }: Props) {
     };
 
     try {
-      // Create checkout session with Dodo Payments
+      // Create checkout session with Polar
       const res = await fetch("/api/payments/create-checkout", {
         method: "POST",
         headers: {
@@ -187,7 +187,7 @@ export function AdminJobForm({ categories }: Props) {
       // Log the response for debugging
       console.log("[AdminJobForm] Checkout response:", data);
 
-      // Redirect to Dodo Payments checkout
+      // Redirect to Polar checkout
       const checkoutUrl = data.url || data.checkout_url || data.redirect_url;
       if (checkoutUrl) {
         window.location.href = checkoutUrl;

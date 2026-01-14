@@ -65,7 +65,7 @@ export default function JobsPage({
   return (
     <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
       <GridBackground />
-      
+
       {/* Gumroad-style Hero Section - Yellow */}
       <section className="relative z-10 bg-transparent py-8 sm:py-16 overflow-hidden">
         <div className="mx-auto max-w-6xl px-2 sm:px-6 lg:px-8 relative z-10">
@@ -88,11 +88,11 @@ export default function JobsPage({
                 Join our Community on Telegram!
               </a>
             </div>
-             <h1 className="text-4xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
-               The{" "}
-               <span className="inline-block bg-yellow-300 px-2 py-3 border-2 border-black relative z-10">{"<quickest />"}</span>{" "}
-               remote jobs and opportunities
-             </h1>
+            <h1 className="text-4xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
+              The{" "}
+              <span className="inline-block bg-yellow-300 px-2 py-3 border-2 border-black relative z-10">{"<quickest />"}</span>{" "}
+              remote jobs and opportunities
+            </h1>
             <p className="text-base sm:text-xl text-black/90 max-w-2xl sm:mx-auto font-medium leading-relaxed">
               There's no roadmap for making your own road. But here's some how-to's, helpful tips, and curated remote jobs to help you.
             </p>

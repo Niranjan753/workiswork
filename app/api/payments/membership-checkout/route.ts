@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createPolarCheckout, ensurePolarConfig } from "@/lib/polar";
+import { createPolarCheckout, ensurePolarConfig } from "@/lib/polar-sdk";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const runtime = "nodejs";
@@ -28,14 +28,13 @@ export async function POST() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getSiteUrl() || "https://workiswork.xyz";
 
     const checkout = await createPolarCheckout({
-      products: [process.env.POLAR_MEMBERSHIP_PRODUCT_ID],
+      product_price_id: process.env.POLAR_MEMBERSHIP_PRODUCT_ID,
       success_url: `${siteUrl}/api/payments/membership-success?checkout_id={CHECKOUT_ID}`,
       allow_discount_codes: false,
-      customer_email: session.user.email,
       metadata: {
-        flow: "membership",
-        user_id: session.user.id,
-        user_email: session.user.email,
+        custom_flow: "membership",
+        custom_user_id: session.user.id,
+        custom_user_email: session.user.email,
       },
     });
 

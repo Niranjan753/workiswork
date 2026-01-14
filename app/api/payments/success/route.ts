@@ -5,7 +5,7 @@ import { alerts, categories, companies, jobs } from "@/db/schema";
 import { guessLogoFromWebsite } from "@/lib/logo";
 import { sendAlertEmail } from "@/lib/resend";
 import { getSiteUrl } from "@/lib/site-url";
-import { ensurePolarConfig, retrievePolarCheckout } from "@/lib/polar";
+import { ensurePolarConfig, retrievePolarCheckout } from "@/lib/polar-sdk";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,35 +13,36 @@ export const dynamic = "force-dynamic";
 type MetadataMap = Record<string, unknown>;
 
 function reconstructJobData(metadata: MetadataMap) {
-  if (!metadata || metadata["flow"] !== "job_posting") {
+  if (!metadata || metadata["custom_flow"] !== "job_posting") {
     throw new Error("Invalid checkout flow for job creation");
   }
 
+  // Reconstruct description from chunked custom_ fields
   const description = Object.entries(metadata)
-    .filter(([key]) => key.startsWith("job_desc_"))
+    .filter(([key]) => key.startsWith("custom_job_desc_"))
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, value]) => (value ?? "").toString())
     .join("");
 
-  const tagsValue = metadata["job_tags"];
+  const tagsValue = metadata["custom_job_tags"];
   const tags = typeof tagsValue === "string" ? tagsValue.split(",").map((t) => t.trim()).filter(Boolean) : [];
 
   const jobData = {
-    title: (metadata["job_title"] || "").toString(),
-    companyName: (metadata["company_name"] || "").toString(),
-    companyWebsite: (metadata["company_website"] || "").toString(),
-    categorySlug: (metadata["category_slug"] || "").toString(),
-    applyUrl: (metadata["apply_url"] || "").toString(),
-    receiveApplicationsByEmail: Boolean(metadata["receive_email"]),
-    companyEmail: (metadata["company_email"] || "").toString(),
-    highlightColor: (metadata["highlight_color"] || "").toString() || null,
+    title: (metadata["custom_job_title"] || "").toString(),
+    companyName: (metadata["custom_company_name"] || "").toString(),
+    companyWebsite: (metadata["custom_company_website"] || "").toString(),
+    categorySlug: (metadata["custom_category_slug"] || "").toString(),
+    applyUrl: (metadata["custom_apply_url"] || "").toString(),
+    receiveApplicationsByEmail: metadata["custom_receive_email"] === "true",
+    companyEmail: (metadata["custom_company_email"] || "").toString(),
+    highlightColor: (metadata["custom_highlight_color"] || "").toString() || null,
     descriptionHtml: description,
     tags,
-    jobType: (metadata["job_type"] || "").toString() || "full_time",
-    remoteScope: (metadata["remote_scope"] || "").toString() || "worldwide",
-    location: (metadata["location"] || "").toString() || "Worldwide",
-    salaryMin: metadata["salary_min"] ? Number(metadata["salary_min"]) : undefined,
-    salaryMax: metadata["salary_max"] ? Number(metadata["salary_max"]) : undefined,
+    jobType: (metadata["custom_job_type"] || "").toString() || "full_time",
+    remoteScope: (metadata["custom_remote_scope"] || "").toString() || "worldwide",
+    location: (metadata["custom_location"] || "").toString() || "Worldwide",
+    salaryMin: metadata["custom_salary_min"] ? Number(metadata["custom_salary_min"]) : undefined,
+    salaryMax: metadata["custom_salary_max"] ? Number(metadata["custom_salary_max"]) : undefined,
   };
 
   if (!jobData.title || !jobData.companyName || !jobData.categorySlug || !jobData.applyUrl) {

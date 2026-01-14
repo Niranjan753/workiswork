@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { subscriptions, users } from "@/db/schema";
-import { ensurePolarConfig, retrievePolarCheckout } from "@/lib/polar";
+import { ensurePolarConfig, retrievePolarCheckout } from "@/lib/polar-sdk";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const runtime = "nodejs";
@@ -33,11 +33,11 @@ export async function GET(request: Request) {
 
     const metadata = (checkout.metadata || {}) as MetadataMap;
 
-    if (metadata["flow"] !== "membership") {
+    if (metadata["custom_flow"] !== "membership") {
       return NextResponse.json({ error: "Checkout does not belong to membership flow" }, { status: 400 });
     }
 
-    const userId = (metadata["user_id"] || "").toString();
+    const userId = (metadata["custom_user_id"] || "").toString();
 
     if (!userId) {
       return NextResponse.json({ error: "Missing user_id in checkout metadata" }, { status: 400 });
@@ -48,8 +48,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "User not found for membership" }, { status: 404 });
     }
 
-    const subscriptionId = checkout.subscription_id || checkout.id;
-    const customerId = checkout.customer_id || (metadata["customer_id"] || "polar").toString();
+    const subscriptionId = checkout.subscriptionId || checkout.id;
+    const customerId = checkout.customerId || (metadata["custom_customer_id"] || "polar").toString();
 
     const existing = await db
       .select()

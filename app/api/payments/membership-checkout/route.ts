@@ -28,7 +28,7 @@ export async function POST() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getSiteUrl() || "https://workiswork.xyz";
 
     const checkout = await createPolarCheckout({
-      product_price_id: process.env.POLAR_MEMBERSHIP_PRODUCT_ID,
+      product_id: process.env.POLAR_MEMBERSHIP_PRODUCT_ID,
       success_url: `${siteUrl}/api/payments/membership-success?checkout_id={CHECKOUT_ID}`,
       allow_discount_codes: false,
       metadata: {

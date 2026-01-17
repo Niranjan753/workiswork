@@ -54,20 +54,19 @@ export default async function AlertsPage() {
 
   if (!userRow || userRow.role === "employer") {
     return (
-      <div className="relative min-h-screen bg-yellow-400 text-black overflow-hidden">
-        <GridBackground />
+      <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
         <main className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border-2 border-black bg-yellow-500 p-8 text-center shadow-lg">
-            <h1 className="text-xl font-bold text-black">
+          <div className="rounded-lg border border-border bg-background p-8 text-center shadow-sm">
+            <h1 className="text-xl font-bold text-foreground">
               Job Seeker access required
             </h1>
-            <p className="mt-2 text-sm text-black/80 font-medium">
+            <p className="mt-2 text-sm text-muted-foreground font-medium">
               This page is only available for job seekers. Employers can post jobs from the admin page.
             </p>
             <div className="mt-6">
               <Link
                 href="/post"
-                className="block w-full border-2 border-black bg-black px-4 py-2 text-center text-sm font-bold text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-md"
+                className="inline-block bg-primary px-6 py-2 rounded-md text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
               >
                 Go to Post a Job
               </Link>
@@ -79,22 +78,21 @@ export default async function AlertsPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-white text-black overflow-hidden">
-      <GridBackground />
-      {/* Hero Section - Yellow */}
-      <section className="relative z-10 bg-yellow-400 py-12 sm:py-16">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative z-10 py-12 sm:py-16 bg-background">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-black leading-none mb-6">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground leading-none mb-6">
             Never miss a great remote job
           </h1>
-          <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
             Pick the skills you care about and we&apos;ll send you curated roles when they go live.
           </p>
         </div>
-        </section>
+      </section>
 
-      {/* Main Content - White */}
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 bg-white">
+      {/* Main Content */}
+      <main className="relative z-10 mx-auto max-w-2xl px-4 pb-12 pt-0 sm:px-6 bg-background">
         <AlertsForm />
       </main>
     </div>

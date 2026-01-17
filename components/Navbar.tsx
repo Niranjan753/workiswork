@@ -55,85 +55,85 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl rounded-full border border-border bg-background/80 backdrop-blur-md shadow-sm px-2 py-2">
-        <div className="flex items-center justify-between px-2 sm:px-4">
-          {/* Logo & Brand */}
-          <Link href="/jobs" className="flex items-center gap-3 min-w-fit hover:opacity-80 transition-opacity">
-            <span className="flex h-8 w-8 items-center justify-center text-primary">
-              <Logo width={32} height={24} />
-            </span>
-            <span className="text-lg font-bold tracking-tight text-foreground hidden sm:inline-block">
-              WorkIsWork
-            </span>
-          </Link>
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo & Brand */}
+            <Link href="/jobs" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <Logo width={28} height={20} />
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                WorkIsWork
+              </span>
+            </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-full transition-all duration-200",
-                  link.active
-                    ? "bg-secondary text-secondary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (!session?.user) {
-                  setShowUnlockDialog(true);
-                } else {
-                  router.push("/pricing");
-                }
-              }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
-            >
-              <LockOpen className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Unlock Jobs</span>
-            </button>
-
-            {userEmail ? (
-              <div className="flex items-center gap-2">
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
                 <Link
-                  href="/profile"
-                  className="px-4 py-2 rounded-full border border-border bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-4 py-2 text-sm font-medium rounded-md transition-all duration-200",
+                    link.active
+                      ? "bg-secondary text-secondary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                  )}
                 >
-                  Profile
+                  {link.name}
                 </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-muted-foreground hover:text-foreground text-xs font-medium px-2 transition-colors"
-                >
-                  Log out
-                </button>
-              </div>
-            ) : (
-              <Link
-                href="/login?callbackUrl=/alerts"
-                className="px-4 py-2 rounded-full border border-border bg-transparent text-foreground text-sm font-bold hover:bg-secondary/50 transition-colors"
-              >
-                Log in
-              </Link>
-            )}
-          </div>
+              ))}
+            </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={() => {
+                  if (!session?.user) {
+                    setShowUnlockDialog(true);
+                  } else {
+                    router.push("/pricing");
+                  }
+                }}
+                className="flex items-center gap-2 px-6 py-2 rounded-md bg-primary text-primary-foreground text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95"
+              >
+                <LockOpen className="w-3.5 h-3.5" />
+                Unlock Jobs
+              </button>
+
+              {userEmail ? (
+                <div className="flex items-center gap-3 ml-2 border-l border-border pl-4">
+                  <Link
+                    href="/profile"
+                    className="px-4 py-2 rounded-md border border-border bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                  >
+                    Log out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login?callbackUrl=/alerts"
+                  className="px-4 py-2 rounded-md border border-border bg-transparent text-foreground text-sm font-bold hover:bg-secondary/50 transition-colors"
+                >
+                  Log in
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-md transition-colors"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </header>
 

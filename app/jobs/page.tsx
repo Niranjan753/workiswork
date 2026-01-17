@@ -34,121 +34,126 @@ export const metadata: Metadata = {
   },
 };
 
-export default function JobsPage({
-  searchParams,
-}: {
-  searchParams?: { q?: string };
-}) {
+export default function JobsPage() {
   const categoryChips: { label: string; slug: string }[] = [
-    { label: "Software Development", slug: "software-development" },
-    { label: "Customer Service", slug: "customer-support" },
-    { label: "Design", slug: "design" },
-    { label: "Marketing", slug: "marketing" },
-    { label: "Sales / Business", slug: "sales" },
-    { label: "Product", slug: "product" },
-    { label: "Project Management", slug: "project" },
-    { label: "AI / ML", slug: "ai-ml" },
-    { label: "Data Analysis", slug: "data-analysis" },
-    { label: "Devops / Sysadmin", slug: "devops" },
-    { label: "Finance", slug: "finance" },
-    { label: "Human Resources", slug: "human-resources" },
-    { label: "QA", slug: "qa" },
-    { label: "Writing", slug: "writing" },
-    { label: "Legal", slug: "legal" },
-    { label: "Medical", slug: "medical" },
-    { label: "Education", slug: "education" },
-    { label: "All Others", slug: "all-others" },
+    { label: "All Jobs", slug: "" },
+    { label: "Frontend Developer", slug: "frontend" },
+    { label: "Backend Developer", slug: "backend" },
+    { label: "Full Stack Developer", slug: "full-stack" },
+    { label: "Blockchain Developer", slug: "blockchain" },
+    { label: "Smart Contract Developer", slug: "smart-contract" },
+    { label: "Designer", slug: "design" },
+    { label: "Sales & Marketing", slug: "sales" },
+    { label: "Product Manager", slug: "product" },
+    { label: "Customer Support", slug: "customer-support" },
+    { label: "InfoSec Engineer", slug: "infosec" },
+    { label: "Management & Finance", slug: "finance" },
+    { label: "No-Code Developer", slug: "no-code" },
+    { label: "DevOps Engineer", slug: "devops" },
+    { label: "Community Manager", slug: "community-manager" },
+    { label: "Writer", slug: "writing" },
+    { label: "Non-Tech", slug: "non-tech" },
   ];
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      {/* Refined Hero Section with Original Content */}
-      <section className="relative z-10 pt-4 pb-8 sm:pt-6 sm:pb-16 overflow-hidden">
-        {/* Subtle Grid Background for Hero */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+    <div className="relative min-h-screen bg-white text-zinc-900 selection:bg-primary/20">
+      {/* Hero Section */}
+      <section className="relative z-10 pt-12 pb-12 sm:pt- sm:pb-16 text-center px-4 bg-white">
+        {/* Subtle Background Accent */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(100,92,255,0.05)_0%,transparent_50%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:40px_40px]" />
+        </div>
 
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          {/* Telegram Pill */}
-          <div className="flex justify-center">
-            <a
-              href="https://t.me/workisworkxyz"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 transition-all font-sans"
-            >
-              <svg
-                className="w-4 h-4 text-[#0088cc]"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.192l-1.87 8.81c-.138.625-.497.778-.999.485l-2.755-2.03-1.33 1.277c-.146.146-.269.269-.553.269l.198-2.79 5.09-.46c.22-.02.22-.34.014-.46l-6.29-1.98c-.27-.085-.27-.27.04-.36l7.7-2.9c.32-.12.6.08.5.45z" />
-              </svg>
-              Join our Community on Telegram!
-            </a>
-          </div>
-
-          {/* Headline - Smaller as requested */}
-          <h1 className="text-8xl sm:text-5xl md:text-7xl font-bold tracking-tight text-foreground leading-[1.1] max-w-8xl mx-auto font-sans">
-            The <span className="text-primary">quickest</span> remote jobs and opportunities
+        <div className="mx-auto max-w-5xl space-y-10">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-950 leading-[1.1]">
+            Find your dream remote job without the hassle
           </h1>
 
-          {/* Subheader - Original Content */}
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed font-sans">
-            There&apos;s no roadmap for making your own road. But here&apos;s some how-to&apos;s, helpful tips, and curated remote jobs to help you.
+          <p className="text-base sm:text-lg text-zinc-500 max-w-3xl mx-auto leading-relaxed font-medium">
+            Browse 110,000+ fully remote jobs from vetted companies and get more jobs interviews.
           </p>
 
-          {/* Social Proof (kept for design, updated text) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full border-2 border-background bg-secondary flex items-center justify-center overflow-hidden"
-                >
-                  <img
-                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=WIW-${i}`}
-                    alt={`User ${i}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-foreground font-sans">
-              <span>Trusted by talented remotes worldwide</span>
-              <div className="flex text-yellow-400">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                  </svg>
-                ))}
-              </div>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <Link
+              href="/hire"
+              className="px-8 py-3 rounded-full bg-zinc-100 text-sm font-bold text-zinc-900 hover:bg-zinc-200 transition-all border border-zinc-200"
+            >
+              Hire Remote Talent
+            </Link>
+            <Link
+              href="#jobs"
+              className="px-8 py-3 rounded-full bg-zinc-950 text-sm font-bold text-white hover:bg-zinc-800 transition-all shadow-lg"
+            >
+              View all 110,000+ jobs
+            </Link>
+            <Link
+              href="/join"
+              className="px-8 py-3 rounded-full bg-primary text-sm font-bold text-white hover:bg-primary/90 transition-all shadow-[0_0_30px_rgba(100,92,255,0.2)]"
+            >
+              Join for Free
+            </Link>
           </div>
         </div>
       </section>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-background">
-        <section className="mb-8 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center gap-3 pt-0">
-            <Link
-              href="/join"
-              className="flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-primary px-8 text-lg font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
-            >
-              Join
-            </Link>
-            <Suspense fallback={null}>
-              <JobsSearchBar categories={categoryChips} />
-            </Suspense>
+      <main className="mx-auto max-w-7xl px-4 pb-24 space-y-20">
+        {/* Subscription Feature Box */}
+        <div className="relative mx-auto max-w-5xl rounded-[3rem] bg-primary p-10 sm:p-20 overflow-hidden shadow-[0_20px_80px_-20px_rgba(100,92,255,0.4)]">
+          {/* Diagonal Texture Overlay */}
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,white_20px,white_21px)]" />
+
+          <div className="relative z-10 flex flex-col items-center text-center space-y-8">
+            <div className="space-y-3">
+              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                Find a high paying remote job
+              </h2>
+              <p className="text-base text-white/90 max-w-2xl mx-auto font-medium">
+                Enjoy remote work, better work-life balance, and top salaries from top companies.
+              </p>
+            </div>
+
+            <div className="w-full max-w-lg space-y-6">
+              <form className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 h-14 px-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 transition-all font-medium"
+                />
+                <button
+                  type="submit"
+                  className="h-14 px-8 bg-white text-zinc-950 font-bold rounded-2xl hover:bg-zinc-100 active:scale-[0.98] transition-all shadow-xl whitespace-nowrap"
+                >
+                  Subscribe →
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* Job Board Section */}
+        <section id="jobs" className="space-y-16 pt-8">
+          <div className="space-y-12">
+            {/* Centered Search Integration */}
+            <div className="w-full max-w-4xl mx-auto px-4">
+              <Suspense fallback={null}>
+                <JobsSearchBar categories={categoryChips} />
+              </Suspense>
+            </div>
+
+            {/* Filter Chips */}
+            <div className="flex flex-col items-center gap-8">
+              <Suspense fallback={null}>
+                <CategoryFilters categories={categoryChips} />
+              </Suspense>
+            </div>
           </div>
 
+          {/* Jobs Board Component */}
           <Suspense fallback={null}>
-            <CategoryFilters categories={categoryChips} />
+            <JobsBoard />
           </Suspense>
         </section>
-
-        <Suspense fallback={null}>
-          <JobsBoard />
-        </Suspense>
       </main>
     </div>
   );

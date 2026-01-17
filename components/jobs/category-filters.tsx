@@ -111,7 +111,7 @@ export function CategoryFilters({ categories }: Props) {
   );
 
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap justify-center gap-3">
       {categories.map(({ label, slug }) => {
         const isActive = selectedCategories.includes(slug);
 
@@ -121,18 +121,13 @@ export function CategoryFilters({ categories }: Props) {
             type="button"
             onClick={(e) => toggleCategory(slug, e)}
             className={cn(
-              "px-4 py-2 text-sm font-medium transition-all border border-border rounded-full cursor-pointer flex items-center gap-2",
+              "px-4 py-1.5 text-xs font-bold transition-all rounded-full cursor-pointer flex items-center gap-2",
               isActive
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background text-foreground hover:bg-secondary/50",
+                ? "bg-primary text-white"
+                : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900",
             )}
           >
             <span>{label}</span>
-            {isActive && (
-              <span className="text-primary-foreground/80 hover:text-primary-foreground font-bold leading-none">
-                ×
-              </span>
-            )}
           </button>
         );
       })}

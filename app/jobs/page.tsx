@@ -56,25 +56,24 @@ export default function JobsPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-white text-zinc-900 selection:bg-primary/20">
-      {/* Hero Section */}
-      <section className="relative z-10 pt-12 pb-12 sm:pt- sm:pb-16 text-center px-4 bg-white">
-        {/* Subtle Background Accent */}
+    <div className="relative min-h-screen bg-white text-zinc-900 selection:bg-white">
+
+      <section className="relative z-10 pt-12 pb-12 sm:pt-12 sm:pb-12 text-center px-4 bg-white">
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(100,92,255,0.05)_0%,transparent_50%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:40px_40px]" />
         </div>
 
-        <div className="mx-auto max-w-5xl space-y-10">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-950 leading-[1.1]">
-            Find your dream remote job without the hassle
+        <div className="mx-auto max-w-5xl space-y-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-950 leading-[1.1]">
+            The best remote Job Board
           </h1>
 
           <p className="text-base sm:text-lg text-zinc-500 max-w-3xl mx-auto leading-relaxed font-medium">
             Browse 110,000+ fully remote jobs from vetted companies and get more jobs interviews.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-2">
             <Link
               href="/hire"
               className="px-8 py-3 rounded-full bg-zinc-100 text-sm font-bold text-zinc-900 hover:bg-zinc-200 transition-all border border-zinc-200"
@@ -98,8 +97,8 @@ export default function JobsPage() {
       </section>
 
       <main className="mx-auto max-w-7xl px-4 pb-24 space-y-20">
-        {/* Subscription Feature Box */}
-        <div className="relative mx-auto max-w-5xl rounded-[3rem] bg-primary p-10 sm:p-20 overflow-hidden shadow-[0_20px_80px_-20px_rgba(100,92,255,0.4)]">
+
+        <div className="relative mx-auto max-w-6xl max-h-md rounded-[3rem] bg-primary p-10 sm:p-20 overflow-hidden shadow-[0_20px_80px_-20px_rgba(100,92,255,0.4)]">
           {/* Diagonal Texture Overlay */}
           <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,white_20px,white_21px)]" />
 

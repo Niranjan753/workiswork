@@ -63,11 +63,9 @@ export default function JobsPage({
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
-      <GridBackground />
-
-      {/* Gumroad-style Hero Section - Yellow */}
-      <section className="relative z-10 bg-transparent py-8 sm:py-16 overflow-hidden">
+    <div className="relative min-h-screen bg-background text-foreground">
+      {/* Clean Hero Section */}
+      <section className="relative z-10 py-8 sm:py-16">
         <div className="mx-auto max-w-6xl px-2 sm:px-6 lg:px-8 relative z-10">
           <div className="text-left sm:text-center space-y-3 sm:space-y-4">
             <div className="relative z-10 flex justify-start sm:justify-center pt-4 sm:pt-12">
@@ -75,10 +73,10 @@ export default function JobsPage({
                 href="https://t.me/workisworkxyz"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border-2 border-black bg-yellow-400 px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm font-bold text-black hover:bg-black hover:text-yellow-400 transition-all shadow-md hover:shadow-lg cursor-pointer hover:px-3 hover:py-2"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs sm:text-sm font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors"
               >
                 <svg
-                  className="w-4 h-4 hover:w-5 hover:h-5"
+                  className="w-4 h-4 text-[#0088cc]"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -88,28 +86,28 @@ export default function JobsPage({
                 Join our Community on Telegram!
               </a>
             </div>
-            <h1 className="text-4xl sm:text-6xl font-sans md:text-7xl font-black tracking-tight text-black leading-none">
+            <h1 className="text-4xl sm:text-6xl font-sans md:text-7xl font-bold tracking-tight text-foreground leading-none">
               The{" "}
-              <span className="inline-block bg-yellow-300 px-2 py-3 border-2 border-black relative z-10">{"<quickest />"}</span>{" "}
+              <span className="text-primary relative z-10">{"<quickest />"}</span>{" "}
               remote jobs and opportunities
             </h1>
-            <p className="text-base sm:text-xl text-black/90 max-w-2xl sm:mx-auto font-medium leading-relaxed">
+            <p className="text-base sm:text-xl text-muted-foreground max-w-2xl sm:mx-auto font-medium leading-relaxed">
               There's no roadmap for making your own road. But here's some how-to's, helpful tips, and curated remote jobs to help you.
             </p>
-            <p className="text-xs sm:text-sm text-black/70 font-medium">
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
               Start browsing below or grab the RSS.
             </p>
           </div>
         </div>
       </section>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-transparent">
-        <section className="mb-4 space-y-4">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-0 sm:px-6 lg:px-8 bg-background">
+        <section className="mb-8 space-y-4">
 
           <div className="flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center gap-3 pt-4">
             <Link
               href="/join"
-              className="flex h-12 w-full sm:w-auto items-center justify-center border-2 border-black bg-yellow-400 px-8 text-lg font-bold text-black shadow-sm hover:bg-yellow-500 transition-colors"
+              className="flex h-12 w-full sm:w-auto items-center justify-center rounded-md bg-primary px-8 text-lg font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
             >
               Join
             </Link>

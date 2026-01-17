@@ -10,13 +10,10 @@ type FooterProps = {
 export function Footer({ variant = "dark" }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
-  // Force background to be white and use dark text.
-  const isLight = true;
-
   return (
     <footer className={cn(
-      "border-t-2 border-black",
-      "bg-white text-black"
+      "border-t border-border",
+      "bg-background text-foreground"
     )}>
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -24,11 +21,11 @@ export function Footer({ variant = "dark" }: FooterProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Logo />
-              <span className={cn("text-lg font-bold", "text-black")}>
+              <span className={cn("text-lg font-bold", "text-foreground")}>
                 WorkIsWork
               </span>
             </div>
-            <p className={cn("text-sm font-medium", "text-black")}>
+            <p className={cn("text-sm font-medium", "text-muted-foreground")}>
               The best remote jobs, curated for you. Find your next opportunity in tech, design, marketing, and more.
             </p>
             <div className="flex items-center gap-4">
@@ -38,7 +35,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 rel="noopener noreferrer"
                 className={cn(
                   "transition-all hover:scale-110",
-                  "text-black hover:text-black"
+                  "text-muted-foreground hover:text-foreground"
                 )}
                 aria-label="Twitter"
               >
@@ -50,7 +47,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 rel="noopener noreferrer"
                 className={cn(
                   "transition-all hover:scale-110",
-                  "text-black hover:text-black"
+                  "text-muted-foreground hover:text-foreground"
                 )}
                 aria-label="LinkedIn"
               >
@@ -62,7 +59,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 rel="noopener noreferrer"
                 className={cn(
                   "transition-all hover:scale-110",
-                  "text-black hover:text-black"
+                  "text-muted-foreground hover:text-foreground"
                 )}
                 aria-label="GitHub"
               >
@@ -73,7 +70,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
 
           {/* For Job Seekers */}
           <div className="space-y-4">
-            <h3 className={cn("text-sm font-bold", "text-black")}>
+            <h3 className={cn("text-sm font-bold", "text-foreground")}>
               For Job Seekers
             </h3>
             <ul className="space-y-3">
@@ -82,7 +79,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/jobs"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <Briefcase className="h-4 w-4" />
@@ -94,7 +91,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/alerts"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <Bell className="h-4 w-4" />
@@ -106,7 +103,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/blog"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <FileText className="h-4 w-4" />
@@ -118,7 +115,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/pricing"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <DollarSign className="h-4 w-4" />
@@ -130,7 +127,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
 
           {/* For Employers */}
           <div className="space-y-4">
-            <h3 className={cn("text-sm font-bold", "text-black")}>
+            <h3 className={cn("text-sm font-bold", "text-foreground")}>
               For Employers
             </h3>
             <ul className="space-y-3">
@@ -139,7 +136,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/post"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <Building2 className="h-4 w-4" />
@@ -151,7 +148,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="mailto:employers@workiswork.com"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <Mail className="h-4 w-4" />
@@ -163,7 +160,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/pricing"
                   className={cn(
                     "flex items-center gap-2 text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <DollarSign className="h-4 w-4" />
@@ -175,7 +172,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
 
           {/* Company & Legal */}
           <div className="space-y-4">
-            <h3 className={cn("text-sm font-bold", "text-black")}>
+            <h3 className={cn("text-sm font-bold", "text-foreground")}>
               Company
             </h3>
             <ul className="space-y-3">
@@ -184,7 +181,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/about"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   About Us
@@ -195,7 +192,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/blog"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Blog
@@ -206,7 +203,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="mailto:berlin@workiswork.xyz"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Contact
@@ -217,7 +214,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/terms"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Terms of Service
@@ -228,7 +225,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href="/privacy"
                   className={cn(
                     "text-sm font-medium transition-all hover:underline",
-                    "text-black"
+                    "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Privacy Policy
@@ -239,12 +236,12 @@ export function Footer({ variant = "dark" }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className={cn("mt-12 border-t-2 border-black pt-8")}>
+        <div className={cn("mt-12 border-t border-border pt-8")}>
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className={cn("text-xs font-medium", "text-black")}>
+            <p className={cn("text-xs font-medium", "text-muted-foreground")}>
               © {currentYear} WorkIsWork. All rights reserved.
             </p>
-            <div className={cn("flex items-center gap-6 text-xs font-medium", "text-black")}>
+            <div className={cn("flex items-center gap-6 text-xs font-medium", "text-muted-foreground")}>
               <span>Made with ❤️ for remote workers</span>
             </div>
           </div>

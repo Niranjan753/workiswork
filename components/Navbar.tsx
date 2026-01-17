@@ -55,14 +55,14 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl rounded-full border border-white/10 bg-[#1A1A1A]/90 backdrop-blur-md shadow-2xl px-2 py-2">
+      <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-5xl rounded-full border border-border bg-background/80 backdrop-blur-md shadow-sm px-2 py-2">
         <div className="flex items-center justify-between px-2 sm:px-4">
           {/* Logo & Brand */}
           <Link href="/jobs" className="flex items-center gap-3 min-w-fit hover:opacity-80 transition-opacity">
-            <span className="flex h-8 w-8 items-center justify-center text-white">
+            <span className="flex h-8 w-8 items-center justify-center text-primary">
               <Logo width={32} height={24} />
             </span>
-            <span className="text-lg font-bold tracking-tight text-white hidden sm:inline-block">
+            <span className="text-lg font-bold tracking-tight text-foreground hidden sm:inline-block">
               WorkIsWork
             </span>
           </Link>
@@ -76,8 +76,8 @@ export function Navbar() {
                 className={cn(
                   "px-4 py-2 text-sm font-medium rounded-full transition-all duration-200",
                   link.active
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    ? "bg-secondary text-secondary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 )}
               >
                 {link.name}
@@ -95,7 +95,7 @@ export function Navbar() {
                   router.push("/pricing");
                 }
               }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
             >
               <LockOpen className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">Unlock Jobs</span>
@@ -105,13 +105,13 @@ export function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/profile"
-                  className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white text-sm font-medium hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-full border border-border bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
                 >
                   Profile
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-zinc-400 hover:text-white text-xs font-medium px-2 transition-colors"
+                  className="text-muted-foreground hover:text-foreground text-xs font-medium px-2 transition-colors"
                 >
                   Log out
                 </button>
@@ -119,7 +119,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/login?callbackUrl=/alerts"
-                className="px-4 py-2 rounded-full border border-white/10 bg-transparent text-white text-sm font-bold hover:bg-white/5 transition-colors"
+                className="px-4 py-2 rounded-full border border-border bg-transparent text-foreground text-sm font-bold hover:bg-secondary/50 transition-colors"
               >
                 Log in
               </Link>
@@ -129,7 +129,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+            className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -140,7 +140,7 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden",
+          "fixed inset-0 z-40 bg-background/80 backdrop-blur-sm transition-opacity duration-300 md:hidden",
           mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={() => setMobileOpen(false)}
@@ -149,7 +149,7 @@ export function Navbar() {
       {/* Mobile Menu Drawer */}
       <div
         className={cn(
-          "fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm origin-top rounded-3xl bg-[#1A1A1A] border border-white/10 p-2 shadow-2xl transition-all duration-300 md:hidden",
+          "fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm origin-top rounded-3xl bg-background border border-border p-2 shadow-2xl transition-all duration-300 md:hidden",
           mobileOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none translate-y-[-20px]"
         )}
       >
@@ -161,8 +161,8 @@ export function Navbar() {
               className={cn(
                 "px-4 py-3 rounded-xl text-base font-medium transition-colors",
                 link.active
-                  ? "bg-white/10 text-white"
-                  : "text-zinc-400 hover:text-white hover:bg-white/5"
+                  ? "bg-secondary text-secondary-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               )}
               onClick={() => setMobileOpen(false)}
             >
@@ -170,7 +170,7 @@ export function Navbar() {
             </Link>
           ))}
 
-          <div className="h-px bg-white/10 my-2 mx-2" />
+          <div className="h-px bg-border my-2 mx-2" />
 
           {/* Mobile Auth Actions */}
           <div className="flex flex-col gap-2 p-2">
@@ -183,7 +183,7 @@ export function Navbar() {
                   router.push("/pricing");
                 }
               }}
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-primary text-white font-bold"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-bold"
             >
               <LockOpen className="w-4 h-4" />
               Unlock All Jobs
@@ -193,7 +193,7 @@ export function Navbar() {
               <>
                 <Link
                   href="/profile"
-                  className="w-full text-center px-4 py-3 rounded-xl border border-white/10 text-white font-medium"
+                  className="w-full text-center px-4 py-3 rounded-xl border border-border text-foreground font-medium"
                   onClick={() => setMobileOpen(false)}
                 >
                   Profile
@@ -203,7 +203,7 @@ export function Navbar() {
                     setMobileOpen(false);
                     handleSignOut();
                   }}
-                  className="w-full text-center py-2 text-zinc-400 text-sm"
+                  className="w-full text-center py-2 text-muted-foreground text-sm"
                 >
                   Log out
                 </button>
@@ -211,7 +211,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/login?callbackUrl=/alerts"
-                className="w-full text-center px-4 py-3 rounded-xl border border-white/10 text-white font-medium"
+                className="w-full text-center px-4 py-3 rounded-xl border border-border text-foreground font-medium"
                 onClick={() => setMobileOpen(false)}
               >
                 Log in
@@ -223,24 +223,24 @@ export function Navbar() {
 
       {/* Unlock Dialog */}
       <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
-        <DialogContent className="border border-white/10 bg-[#1A1A1A] text-white sm:rounded-2xl">
+        <DialogContent className="border border-border bg-background text-foreground sm:rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">Join WorkIsWork</DialogTitle>
-            <DialogDescription className="text-zinc-400 pt-2">
+            <DialogDescription className="text-muted-foreground pt-2">
               Unlock unlimited access to the best remote jobs and premium features.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-start gap-2">
             <Link
               href="/join"
-              className="px-6 py-2.5 rounded-full bg-primary text-white font-bold hover:bg-primary/90 transition-colors"
+              className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors"
               onClick={() => setShowUnlockDialog(false)}
             >
               Join Now
             </Link>
             <button
               onClick={() => setShowUnlockDialog(false)}
-              className="px-4 py-2.5 rounded-full text-zinc-400 font-medium hover:text-white hover:bg-white/5 transition-colors"
+              className="px-4 py-2.5 rounded-full text-muted-foreground font-medium hover:text-foreground hover:bg-secondary/50 transition-colors"
             >
               Cancel
             </button>

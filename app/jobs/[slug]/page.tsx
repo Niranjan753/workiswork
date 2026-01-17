@@ -117,19 +117,19 @@ export default async function JobDetailPage({ params }: Params) {
   if (!job) return notFound();
 
   return (
-    <div className="relative min-h-screen bg-transparent text-black overflow-hidden">
-      <GridBackground />
-      <header className="relative z-10 border-b-2 border-black bg-transparent">
+
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+      <header className="relative z-10 border-b border-border bg-background">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href="/jobs" className="text-sm font-bold text-black hover:underline">
+          <Link href="/jobs" className="text-sm font-bold text-muted-foreground hover:text-foreground hover:underline transition-colors">
             ← Back to jobs
           </Link>
           <div className="flex items-center gap-2 text-xs font-bold">
-            <span className="border-2 border-black bg-yellow-400 px-3 py-1 text-black">
+            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
               {job.remoteScope}
             </span>
             {job.isFeatured && (
-              <span className="border-2 border-black bg-yellow-400 px-3 py-1 text-black font-bold">
+              <span className="bg-primary text-primary-foreground px-3 py-1 rounded">
                 Featured
               </span>
             )}
@@ -138,21 +138,21 @@ export default async function JobDetailPage({ params }: Params) {
       </header>
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        <section className="border-2 border-black bg-white p-8 shadow-lg">
+        <section className="border border-border bg-background p-8 shadow-sm rounded-lg">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide text-yellow-800 font-bold">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground font-bold">
                 {job.categoryName}
               </p>
-              <h1 className="text-3xl font-black text-black mb-1">
+              <h1 className="text-3xl font-bold text-foreground mb-1">
                 {job.title}
               </h1>
-              <p className="text-sm text-black/70 font-medium">
+              <p className="text-sm text-foreground/80 font-medium">
                 {job.companyName || "Remote company"} • {job.location || "Remote"}
               </p>
               {job.companyWebsite && (
                 <p className="mt-1 text-xs">
-                  <a href={job.companyWebsite} target="_blank" rel="noopener noreferrer" className="text-yellow-900 underline hover:text-yellow-700">
+                  <a href={job.companyWebsite} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
                     {job.companyWebsite}
                   </a>
                 </p>
@@ -163,7 +163,7 @@ export default async function JobDetailPage({ params }: Params) {
                 href={job.applyUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="border-2 border-black bg-black px-5 py-2 text-xs font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
+                className="bg-primary text-primary-foreground px-5 py-2 text-xs font-bold rounded-md hover:bg-primary/90 transition-all shadow-sm flex items-center justify-center"
               >
                 Apply now
               </a>
@@ -172,14 +172,14 @@ export default async function JobDetailPage({ params }: Params) {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
-            <span className="border-2 border-black bg-yellow-400 px-3 py-1 text-black">
+            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
               {job.jobType.replace("_", " ")}
             </span>
-            <span className="border-2 border-black bg-yellow-400 px-3 py-1 text-black">
+            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
               {job.remoteScope}
             </span>
             {job.salaryMin && (
-              <span className="border-2 border-black bg-yellow-400 px-3 py-1 text-black">
+              <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
                 {job.salaryCurrency} {job.salaryMin}
                 {job.salaryMax ? ` - ${job.salaryMax}` : ""} / yr
               </span>
@@ -187,7 +187,7 @@ export default async function JobDetailPage({ params }: Params) {
           </div>
 
           <div
-            className="prose prose-sm mt-6 max-w-none text-black prose-a:text-yellow-700"
+            className="prose prose-sm mt-6 max-w-none text-foreground prose-a:text-primary prose-a:underline hover:prose-a:text-primary/80"
             dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
           />
 
@@ -196,7 +196,7 @@ export default async function JobDetailPage({ params }: Params) {
               {job.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="border-2 border-black bg-yellow-400 px-3 py-1 font-bold text-black"
+                  className="bg-secondary text-secondary-foreground px-3 py-1 font-bold rounded"
                 >
                   {tag}
                 </span>
@@ -206,27 +206,27 @@ export default async function JobDetailPage({ params }: Params) {
         </section>
 
         {similar.length > 0 && (
-          <section className="mt-8 border-2 border-black bg-white p-6 shadow-lg">
-            <h2 className="mb-4 text-lg font-black text-black">Similar jobs</h2>
+          <section className="mt-8 border border-border bg-background p-6 shadow-sm rounded-lg">
+            <h2 className="mb-4 text-lg font-bold text-foreground">Similar jobs</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {similar.map((item) => (
                 <Link
                   key={item.id}
                   href={`/jobs/${item.slug}`}
-                  className="block border-2 border-black bg-white p-4 text-black hover:bg-yellow-400 transition-all shadow-lg"
+                  className="block border border-border bg-background p-4 rounded-lg hover:bg-secondary/50 transition-all"
                 >
                   <div className="space-y-3">
                     <div className="min-w-0">
-                      <p className="text-base font-bold text-black mb-1">
+                      <p className="text-base font-bold text-foreground mb-1">
                         {item.title}
                       </p>
-                      <p className="text-xs text-black/70 font-medium">
+                      <p className="text-xs text-muted-foreground font-medium">
                         {item.companyName || "Remote company"} •{" "}
                         {item.location || "Remote"}
                       </p>
                     </div>
                     <div>
-                      <span className="inline-flex w-full items-center justify-center border-2 border-black bg-black px-4 py-2 text-xs font-bold text-yellow-400 hover:bg-white hover:text-black transition-all">
+                      <span className="inline-flex w-full items-center justify-center bg-secondary text-secondary-foreground px-4 py-2 text-xs font-bold rounded-md hover:bg-secondary/80 transition-all">
                         View job →
                       </span>
                     </div>

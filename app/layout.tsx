@@ -54,7 +54,7 @@ export default function RootLayout({
       <head>
         {/* Viewport Meta Tag - Prevent zoom on mobile */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        
+
         {/* Primary Meta Tags */}
         <title>Workiswork - Remote Jobs Board</title>
         <meta name="title" content="Workiswork - Remote Jobs Board" />
@@ -88,7 +88,7 @@ export default function RootLayout({
       >
         <AppProviders>
           <Navbar />
-          <div className="pt-18 sm:pt-24 lg:pt-18">{children}</div>
+          <div className="pt-20 sm:pt-24 lg:pt-10">{children}</div>
           <Footer />
         </AppProviders>
       </body>

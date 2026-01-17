@@ -154,19 +154,17 @@ export function JoinWizard() {
 
   if (preferencesSaved && isSignedIn) {
     return (
-      <div className="relative min-h-screen bg-white text-black overflow-hidden">
-        <GridBackground />
-
-        <section className="relative z-10 bg-transparent py-12 sm:py-16">
+      <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+        <section className="relative z-10 py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-4">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none text-foreground">
                 Preferences{" "}
-                <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+                <span className="text-primary relative inline-block">
                   Updated
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
                 Your preferences have been saved successfully. We'll use these to personalize your job search experience.
               </p>
             </div>
@@ -174,28 +172,28 @@ export function JoinWizard() {
         </section>
 
         <div className="relative z-10 flex items-center justify-center px-4 py-8">
-          <div className="w-full max-w-3xl border-2 border-black bg-white shadow-lg p-8 text-center space-y-6">
+          <div className="w-full max-w-3xl border border-border bg-background shadow-lg rounded-lg p-8 text-center space-y-6">
             <div className="flex justify-center">
-              <div className="w-16 h-16 rounded-full bg-yellow-400 border-4 border-black flex items-center justify-center">
-                <CheckCircle2 className="w-10 h-10 text-black" />
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle2 className="w-10 h-10 text-primary" />
               </div>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-black">All Done!</h2>
-              <p className="text-sm font-medium text-black/70">
+              <h2 className="text-2xl font-bold text-foreground">All Done!</h2>
+              <p className="text-sm font-medium text-muted-foreground">
                 Your preferences have been saved. You can now use the Optimise button to find jobs that match your selections.
               </p>
             </div>
             <div className="flex gap-3 justify-center">
               <Link
                 href="/profile"
-                className="px-6 py-3 text-sm font-bold border-2 border-black bg-yellow-400 text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg cursor-pointer"
+                className="px-6 py-3 text-sm font-bold bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all shadow-sm cursor-pointer"
               >
                 View Profile
               </Link>
               <Link
                 href="/jobs"
-                className="px-6 py-3 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg cursor-pointer"
+                className="px-6 py-3 text-sm font-bold border border-border bg-background text-foreground rounded-md hover:bg-secondary transition-all shadow-sm cursor-pointer"
               >
                 Browse Jobs
               </Link>
@@ -207,32 +205,30 @@ export function JoinWizard() {
   }
 
   return (
-    <div className="relative min-h-screen bg-white text-black overflow-hidden">
-      <GridBackground />
-
-      <section className="relative z-10 bg-transparent py-12 sm:py-16">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+      <section className="relative z-10 py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none text-foreground">
               {isSignedIn ? "Update Your" : "Join the"}{" "}
-              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+              <span className="text-primary relative inline-block">
                 {isSignedIn ? "Preferences" : "WorkIsWork"}
               </span>{" "}
               {isSignedIn ? "" : "community"}
             </h1>
-            <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
-              {isSignedIn 
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
+              {isSignedIn
                 ? "Update your preferences to better match you with remote roles and opportunities."
                 : "Answer a few quick questions so we can better match you with remote roles and opportunities."
               }
             </p>
             {!isSignedIn && (
               <div className="mt-6">
-                <p className="text-sm text-black/70 font-medium">
+                <p className="text-sm text-muted-foreground font-medium">
                   Already joined?{" "}
                   <Link
                     href="/sign-in?callbackUrl=/jobs"
-                    className="font-bold text-black hover:underline"
+                    className="font-bold text-foreground hover:text-primary transition-colors"
                   >
                     Login now
                   </Link>
@@ -244,33 +240,33 @@ export function JoinWizard() {
       </section>
 
       <div className="relative z-10 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-2xl border-2 border-black bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="w-full h-1 bg-gray-100">
+        <div className="w-full max-w-2xl border border-border bg-background shadow-lg rounded-lg overflow-hidden">
+          <div className="w-full h-1 bg-secondary">
             <div
-              className="h-full bg-yellow-400 transition-all duration-300"
+              className="h-full bg-primary transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
 
           <div className="px-8 py-8 space-y-6">
             <div className="space-y-3">
-              <h1 className="text-2xl sm:text-3xl font-bold text-black">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 {current.label}
               </h1>
               {current.helper && (
-                <p className="text-sm text-black/70 font-medium">
+                <p className="text-sm text-muted-foreground font-medium">
                   {current.helper}
                 </p>
               )}
               {isSkillsQuestion && (
-                <p className="text-xs text-black/60 font-medium pt-1">
+                <p className="text-xs text-muted-foreground font-medium pt-1">
                   Select up to {maxSkills} skills ({currentAnswers.length}/{maxSkills} selected)
                 </p>
               )}
             </div>
 
             {selectedCategory && step > 0 && (
-              <div className="flex items-center gap-2 text-xs font-medium text-black/70 bg-yellow-50 px-3 py-2 border border-black rounded">
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground bg-secondary/50 px-3 py-2 border border-border rounded">
                 <span className="font-bold">Category:</span>
                 <span>{selectedCategory}</span>
                 {step < 3 && (
@@ -279,7 +275,7 @@ export function JoinWizard() {
                     onClick={() => {
                       setStep(0);
                     }}
-                    className="ml-auto text-xs font-bold underline hover:no-underline"
+                    className="ml-auto text-xs font-bold text-primary hover:underline"
                   >
                     Change
                   </button>
@@ -299,12 +295,12 @@ export function JoinWizard() {
                     onClick={() => handleSelect(opt)}
                     disabled={disabled}
                     className={
-                      "flex-1 min-w-[200px] max-w-[300px] px-5 py-4 cursor-pointer text-base font-medium border border-black rounded transition-all text-center " +
+                      "flex-1 min-w-[200px] max-w-[300px] px-5 py-4 cursor-pointer text-base font-medium border rounded transition-all text-center " +
                       (disabled
-                        ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-300"
+                        ? "bg-secondary/50 text-muted-foreground cursor-not-allowed border-border"
                         : selected
-                        ? "bg-yellow-400 text-black border-2 border-black shadow-md"
-                        : "bg-white text-black hover:bg-yellow-50 hover:border-black/50")
+                          ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                          : "bg-background text-foreground border-border hover:bg-secondary hover:border-secondary-foreground/20")
                     }
                   >
                     {opt}
@@ -318,7 +314,7 @@ export function JoinWizard() {
                 type="button"
                 onClick={goNext}
                 disabled={!canProceed || isSaving}
-                className="w-full px-6 py-4 text-base font-bold bg-yellow-400 text-black rounded hover:bg-yellow-500 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-yellow-400 cursor-pointer"
+                className="w-full px-6 py-4 text-base font-bold bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSaving ? "Saving..." : isLast ? (isSignedIn ? "Save Preferences" : "Get Started") : "Continue"}
               </button>
@@ -327,7 +323,7 @@ export function JoinWizard() {
                 <button
                   type="button"
                   onClick={goBack}
-                  className="w-full px-6 py-3 text-sm font-medium text-black/70 hover:text-black transition-colors cursor-pointer"
+                  className="w-full px-6 py-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                   ← Back
                 </button>
@@ -338,16 +334,16 @@ export function JoinWizard() {
                   type="button"
                   onClick={skipStep}
                   disabled={isSaving}
-                  className="w-full px-6 py-3 text-sm font-medium border border-black bg-white text-black rounded hover:bg-gray-50 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-6 py-3 text-sm font-medium border border-border bg-background text-foreground rounded-md hover:bg-secondary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Skip this step
                 </button>
               )}
 
               {isLast && !isSignedIn && (
-                <p className="pt-2 text-xs text-black/70 text-center font-medium">
+                <p className="pt-2 text-xs text-muted-foreground text-center font-medium">
                   All questions done.{" "}
-                  <Link href="/jobs" className="font-bold underline">
+                  <Link href="/jobs" className="font-bold text-foreground hover:underline">
                     Browse remote jobs
                   </Link>
                   .

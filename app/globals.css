@@ -67,125 +67,125 @@
 }
 
 :root {
-  --radius: 1rem;
-  
-  /* PocketsFlow Light Mode Palette */
-  --background: #FAFAFA;
-  --foreground: #1A1A1A;
-  
+  --radius: 0.5rem;
+  /* Standard radius, slightly smaller than 1rem which can look cartoony */
+
+  /* Standard White/Black Theme */
+  --background: #FFFFFF;
+  --foreground: #000000;
+
   --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
-  
+  --card-foreground: #000000;
+
   --popover: #FFFFFF;
-  --popover-foreground: #1A1A1A;
-  
-  --primary: #635BFF; /* PocketsFlow Purple */
+  --popover-foreground: #000000;
+
+  --primary: #645cff;
   --primary-foreground: #FFFFFF;
-  
-  --secondary: #FFFFFF;
-  --secondary-foreground: #635BFF;
-  
-  --muted: #F4F4F5;
-  --muted-foreground: #71717A;
-  
-  --accent: #F4F4F5;
-  --accent-foreground: #18181B;
-  
+
+  --secondary: #F3F4F6;
+  /* light gray for secondary actions */
+  --secondary-foreground: #111827;
+
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+
+  --accent: #F3F4F6;
+  --accent-foreground: #111827;
+
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  
-  --border: #E4E4E7;
-  --input: #E4E4E7;
-  --ring: #635BFF;
-  
-  --chart-1: #635BFF;
+
+  --border: #E5E7EB;
+  /* light gray border */
+  --input: #E5E7EB;
+  --ring: #645cff;
+
+  --chart-1: #645cff;
   --chart-2: #1C1C1C;
   --chart-3: #EE4D3D;
   --chart-4: #F5F5F5;
   --chart-5: #E4E4E7;
 
-  --sidebar: #FAFAFA;
-  --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #635BFF;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #645cff;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F4F4F5;
-  --sidebar-accent-foreground: #1A1A1A;
-  --sidebar-border: #E4E4E7;
-  --sidebar-ring: #635BFF;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #645cff;
 }
 
 .dark {
-  /* PocketsFlow Dark Mode Adaptation */
+  /* Dark Mode Adaptation - keeping it functional just in case, but user wants white */
   --background: #0A0A0A;
-  --foreground: #FAFAFA;
-  
-  --card: #1C1C1C;
-  --card-foreground: #FAFAFA;
-  
-  --popover: #1C1C1C;
-  --popover-foreground: #FAFAFA;
-  
-  --primary: #635BFF;
+  --foreground: #FFFFFF;
+
+  --card: #171717;
+  --card-foreground: #FFFFFF;
+
+  --popover: #171717;
+  --popover-foreground: #FFFFFF;
+
+  --primary: #645cff;
   --primary-foreground: #FFFFFF;
-  
-  --secondary: #27272A;
-  --secondary-foreground: #FAFAFA;
-  
-  --muted: #27272A;
-  --muted-foreground: #A1A1AA;
-  
-  --accent: #27272A;
-  --accent-foreground: #FAFAFA;
-  
+
+  --secondary: #262626;
+  --secondary-foreground: #FFFFFF;
+
+  --muted: #262626;
+  --muted-foreground: #A3A3A3;
+
+  --accent: #262626;
+  --accent-foreground: #FFFFFF;
+
   --destructive: #7F1D1D;
-  --destructive-foreground: #FAFAFA;
-  
-  --border: #27272A;
-  --input: #27272A;
-  --ring: #635BFF;
-  
-  --sidebar: #1C1C1C;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-primary: #635BFF;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #262626;
+  --input: #262626;
+  --ring: #645cff;
+
+  --sidebar: #171717;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #645cff;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #27272A;
-  --sidebar-accent-foreground: #FAFAFA;
-  --sidebar-border: #27272A;
-  --sidebar-ring: #635BFF;
+  --sidebar-accent: #262626;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #262626;
+  --sidebar-ring: #645cff;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-weight: 400;
     letter-spacing: -0.01em;
-    
-    /* Subway Grid Pattern - Subtle */
-    background-image: 
-      linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-  
-  .dark body {
-    background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.1;
   }
-  
+
   /* Prevent scroll anchoring on jobs page */
   html {
     overflow-anchor: none;
   }
+
   /* Prevent zoom on input focus - iOS Safari */
   input[type="text"],
   input[type="email"],

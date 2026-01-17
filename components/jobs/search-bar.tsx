@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "../../lib/utils";
+import { Search } from "lucide-react";
 
 type Suggestion = {
   titles: string[];
@@ -106,64 +107,59 @@ export function JobsSearchBar({ categories }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="relative mt-0 flex w-full max-w-3xl items-center gap-2 border-2 border-black bg-white px-4 py-2 rounded-lg"
+      className="relative w-full"
     >
-      <input
-        type="text"
-        name="q"
-        placeholder="Search Job Title or Company name..."
-        className="h-12 flex-1 border-none bg-transparent text-sm text-black placeholder:text-black/50 focus:outline-none"
-        value={q}
-        onChange={(e) => {
-          setQ(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => {
-          // Delay closing to allow clicks on dropdown items
-          setTimeout(() => {
-            setOpen(false);
-          }, 200);
-        }}
-        autoComplete="off"
-      />
+      <div className="relative flex items-center">
+        <Search className="absolute left-4 w-5 h-5 text-zinc-400" />
+        <input
+          type="text"
+          name="q"
+          placeholder="Search for jobs..."
+          className="h-14 w-full pl-12 pr-4 bg-zinc-50 border border-zinc-200 rounded-xl text-black placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-sans text-base"
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => {
+            setTimeout(() => {
+              setOpen(false);
+            }, 200);
+          }}
+          autoComplete="off"
+        />
+      </div>
       <input type="hidden" name="category" value={selectedCategory} />
-      <button
-        type="submit"
-        className="px-6 py-2 bg-black text-white text-sm font-bold cursor-pointer hover:bg-gray-900 transition-colors rounded-md"
-      >
-        Search
-      </button>
 
       {open && (
-        <div 
-          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-xl bg-white border-2 border-black shadow-lg"
-          onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking dropdown
+        <div
+          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl bg-white border border-zinc-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]"
+          onMouseDown={(e) => e.preventDefault()}
         >
           <div className="max-h-96 overflow-y-auto">
             {loading && (
-              <div className="px-4 py-3 text-sm text-black/60">
+              <div className="px-4 py-3 text-sm text-zinc-500">
                 Searching…
               </div>
             )}
 
             {!loading && !q.trim() && matches.length > 0 && (
               <>
-                <div className="px-4 py-3 text-sm font-bold text-black">
-                  CATEGORIES
+                <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                  Quick categories
                 </div>
-                <ul>
-                  {matches.map((cat, index) => {
+                <ul className="divide-y divide-zinc-50">
+                  {matches.map((cat) => {
                     const isActive = selectedCategory === cat.slug;
                     return (
                       <li key={cat.slug}>
-                        {index > 0 && <hr className="border-0 border-t border-gray-200 mx-0" />}
                         <button
                           type="button"
                           onClick={() => selectCategory(cat)}
                           className={cn(
-                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-black hover:bg-gray-50 transition-colors",
-                            isActive && "bg-black text-white hover:bg-gray-900",
+                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-700 hover:bg-zinc-50 hover:text-primary transition-colors",
+                            isActive && "bg-primary/5 text-primary font-bold",
                           )}
                         >
                           <span>{cat.label}</span>
@@ -179,16 +175,16 @@ export function JobsSearchBar({ categories }: Props) {
               <>
                 {suggestions.titles.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-black bg-gray-50">
-                      Job titles
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                      Suggested titles
                     </div>
-                    <ul className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-zinc-50">
                       {suggestions.titles.map((title) => (
-                        <li key={title} className="border-t border-gray-200 first:border-t-0">
+                        <li key={title}>
                           <button
                             type="button"
                             onClick={() => selectTerm(title)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 text-sm text-black"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-50 hover:text-primary text-sm text-zinc-700 transition-colors"
                           >
                             <span>{title}</span>
                           </button>
@@ -200,16 +196,16 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {suggestions.companies.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-xs font-bold uppercase tracking-wide text-black bg-gray-50">
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
                       Companies
                     </div>
-                    <ul className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-zinc-50">
                       {suggestions.companies.map((comp) => (
-                        <li key={comp} className="border-t border-gray-200 first:border-t-0">
+                        <li key={comp}>
                           <button
                             type="button"
                             onClick={() => selectTerm(comp)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 text-sm text-black"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-50 hover:text-primary text-sm text-zinc-700 transition-colors"
                           >
                             <span>{comp}</span>
                           </button>
@@ -221,21 +217,20 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {matches.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-sm font-bold text-black">
-                      CATEGORIES
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                      Matching categories
                     </div>
-                    <ul>
-                      {matches.map((cat, index) => {
+                    <ul className="divide-y divide-zinc-50">
+                      {matches.map((cat) => {
                         const isActive = selectedCategory === cat.slug;
                         return (
                           <li key={cat.slug}>
-                            {index > 0 && <hr className="border-0 border-t border-gray-200 mx-0" />}
                             <button
                               type="button"
                               onClick={() => selectCategory(cat)}
                               className={cn(
-                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-black hover:bg-gray-50 transition-colors",
-                                isActive && "bg-black text-white hover:bg-gray-900",
+                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-700 hover:bg-zinc-50 hover:text-primary transition-colors",
+                                isActive && "bg-primary/5 text-primary font-bold",
                               )}
                             >
                               <span>{cat.label}</span>
@@ -250,8 +245,8 @@ export function JobsSearchBar({ categories }: Props) {
                 {suggestions.titles.length === 0 &&
                   suggestions.companies.length === 0 &&
                   matches.length === 0 && (
-                    <div className="px-4 py-4 text-sm text-black/60">
-                      No matches yet
+                    <div className="px-4 py-8 text-sm text-zinc-400 text-center">
+                      No matches found
                     </div>
                   )}
               </>
@@ -262,4 +257,3 @@ export function JobsSearchBar({ categories }: Props) {
     </form>
   );
 }
-

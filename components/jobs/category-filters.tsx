@@ -30,14 +30,14 @@ export function CategoryFilters({ categories }: Props) {
     if (scrollPositionRef.current !== null) {
       const savedScroll = scrollPositionRef.current;
       scrollPositionRef.current = null; // Clear immediately
-      
+
       // Restore scroll position aggressively
       const restoreScroll = () => {
         if (window.scrollY !== savedScroll) {
           window.scrollTo(0, savedScroll);
         }
       };
-      
+
       // Restore immediately and multiple times
       restoreScroll();
       requestAnimationFrame(restoreScroll);
@@ -51,21 +51,21 @@ export function CategoryFilters({ categories }: Props) {
   const toggleCategory = React.useCallback(
     (slug: string, e: React.MouseEvent) => {
       e.preventDefault();
-      
+
       // Store current scroll position BEFORE any navigation
       const currentScroll = window.scrollY;
       scrollPositionRef.current = currentScroll;
-      
+
       const params = new URLSearchParams(searchParams.toString());
-      
+
       // Remove q param if it exists (we'll add it back)
       if (q) {
         params.delete("q");
       }
-      
+
       // Get current categories
       const current = params.getAll("category");
-      
+
       // Toggle the category
       if (current.includes(slug)) {
         // Remove it
@@ -77,28 +77,28 @@ export function CategoryFilters({ categories }: Props) {
         // Add it
         params.append("category", slug);
       }
-      
+
       // Add q back if it exists
       if (q) {
         params.set("q", q);
       }
-      
+
       // Update URL
       const newUrl = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
-      
+
       // Restore scroll immediately before navigation
       window.scrollTo(0, currentScroll);
-      
+
       // Use router.replace
       router.replace(newUrl);
-      
+
       // Aggressively restore scroll after navigation
       const restoreScroll = () => {
         if (window.scrollY !== currentScroll) {
           window.scrollTo(0, currentScroll);
         }
       };
-      
+
       // Restore multiple times to catch any scroll resets
       requestAnimationFrame(restoreScroll);
       setTimeout(restoreScroll, 0);
@@ -111,7 +111,7 @@ export function CategoryFilters({ categories }: Props) {
   );
 
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap justify-center gap-3">
       {categories.map(({ label, slug }) => {
         const isActive = selectedCategories.includes(slug);
 
@@ -121,18 +121,13 @@ export function CategoryFilters({ categories }: Props) {
             type="button"
             onClick={(e) => toggleCategory(slug, e)}
             className={cn(
-              "px-4 py-2 text-sm font-bold transition-all border-2 border-black cursor-pointer flex items-center gap-2",
+              "px-4 py-1.5 text-xs font-bold transition-all rounded-full cursor-pointer flex items-center gap-2",
               isActive
-                ? "bg-black text-yellow-400"
-                : "bg-white text-black hover:bg-yellow-100",
+                ? "bg-primary text-white"
+                : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900",
             )}
           >
             <span>{label}</span>
-            {isActive && (
-              <span className="text-yellow-400 hover:text-yellow-300 text-base leading-none">
-                ×
-              </span>
-            )}
           </button>
         );
       })}

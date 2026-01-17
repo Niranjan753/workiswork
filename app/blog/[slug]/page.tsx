@@ -79,28 +79,27 @@ export default async function BlogPostPage({ params }: Params) {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white text-black">
-      <GridBackground />
 
-      {/* Hero Section - Yellow */}
-      <section className="relative z-10 bg-yellow-400 py-16 sm:py-20 lg:py-24 border-b-2 border-black">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative z-10 bg-background py-16 sm:py-20 lg:py-24 border-b border-border">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           {post.heroLabel && (
-            <span className="inline-block mb-4 border-2 border-black bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide">
+            <span className="inline-block mb-4 border border-border bg-secondary px-4 py-2 text-xs font-bold uppercase tracking-wide rounded-full text-secondary-foreground">
               {post.heroLabel}
             </span>
           )}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-black leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight mb-6">
             {post.title}
           </h1>
-          <p className="text-sm font-medium text-black/70 flex flex-wrap gap-3">
-            <span className="border-2 border-black bg-white px-4 py-2 text-xs font-bold">
+          <p className="text-sm font-medium text-muted-foreground flex flex-wrap gap-3 items-center">
+            <span className="bg-secondary text-secondary-foreground px-3 py-1 text-xs font-bold rounded">
               {post.category}
             </span>
-            <span className="border-2 border-black bg-black px-4 py-2 text-xs font-bold text-yellow-400">
+            <span className="bg-primary/10 text-primary px-3 py-1 text-xs font-bold rounded">
               {post.readTime}
             </span>
-            <span className="text-xs font-medium text-black/70 self-center">
+            <span className="flex items-center gap-1">
               {new Date(post.publishedAt).toLocaleDateString()}
             </span>
           </p>
@@ -108,36 +107,31 @@ export default async function BlogPostPage({ params }: Params) {
       </section>
 
       {/* Article Content */}
-      <main className="relative z-10 mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 bg-white">
-        <article className="border-2 border-black bg-white p-8 sm:p-12 lg:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div
-            className="prose prose-lg sm:prose-xl max-w-none 
-              prose-p:text-black prose-p:leading-[1.8] prose-p:mb-6 prose-p:text-base sm:prose-p:text-lg
-              prose-h2:text-black prose-h2:font-black prose-h2:text-2xl sm:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:leading-tight
-              prose-h3:text-black prose-h3:font-black prose-h3:text-xl sm:prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:leading-tight
-              prose-ul:text-black prose-ul:my-6 prose-ul:space-y-3
-              prose-ol:text-black prose-ol:my-6 prose-ol:space-y-3
-              prose-li:text-black prose-li:leading-relaxed prose-li:text-base sm:prose-li:text-lg
-              prose-strong:text-black prose-strong:font-black
-              prose-a:text-black prose-a:font-bold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-2
-              prose-blockquote:border-l-4 prose-blockquote:border-black prose-blockquote:pl-6 prose-blockquote:my-8 prose-blockquote:text-black/80 prose-blockquote:italic
-              prose-code:text-black prose-code:bg-yellow-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm
-              prose-pre:bg-black prose-pre:text-yellow-400 prose-pre:p-6 prose-pre:rounded-none prose-pre:border-2 prose-pre:border-black
-              prose-hr:border-black prose-hr:border-t-2 prose-hr:my-12"
-            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-          />
+      <main className="relative z-10 mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 bg-background">
+        <article className="prose prose-lg sm:prose-xl max-w-none 
+          prose-headings:font-bold prose-headings:text-foreground
+          prose-p:text-foreground/90 prose-p:leading-relaxed
+          prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-foreground prose-strong:font-bold
+          prose-ul:text-foreground/90 prose-ol:text-foreground/90
+          prose-li:marker:text-primary
+          prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-secondary/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
+          prose-code:text-primary prose-code:bg-secondary/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm
+          prose-pre:bg-secondary prose-pre:text-secondary-foreground prose-pre:p-6 prose-pre:rounded-lg prose-pre:border prose-pre:border-border
+          prose-hr:border-border prose-hr:my-12">
+          <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
         </article>
 
-        <div className="mt-16 flex flex-wrap gap-4 justify-between items-center border-t-2 border-black pt-8">
+        <div className="mt-16 flex flex-wrap gap-4 justify-between items-center border-t border-border pt-8">
           <Link
             href="/blog"
-            className="border-2 border-black bg-white px-6 py-3 text-sm font-bold text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
+            className="text-sm font-bold text-muted-foreground hover:text-foreground hover:underline transition-colors"
           >
             ← Back to all articles
           </Link>
           <Link
             href="/post"
-            className="border-2 border-black bg-black px-6 py-3 text-sm font-bold text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all shadow-lg"
+            className="bg-primary text-primary-foreground px-6 py-3 text-sm font-bold rounded-md hover:bg-primary/90 transition-all shadow-sm"
           >
             Hire remote talent on WorkIsWork →
           </Link>

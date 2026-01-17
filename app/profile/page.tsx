@@ -84,30 +84,28 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
-      <GridBackground />
-
-      <section className="relative z-10 bg-transparent py-12 sm:py-16">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+      <section className="relative z-10 bg-background py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <Link
                 href="/jobs"
-                className="flex items-center gap-2 text-sm font-bold text-black hover:underline"
+                className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors group"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 Back to Jobs
               </Link>
             </div>
 
             <div className="text-center space-y-4">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none text-foreground">
                 Your{" "}
-                <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+                <span className="text-primary relative inline-block">
                   Profile
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
                 View your account information and preferences.
               </p>
             </div>
@@ -117,55 +115,53 @@ export default async function ProfilePage() {
 
       <main className="relative z-10 mx-auto max-w-4xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="space-y-6">
-          <div className="border-2 border-black bg-white shadow-lg p-6 space-y-4">
-            <h2 className="text-xl font-black text-black flex items-center gap-2">
+          <div className="border border-border bg-background rounded-lg shadow-sm p-6 space-y-4">
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
               <User className="w-5 h-5" />
               Account Information
             </h2>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
-                <Mail className="w-4 h-4 text-black/60" />
-                <span className="font-medium text-black/80">Email:</span>
-                <span className="font-bold text-black">{user.email}</span>
+                <Mail className="w-4 h-4 text-muted-foreground" />
+                <span className="font-medium text-muted-foreground">Email:</span>
+                <span className="font-bold text-foreground">{user.email}</span>
                 {user.emailVerified ? (
-                  <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 border border-green-600">
+                  <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-200">
                     Verified
                   </span>
                 ) : (
-                  <span className="text-xs font-bold text-yellow-600 bg-yellow-100 px-2 py-1 border border-yellow-600">
+                  <span className="text-xs font-bold text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded border border-yellow-200">
                     Unverified
                   </span>
                 )}
               </div>
               {user.name && (
                 <div className="flex items-center gap-3 text-sm">
-                  <User className="w-4 h-4 text-black/60" />
-                  <span className="font-medium text-black/80">Name:</span>
-                  <span className="font-bold text-black">{user.name}</span>
+                  <User className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-medium text-muted-foreground">Name:</span>
+                  <span className="font-bold text-foreground">{user.name}</span>
                 </div>
               )}
               <div className="flex items-center gap-3 text-sm">
-                <Briefcase className="w-4 h-4 text-black/60" />
-                <span className="font-medium text-black/80">Role:</span>
-                <span className="font-bold text-black capitalize">{user.role}</span>
+                <Briefcase className="w-4 h-4 text-muted-foreground" />
+                <span className="font-medium text-muted-foreground">Role:</span>
+                <span className="font-bold text-foreground capitalize">{user.role}</span>
               </div>
             </div>
           </div>
 
           {preferences && Object.keys(answersByQuestionId).length > 0 ? (
-            <div className="border-2 border-black bg-white shadow-lg p-6 space-y-6">
-              <h2 className="text-xl font-black text-black flex items-center gap-2">
+            <div className="border border-border bg-background rounded-lg shadow-sm p-6 space-y-6">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <Briefcase className="w-5 h-5" />
                 Your Preferences
               </h2>
-              
+
               {selectedCategory && (
-                <div className="bg-yellow-100 px-4 py-3 border-2 border-black">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-bold text-black/60 uppercase tracking-wide">Selected Category</span>
-                      <p className="text-lg font-black text-black mt-1">{selectedCategory}</p>
-                    </div>
+                <div className="bg-secondary/30 px-4 py-3 rounded-lg border border-border">
+                  <div>
+                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Selected Category</span>
+                    <p className="text-lg font-bold text-foreground mt-0.5">{selectedCategory}</p>
                   </div>
                 </div>
               )}
@@ -173,23 +169,23 @@ export default async function ProfilePage() {
               <div className="space-y-4">
                 {Object.entries(answersByQuestionId).map(([questionId, answers]) => {
                   if (!Array.isArray(answers) || answers.length === 0) return null;
-                  
+
                   const question = questions.find((q) => String(q.id) === questionId);
                   const label = questionLabels[questionId] || `Question ${questionId}`;
-                  
+
                   return (
-                    <div key={questionId} className="border border-black/20 bg-white p-4 space-y-2">
-                      <h3 className="text-sm font-bold text-black/80 uppercase tracking-wide">
+                    <div key={questionId} className="border border-border/50 bg-background rounded-lg p-5 space-y-2">
+                      <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">
                         {label}
                       </h3>
                       {question && (
-                        <p className="text-base font-medium text-black/90">{question.label}</p>
+                        <p className="text-base font-medium text-foreground">{question.label}</p>
                       )}
                       <div className="flex flex-wrap gap-2 mt-2">
                         {answers.map((answer: string, idx: number) => (
                           <span
                             key={`${questionId}-${idx}-${answer}`}
-                            className="inline-block bg-yellow-400 px-3 py-1 text-sm font-bold text-black border-2 border-black"
+                            className="inline-block bg-secondary text-secondary-foreground px-3 py-1 text-sm font-bold rounded"
                           >
                             {answer}
                           </span>
@@ -200,27 +196,29 @@ export default async function ProfilePage() {
                 })}
               </div>
 
-              <div className="pt-4 border-t border-black/20">
+              <div className="pt-6 border-t border-border mt-8">
                 <Link
                   href="/join?from=profile"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold border-2 border-black bg-yellow-400 text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
                 >
                   Update Preferences
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="border-2 border-black bg-white shadow-lg p-6 space-y-4 text-center">
-              <h2 className="text-xl font-black text-black">No Preferences Yet</h2>
-              <p className="text-sm font-medium text-black/70">
-                Complete the onboarding questionnaire to personalize your job search experience.
+            <div className="border border-border bg-background rounded-lg shadow-sm p-12 space-y-4 text-center">
+              <h2 className="text-2xl font-bold text-foreground">No Preferences Yet</h2>
+              <p className="text-base font-medium text-muted-foreground max-w-md mx-auto">
+                Complete the onboarding questionnaire to personalize your job search experience and get better matches.
               </p>
-              <Link
-                href="/join?from=profile"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold border-2 border-black bg-yellow-400 text-black hover:bg-black hover:text-yellow-400 transition-all shadow-lg"
-              >
-                Start Onboarding
-              </Link>
+              <div className="pt-4">
+                <Link
+                  href="/join?from=profile"
+                  className="inline-flex items-center gap-2 px-8 py-3 text-base font-bold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
+                >
+                  Start Onboarding
+                </Link>
+              </div>
             </div>
           )}
         </div>
@@ -228,4 +226,3 @@ export default async function ProfilePage() {
     </div>
   );
 }
-

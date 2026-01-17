@@ -95,25 +95,23 @@ const PORTFOLIOS: Portfolio[] = [
 
 export default function PortfolioPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-transparent text-black">
-      <GridBackground />
-
-      <section className="relative z-10 bg-transparent py-12 sm:py-16">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <section className="relative z-10 py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-black">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none text-foreground">
               Portfolios from the{" "}
-              <span className="inline-block bg-yellow-300 px-2 py-1 border-2 border-black">
+              <span className="text-primary relative inline-block">
                 WorkIsWork
               </span>{" "}
               community
             </h1>
-            <p className="text-lg sm:text-xl text-black/90 max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
               Browse a curated set of portfolios from people who build products, write, design, and ship remote work.
             </p>
-            <p className="text-sm text-black/70 font-medium">
+            <p className="text-sm text-muted-foreground font-medium">
               Want to be featured here?{" "}
-              <Link href="/join" className="underline text-black shadow-sm font-semibold hover:text-yellow-400 hover:shadow-md hover:bg-black hover:text-yellow-400 transition-all hover:px-2 hover:py-1">
+              <Link href="/join" className="underline text-foreground font-semibold hover:text-primary transition-colors">
                 Join WorkIsWork
               </Link>
               .
@@ -122,7 +120,7 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-0 sm:px-6 lg:px-8">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-0 sm:px-6 lg:px-8 bg-background">
         <div className="space-y-4">
           {PORTFOLIOS.map((profile) => (
             <a
@@ -130,18 +128,18 @@ export default function PortfolioPage() {
               href={profile.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="block bg-white border-2 border-black p-6 transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
+              className="block bg-background border border-border rounded-lg p-6 transition-all hover:bg-secondary/50"
               title={`Visit ${profile.name} website`}
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0 flex-1 space-y-2">
-                  <h3 className="text-lg font-black text-black leading-tight">
+                  <h3 className="text-lg font-bold text-foreground leading-tight">
                     {profile.name}
                   </h3>
-                  <p className="text-sm font-medium text-black/70">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {profile.role} • {profile.location}
                   </p>
-                  <p className="text-sm font-medium text-black/80">
+                  <p className="text-sm font-medium text-foreground/80">
                     {profile.bio}
                   </p>
                   {profile.specialties.length > 0 && (
@@ -149,22 +147,22 @@ export default function PortfolioPage() {
                       {profile.specialties.map((tag) => (
                         <span
                           key={tag}
-                          className="border-2 border-black bg-yellow-400 px-2 py-1 text-[11px] font-bold text-black shadow-sm"
+                          className="bg-secondary text-secondary-foreground rounded px-2 py-1 text-[11px] font-medium"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
                   )}
-                  <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-medium text-black/60">
+                  <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-medium text-muted-foreground">
                     {profile.github && (
-                      <span className="inline-flex items-center gap-1">
+                      <span className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                         <Github className="w-3 h-3" />
                         GitHub
                       </span>
                     )}
                     {profile.twitter && (
-                      <span className="inline-flex items-center gap-1">
+                      <span className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                         <Twitter className="w-3 h-3" />
                         Twitter
                       </span>
@@ -172,8 +170,8 @@ export default function PortfolioPage() {
                   </div>
                 </div>
                 <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-black text-white text-sm font-bold border-2 border-black hover:bg-yellow-400 hover:text-black transition-all cursor-pointer shadow-sm hover:shadow-lg">
-                    Visit site <ArrowUpRight className="inline w-4 h-4 ml-1 -mt-px" />
+                  <span className="inline-block px-4 py-2 bg-secondary text-secondary-foreground text-sm font-medium rounded-md hover:bg-secondary/80 transition-colors cursor-pointer flex items-center gap-1">
+                    Visit site <ArrowUpRight className="w-4 h-4 ml-1" />
                   </span>
                 </div>
               </div>

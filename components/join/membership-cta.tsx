@@ -42,7 +42,7 @@ export function MembershipCTA({ label = "Join membership" }: Props) {
       <Button
         onClick={startCheckout}
         disabled={loading}
-        className="w-full sm:w-auto border-2 border-black bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black"
+        className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-bold px-8 h-12 transition-all shadow-sm"
       >
         {loading ? "Redirecting…" : label}
       </Button>

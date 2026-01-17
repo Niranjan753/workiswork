@@ -84,18 +84,18 @@ export function AlertsForm() {
     <div className="space-y-6">
       <form
         onSubmit={onSubmit}
-        className="space-y-4 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm"
+        className="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm"
       >
-        <h2 className="text-sm font-semibold text-zinc-900">
+        <h2 className="text-base font-bold text-foreground">
           Create a custom job alert
         </h2>
-        <p className="text-xs text-zinc-600">
+        <p className="text-sm text-muted-foreground font-medium">
           Pick a skill or keyword and we&apos;ll email you when new remote jobs
           match.
         </p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-zinc-800">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground font-sans">
               Email address
             </label>
             <Input
@@ -103,24 +103,26 @@ export function AlertsForm() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="bg-background border-border"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-zinc-800">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground font-sans">
               Skill / keyword
             </label>
             <Input
               placeholder="e.g. React, Product Designer, Python"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              className="bg-background border-border"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-zinc-800">
+          <div className="space-y-1.5 sm:col-span-2">
+            <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground font-sans">
               Frequency
             </label>
             <select
-              className="h-10 w-full rounded-full border border-orange-200 bg-white px-3 text-xs text-zinc-800"
+              className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground focus:ring-2 focus:ring-primary focus:outline-none"
               value={frequency}
               onChange={(e) =>
                 setFrequency(e.target.value as "daily" | "weekly")
@@ -131,37 +133,37 @@ export function AlertsForm() {
             </select>
           </div>
         </div>
-        {error && <p className="text-xs text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
         <Button
           type="submit"
           disabled={loading}
-          className="rounded-full bg-orange-500 px-5 py-2 text-xs font-semibold text-white hover:bg-orange-600"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-6 font-bold shadow-sm transition-all"
         >
           {loading ? "Saving…" : "Save alert"}
         </Button>
       </form>
 
       {alerts.length > 0 && (
-        <div className="rounded-2xl border border-orange-200 bg-white p-5 text-xs text-zinc-800 shadow-sm">
-          <h3 className="text-sm font-semibold text-zinc-900">
-            Your alerts ({alerts.length})
+        <div className="rounded-lg border border-border bg-background p-6 shadow-sm">
+          <h3 className="text-base font-bold text-foreground mb-4">
+            Your active alerts ({alerts.length})
           </h3>
-          <ul className="mt-3 space-y-2">
+          <ul className="space-y-3">
             {alerts.map((a) => (
               <li
                 key={a.id}
-                className="flex items-center justify-between rounded-xl border border-orange-100 bg-orange-50 px-3 py-2"
+                className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 px-4 py-3"
               >
                 <div>
-                  <p className="font-semibold text-zinc-900">
+                  <p className="text-sm font-bold text-foreground">
                     {a.keyword || "(no keyword)"}
                   </p>
-                  <p className="text-[11px] text-zinc-600">
+                  <p className="text-xs text-muted-foreground font-medium mt-0.5">
                     {a.frequency === "daily" ? "Daily" : "Weekly"} •{" "}
                     {new Date(a.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-                <span className="rounded-full bg-white px-2 py-1 text-[10px] font-semibold text-orange-700">
+                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary uppercase tracking-wide">
                   Active
                 </span>
               </li>

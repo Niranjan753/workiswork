@@ -44,22 +44,22 @@ export default function HirePage() {
       {/* Hero Section */}
       <section className="relative z-10 pt-12 pb-16 text-center px-4">
         <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+          <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             Hire <span className="text-[#FF5A1F]">remote</span> talent
             <br />
             without the guesswork.
           </h1>
 
-          <p className="mt-8 text-[18px] sm:text-[24px] max-w-3xl mx-auto leading-[1.1] text-[#B6B6B6]">
+          <p className="mt-6 text-[16px] sm:text-[22px] md:text-[24px] max-w-3xl mx-auto leading-[1.2] text-[#B6B6B6] px-4">
             Reach people who already live and breathe remote work – across
             <br className="hidden sm:block" />
             product, engineering, design, marketing and operations.
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-3">
+          <div className="mt-6 sm:mt-10 flex flex-col items-center gap-3">
             <Link
               href="/post"
-              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[22px] font-medium cursor-pointer px-10 py-[12px] rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
+              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
             >
               Post a job for $199
             </Link>

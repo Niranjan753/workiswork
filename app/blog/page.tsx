@@ -46,22 +46,22 @@ export default function BlogPage() {
       {/* Hero Section */}
       <section className="relative z-10 pb-16 text-center px-4">
         <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+          <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             Stories from the
             <br />
             <span className="text-[#FF5A1F]">WorkIsWork</span> community
           </h1>
 
-          <p className="mt-6 text-[18px] sm:text-[24px] max-w-3xl mx-auto leading-[1.1] text-[#B6B6B6]">
+          <p className="mt-6 text-[16px] sm:text-[22px] md:text-[24px] max-w-3xl mx-auto leading-[1.2] text-[#B6B6B6] px-4">
             Short, opinionated essays on remote careers, hiring,
             <br className="hidden sm:block" />
             and building great distributed teams.
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-3">
+          <div className="mt-6 sm:mt-10 flex flex-col items-center gap-3">
             <Link
               href="/join"
-              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[22px] font-medium cursor-pointer px-8 py-[8px] rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
+              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
             >
               Get the newsletter
             </Link>

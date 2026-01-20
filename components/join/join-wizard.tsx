@@ -161,14 +161,14 @@ export function JoinWizard() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
         </div>
 
-        <section className="relative z-10 pt-24 pb-16 text-center px-4">
+        <section className="relative z-10 pt-12 sm:pt-24 pb-16 text-center px-4">
           <div className="mx-auto max-w-5xl">
-            <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+            <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
               Preferences
               <br />
               <span className="text-[#FF5A1F]">Updated Successfully</span>
             </h1>
-            <p className="mt-8 text-[18px] sm:text-[24px] max-w-2xl mx-auto leading-[1.1] text-[#B6B6B6]">
+            <p className="mt-8 text-[16px] sm:text-[22px] md:text-[24px] max-w-2xl mx-auto leading-[1.2] text-[#B6B6B6] px-4">
               Your preferences have been saved. We&apos;ll use these to personalize your job search experience.
             </p>
           </div>
@@ -190,13 +190,13 @@ export function JoinWizard() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 href="/profile"
-                className="px-8 py-4 text-base font-bold bg-[#2563EB] text-white rounded-2xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
+                className="px-8 py-3.5 text-base font-bold bg-[#2563EB] text-white rounded-2xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
               >
                 View Profile
               </Link>
               <Link
                 href="/jobs"
-                className="px-8 py-4 text-base font-bold border border-zinc-800 bg-zinc-800/50 text-white rounded-2xl hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
+                className="px-8 py-3.5 text-base font-bold border border-zinc-800 bg-zinc-800/50 text-white rounded-2xl hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
               >
                 Browse Jobs
               </Link>
@@ -215,14 +215,14 @@ export function JoinWizard() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      <section className="relative z-10 pb-16 text-center px-4">
+      <section className="relative z-10 sm:pt-24 pb-16 text-center px-4">
         <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+          <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             {isSignedIn ? "Update Your" : "Join the"}
             <br />
             <span className="text-[#FF5A1F]">{isSignedIn ? "Preferences" : "WorkIsWork"}</span> {isSignedIn ? "" : "community"}
           </h1>
-          <p className="mt-8 text-[18px] sm:text-[24px] max-w-3xl mx-auto leading-[1.1] text-[#B6B6B6]">
+          <p className="mt-8 text-[16px] sm:text-[22px] md:text-[24px] max-w-3xl mx-auto leading-[1.2] text-[#B6B6B6] px-4">
             {isSignedIn
               ? "Update your preferences to better match you with remote roles and opportunities."
               : "Answer a few quick questions so we can better match you with remote roles and opportunities."

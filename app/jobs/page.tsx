@@ -66,13 +66,13 @@ export default function JobsPage() {
       {/* Hero Section */}
       <section className="relative z-10 pb-16 text-center px-4">
         <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+          <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             Built for the future
             <br />
             of <span className="text-[#FF5A1F]">remote work</span>
           </h1>
 
-          <p className="mt-6 text-[18px] sm:text-[24px] leading-[1.1] text-[#B6B6B6] max-w-2xl mx-auto">
+          <p className="mt-6 text-[16px] sm:text-[22px] md:text-[24px] leading-[1.2] text-[#B6B6B6] max-w-2xl mx-auto px-4">
             Discover 110,000+ curated remote jobs from vetted startups and global tech leaders.
             The best place for real talent.
           </p>
@@ -80,7 +80,7 @@ export default function JobsPage() {
           <div className="mt-8 flex flex-col items-center gap-3">
             <Link
               href="#jobs"
-              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[22px] mt-6 font-medium cursor-pointer px-8 py-[8px] rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
+              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] mt-4 sm:mt-6 font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
             >
               View Jobs
             </Link>
@@ -91,9 +91,9 @@ export default function JobsPage() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 pb-24 space-y-24">
+      <main className="mx-auto max-w-7xl px-4 pb-16 sm:pb-24 space-y-16 sm:space-y-24">
         {/* Subscription Section - Dark Premium */}
-        <div className="relative mx-auto max-w-6xl rounded-[3rem] bg-gradient-to-br from-zinc-900/80 to-black p-8 sm:p-14 overflow-hidden border border-zinc-800/50 shadow-2xl">
+        <div className="relative mx-auto max-w-6xl rounded-[2rem] sm:rounded-[3rem] bg-gradient-to-br from-zinc-900/80 to-black p-6 sm:p-14 overflow-hidden border border-zinc-800/50 shadow-2xl">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,white_20px,white_21px)]" />
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
 
@@ -111,7 +111,7 @@ export default function JobsPage() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 h-14 px-6 bg-zinc-800/50 backdrop-blur-md rounded-2xl border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium"
+                className="flex-1 h-14 px-8 py-2 bg-zinc-800/50 backdrop-blur-md rounded-2xl border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium"
               />
               <button
                 type="submit"

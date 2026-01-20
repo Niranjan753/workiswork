@@ -6,9 +6,9 @@ import { Footer } from "@/components/Footer";
 import { getSiteUrl, getOgImageUrl } from "../lib/site-url";
 import localFont from "next/font/local";
 
-const basierCircle = localFont({
-  src: "../fonts/BasierCircle-Regular.ttf",
-  variable: "--font-basier-circle",
+const Tusker = localFont({
+  src: "../public/fonts/tusker.otf",
+  variable: "--font-tusker",
   display: "swap",
 });
 
@@ -84,11 +84,11 @@ export default function RootLayout({
         <meta property="twitter:image" content={ogImage} />
       </head>
       <body
-        className={`${basierCircle.variable} font-sans antialiased bg-white text-black relative overflow-x-hidden`}
+        className={`${Tusker.variable} font-sans antialiased bg-white text-black relative overflow-x-hidden`}
       >
         <AppProviders>
           <Navbar />
-          <div className="pt-20 sm:pt-24 lg:pt-10">{children}</div>
+          <div>{children}</div>
           <Footer />
         </AppProviders>
       </body>

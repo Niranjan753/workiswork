@@ -97,63 +97,63 @@ export default function JobsPage() {
       </section>
 
 
-     <main className="mx-auto max-w-7xl px-4 pb-24 space-y-20">
+      <main className="mx-auto max-w-7xl px-4 pb-24 space-y-20">
 
-  <div className="relative mx-auto max-w-6xl rounded-[2.5rem] bg-primary px-6 py-10 sm:px-12 sm:py-12 overflow-hidden shadow-[0_16px_60px_-20px_rgba(100,92,255,0.35)]">
+        <div className="relative mx-auto max-w-6xl rounded-[2.5rem] bg-primary px-6 py-10 sm:px-12 sm:py-12 overflow-hidden shadow-[0_16px_60px_-20px_rgba(100,92,255,0.35)]">
 
-    <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,white_20px,white_21px)]" />
+          <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,white_20px,white_21px)]" />
 
-    <div className="relative z-10 flex flex-col items-center text-center space-y-5">
-      
-      <div className="space-y-2">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          Find a high paying remote job
-        </h2>
-        <p className="text-sm sm:text-base text-white/85 max-w-xl mx-auto font-medium">
-          Enjoy remote work, better work-life balance, and top salaries from top companies.
-        </p>
-      </div>
+          <div className="relative z-10 flex flex-col items-center text-center space-y-5">
 
-      <form className="w-full max-w-md flex flex-col sm:flex-row gap-3">
-        <input
-          type="email"
-          placeholder="Enter your email"
-          className="flex-1 h-12 px-5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 transition-all font-medium"
-        />
-        <button
-          type="submit"
-          className="h-12 px-6 bg-white text-zinc-950 font-semibold rounded-xl hover:bg-zinc-100 active:scale-[0.97] transition-all shadow-lg whitespace-nowrap"
-        >
-          Subscribe →
-        </button>
-      </form>
+            <div className="space-y-2">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Find a high paying remote job
+              </h2>
+              <p className="text-sm sm:text-base text-white/85 max-w-xl mx-auto font-medium">
+                Enjoy remote work, better work-life balance, and top salaries from top companies.
+              </p>
+            </div>
 
-    </div>
-  </div>
+            <form className="w-full max-w-md flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 h-12 px-5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 transition-all font-medium"
+              />
+              <button
+                type="submit"
+                className="h-12 px-6 bg-white text-zinc-950 font-semibold rounded-xl hover:bg-zinc-100 active:scale-[0.97] transition-all shadow-lg whitespace-nowrap"
+              >
+                Subscribe →
+              </button>
+            </form>
 
-  {/* Job Board Section */}
-  <section id="jobs" className="space-y-16 pt-8">
+          </div>
+        </div>
 
-    <div className="space-y-12">
-      <div className="w-full max-w-4xl mx-auto px-4">
-        <Suspense fallback={null}>
-          <JobsSearchBar categories={categoryChips} />
-        </Suspense>
-      </div>
+        {/* Job Board Section */}
+        <section id="jobs" className="space-y-16 pt-8">
 
-      <div className="flex flex-col items-center gap-8">
-        <Suspense fallback={null}>
-          <CategoryFilters categories={categoryChips} />
-        </Suspense>
-      </div>
-    </div>
+          <div className="space-y-12">
+            <div className="w-full max-w-4xl mx-auto px-4">
+              <Suspense fallback={null}>
+                <JobsSearchBar categories={categoryChips} />
+              </Suspense>
+            </div>
 
-    <Suspense fallback={null}>
-      <JobsBoard />
-    </Suspense>
+            <div className="flex flex-col items-center gap-8">
+              <Suspense fallback={null}>
+                <CategoryFilters categories={categoryChips} />
+              </Suspense>
+            </div>
+          </div>
 
-  </section>
-</main>
+          <Suspense fallback={null}>
+            <JobsBoard />
+          </Suspense>
+
+        </section>
+      </main>
 
 
     </div>

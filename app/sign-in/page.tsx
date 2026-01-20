@@ -40,27 +40,25 @@ function SignInForm() {
 
           {/* Role Selection */}
           <div className="space-y-2">
-              <Label className="text-sm text-black font-bold">I am a...</Label>
+            <Label className="text-sm text-black font-bold">I am a...</Label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
-                  role === "user"
+                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${role === "user"
                     ? "border-black bg-black text-yellow-400 shadow-lg"
                     : "border-black bg-white text-black hover:bg-yellow-100"
-                }`}
+                  }`}
               >
                 Job Seeker
               </button>
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
-                  role === "employer"
+                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${role === "employer"
                     ? "border-black bg-black text-yellow-400 shadow-lg"
                     : "border-black bg-white text-black hover:bg-yellow-100"
-                }`}
+                  }`}
               >
                 Employer
               </button>
@@ -124,7 +122,7 @@ function SignInForm() {
                   {
                     email,
                     password,
-                    callbackURL: "/jobs",
+                    callbackURL: "/dashboard",
                   },
                   {
                     onRequest: () => {
@@ -134,7 +132,7 @@ function SignInForm() {
                       setLoading(false);
                     },
                     onSuccess: () => {
-                      router.push("/jobs");
+                      router.push("/dashboard");
                     },
                     onError: (error: any) => {
                       const errorMsg = error?.message || String(error || "");

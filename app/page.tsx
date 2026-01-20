@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
     return (
         <div>
@@ -21,14 +23,15 @@ export default function Home() {
 
                     {/* CTA */}
                     <div className="mt-8 flex flex-col items-center gap-3">
-                        <button
+                        <Link
+                            href="/sign-in"
                             className="bg-[#2563EB] hover:bg-[#1D4ED8]
                    text-white text-[22px] mt-6 font-medium cursor-pointer
                    px-8 py-[8px] rounded-2xl
                    transition-colors"
                         >
                             Start hiring for free
-                        </button>
+                        </Link>
 
                         <span className="text-[13px] text-[#8C8C8C]">
                             No subscription required

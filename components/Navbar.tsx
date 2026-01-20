@@ -55,13 +55,13 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md shadow-sm">
+      <header className="sticky top-0 text-white bg-[#1b1b1b] z-50 w-full border-b-[0.5px] border-border  backdrop-blur-sm border-gray-500 border-opacity-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo & Brand */}
-            <Link href="/jobs" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <Logo width={28} height={20} />
-              <span className="text-xl font-bold tracking-tight text-foreground">
+              <span className="text-xl font-bold tracking-tight text-white">
                 WorkIsWork
               </span>
             </Link>
@@ -73,10 +73,10 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-4 py-2 text-sm font-medium rounded-md transition-all duration-200",
+                    "px-4 py-2 text-md font-medium rounded-md transition-all duration-200 ",
                     link.active
-                      ? "bg-secondary text-secondary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      ? "bg-[#1c1c1c] text-white"
+                      : "text-white hover:text-white hover:bg-[#1c1c1c]/50"
                   )}
                 >
                   {link.name}
@@ -94,7 +94,7 @@ export function Navbar() {
                     router.push("/pricing");
                   }
                 }}
-                className="flex items-center gap-2 px-6 py-2 rounded-md bg-primary text-primary-foreground text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95"
+                className="flex items-center gap-2 px-6 py-2 rounded-md bg-[#FF5A1F] text-white text-sm font-bold shadow-sm hover:bg-[#FF5A1F]/90 transition-all active:scale-95 cursor-pointer"
               >
                 <LockOpen className="w-3.5 h-3.5" />
                 Unlock Jobs
@@ -104,13 +104,13 @@ export function Navbar() {
                 <div className="flex items-center gap-3 ml-2 border-l border-border pl-4">
                   <Link
                     href="/profile"
-                    className="px-4 py-2 rounded-md border border-border bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors"
+                    className="px-4 py-2 rounded-md border border-border bg-white text-black text-sm font-medium hover:bg-secondary/80 transition-colors"
                   >
                     Profile
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
+                    className="text-black bg-white hover:bg-white/90 px-4 py-2 rounded-md border border-border text-sm font-bold transition-colors cursor-pointer"
                   >
                     Log out
                   </button>
@@ -118,7 +118,7 @@ export function Navbar() {
               ) : (
                 <Link
                   href="/login?callbackUrl=/alerts"
-                  className="px-4 py-2 rounded-md border border-border bg-transparent text-foreground text-sm font-bold hover:bg-secondary/50 transition-colors"
+                  className="px-4 py-2 rounded-md border bg-white text-black text-sm font-bold hover:bg-white/90"
                 >
                   Log in
                 </Link>

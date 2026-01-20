@@ -19,7 +19,7 @@ export default function AdminPanelLayout({
       <main
         className={cn(
           "min-h-screen bg-white text-black transition-[margin-left] ease-in-out duration-300",
-          !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-72")
+          !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-64")
         )}
       >
         {children}

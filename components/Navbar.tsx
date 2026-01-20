@@ -4,10 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, LockOpen } from "lucide-react";
-
 import { Logo } from "./Logo";
 import { cn } from "../lib/utils";
-import { authClient } from "../lib/auth-client";
 
 import {
   Dialog,
@@ -21,7 +19,6 @@ import {
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = authClient.useSession();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
@@ -32,19 +29,9 @@ export function Navbar() {
   const isHire = pathname.startsWith("/hire");
   const isPortfolio = pathname.startsWith("/portfolio");
 
-  const userEmail = session?.user?.email;
-
   React.useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
-
-  async function handleSignOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => router.push("/jobs"),
-      },
-    });
-  }
 
   const navLinks = [
     { name: "Remote Jobs", href: "/jobs", active: isJobs },
@@ -89,40 +76,12 @@ export function Navbar() {
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
               <button
-                onClick={() =>
-                  session?.user
-                    ? router.push("/pricing")
-                    : setShowUnlockDialog(true)
-                }
+                onClick={() => setShowUnlockDialog(true)}
                 className="flex items-center gap-2 rounded-md bg-[#FF5A1F] px-6 py-2 text-md font-bold text-white hover:bg-[#FF5A1F]/90 cursor-pointer"
               >
                 <LockOpen className="h-4 w-4" />
                 Unlock Jobs
               </button>
-
-              {userEmail ? (
-                <>
-                  <Link
-                    href="/profile"
-                    className="rounded-md border bg-white px-4 py-2 text-md font-medium text-black"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="rounded-md border bg-white px-4 py-2 text-md font-bold text-black cursor-pointer"
-                  >
-                    Log out
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login?callbackUrl=/alerts"
-                  className="rounded-md border bg-white px-4 py-2 text-md font-bold text-black cursor-pointer hover:bg-white/90"
-                >
-                  Log in
-                </Link>
-              )}
             </div>
 
             {/* Mobile Button */}
@@ -192,44 +151,13 @@ export function Navbar() {
           <button
             onClick={() => {
               setMobileOpen(false);
-              session?.user
-                ? router.push("/pricing")
-                : setShowUnlockDialog(true);
+              setShowUnlockDialog(true);
             }}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#FF5A1F] py-3 font-bold text-white"
           >
             <LockOpen className="h-4 w-4" />
             Unlock Jobs
           </button>
-
-          {userEmail ? (
-            <>
-              <Link
-                href="/profile"
-                onClick={() => setMobileOpen(false)}
-                className="block rounded-lg border border-white/10 py-3 text-center text-white"
-              >
-                Profile
-              </Link>
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  handleSignOut();
-                }}
-                className="w-full text-md text-gray-400 hover:text-white"
-              >
-                Log out
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/login?callbackUrl=/alerts"
-              onClick={() => setMobileOpen(false)}
-              className="block rounded-lg border border-white/10 py-3 text-center text-white"
-            >
-              Log in
-            </Link>
-          )}
         </div>
       </div>
 

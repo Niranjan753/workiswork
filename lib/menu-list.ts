@@ -5,6 +5,7 @@ import {
   UserPlus,
   PlusCircle,
   LayoutGrid,
+  Bell,
   LucideIcon
 } from "lucide-react";
 
@@ -57,6 +58,11 @@ export function getMenuList(pathname: string): Group[] {
           href: "/dashboard/portfolio",
           label: "Portfolio",
           icon: User
+        },
+        {
+          href: "/dashboard/alerts",
+          label: "Job Alerts",
+          icon: Bell
         },
         {
           href: "/dashboard/join",

@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { headers } from "next/headers";
 
 import { db } from "../../../db";
 import { alerts, users } from "../../../db/schema";
-import { auth } from "../../../lib/auth";
 import { sendAlertEmail } from "../../../lib/resend";
 
 export const runtime = "nodejs";
@@ -17,95 +15,112 @@ const createAlertSchema = z.object({
   frequency: z.enum(["daily", "weekly"]).default("daily"),
 });
 
+/**
+ * GET /api/alerts?email=foo@bar.com
+ * Fetch alerts for a given email
+ */
 export async function GET(request: Request) {
-  const h = await headers();
-  const session = await auth.api.getSession({ headers: h });
-  const { searchParams } = new URL(request.url);
+  try {
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email")?.toLowerCase();
 
-  let email = session?.user?.email || "";
-  if (!email) {
-    email = searchParams.get("email") || "";
-  }
-  if (!email) {
+    if (!email) {
+      return NextResponse.json(
+        { error: "Email is required" },
+        { status: 400 }
+      );
+    }
+
+    const userRow = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!userRow) {
+      return NextResponse.json({ alerts: [] });
+    }
+
+    const userAlerts = await db
+      .select()
+      .from(alerts)
+      .where(eq(alerts.userId, userRow.id))
+      .orderBy(alerts.createdAt);
+
+    return NextResponse.json({ alerts: userAlerts });
+  } catch (err: any) {
+    console.error("[GET /api/alerts] Error:", err);
     return NextResponse.json(
-      { error: "Email or authenticated user required" },
-      { status: 400 },
+      { error: err.message || "Failed to fetch alerts" },
+      { status: 500 }
     );
   }
-
-  const userRow = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1)
-    .then((rows) => rows[0]);
-
-  if (!userRow) {
-    return NextResponse.json({ alerts: [] });
-  }
-
-  const userAlerts = await db
-    .select()
-    .from(alerts)
-    .where(eq(alerts.userId, userRow.id))
-    .orderBy(alerts.createdAt);
-
-  return NextResponse.json({ alerts: userAlerts });
 }
 
+/**
+ * POST /api/alerts
+ * Create an alert for an email
+ */
 export async function POST(request: Request) {
-  const body = await request.json();
-  const parsed = createAlertSchema.safeParse(body);
+  try {
+    const body = await request.json();
+    const parsed = createAlertSchema.safeParse(body);
 
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Invalid payload", details: parsed.error.flatten() },
-      { status: 400 },
-    );
-  }
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid payload", details: parsed.error.flatten() },
+        { status: 400 }
+      );
+    }
 
-  const { email, keyword, frequency } = parsed.data;
+    const { email, keyword, frequency } = parsed.data;
+    const normalizedEmail = email.toLowerCase();
 
-  // Find or create user for this email
-  let userRow = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email.toLowerCase()))
-    .limit(1)
-    .then((rows) => rows[0]);
+    // Find or create user for this email
+    let userRow = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, normalizedEmail))
+      .limit(1)
+      .then((rows) => rows[0]);
 
-  if (!userRow) {
-    const inserted = await db
-      .insert(users)
+    if (!userRow) {
+      userRow = await db
+        .insert(users)
+        .values({
+          email: normalizedEmail,
+          name: normalizedEmail.split("@")[0],
+        })
+        .returning()
+        .then((rows) => rows[0]);
+    }
+
+    const insertedAlert = await db
+      .insert(alerts)
       .values({
-        email: email.toLowerCase(),
-        name: email.split("@")[0],
+        userId: userRow.id,
+        email: normalizedEmail,
+        keyword,
+        frequency,
+        isActive: true,
       })
       .returning()
       .then((rows) => rows[0]);
-    userRow = inserted;
-  }
 
-  const insertedAlert = await db
-    .insert(alerts)
-    .values({
-      userId: userRow.id,
-      email: email.toLowerCase(),
+    // Fire-and-forget confirmation email
+    sendAlertEmail({
+      to: normalizedEmail,
       keyword,
       frequency,
-      isActive: true,
-    })
-    .returning()
-    .then((rows) => rows[0]);
+    }).catch(() => {});
 
-  // fire-and-forget email confirmation if Resend is configured
-  sendAlertEmail({
-    to: email.toLowerCase(),
-    keyword,
-    frequency: frequency as "daily" | "weekly",
-  }).catch(() => {});
-
-  return NextResponse.json({ alert: insertedAlert }, { status: 201 });
+    return NextResponse.json({ alert: insertedAlert }, { status: 201 });
+  } catch (err: any) {
+    console.error("[POST /api/alerts] Error:", err);
+    return NextResponse.json(
+      { error: err.message || "Failed to create alert" },
+      { status: 500 }
+    );
+  }
 }
-
-

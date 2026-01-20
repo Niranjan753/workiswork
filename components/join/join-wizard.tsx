@@ -2,21 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { getJoinQuestions } from "@/lib/join-questions";
-import type { JoinQuestion } from "@/lib/join-questions";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { GridBackground } from "@/components/GridBackground";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "workiswork_join_preferences";
 
 export function JoinWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const fromProfile = searchParams.get("from") === "profile";
-  const { data: session } = authClient.useSession();
-  const isSignedIn = !!session?.user;
   const [step, setStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [answers, setAnswers] = useState<string[][]>(() => []);
@@ -87,39 +82,9 @@ export function JoinWizard() {
 
   async function goNext() {
     if (isLast) {
-      if (isSignedIn) {
-        await savePreferencesToDatabase();
-        setPreferencesSaved(true);
-      } else {
-        router.push("/sign-up?callbackUrl=/jobs&from=join");
-      }
+      setPreferencesSaved(true);
     } else {
       setStep((s) => Math.min(s + 1, total - 1));
-    }
-  }
-
-  async function savePreferencesToDatabase() {
-    setIsSaving(true);
-    try {
-      const answersByQuestionId: Record<string, string[]> = {};
-      questions.forEach((q, idx) => {
-        answersByQuestionId[String(q.id)] = answers[idx] ?? [];
-      });
-      const payload = { answersByQuestionId, selectedCategory };
-
-      const res = await fetch("/api/user/preferences", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        setPreferencesSaved(true);
-      }
-    } catch (error) {
-      console.error("Failed to save preferences:", error);
-    } finally {
-      setIsSaving(false);
     }
   }
 
@@ -131,12 +96,7 @@ export function JoinWizard() {
 
   async function skipStep() {
     if (isLast) {
-      if (isSignedIn) {
-        await savePreferencesToDatabase();
-        setPreferencesSaved(true);
-      } else {
-        router.push("/sign-up?callbackUrl=/jobs&from=join");
-      }
+      setPreferencesSaved(true);
     } else {
       setStep((s) => Math.min(s + 1, total - 1));
     }
@@ -152,143 +112,67 @@ export function JoinWizard() {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   }, [answers, selectedCategory, questions]);
 
-  if (preferencesSaved && isSignedIn) {
+  if (preferencesSaved) {
     return (
-      <div className="relative min-h-screen bg-[#0B0B0B] text-white selection:bg-blue-500/30">
-        {/* Background Gradients */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.1)_0%,transparent_70%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
+      <div className="bg-white border border-gray-100 shadow-xl shadow-gray-200/50 rounded-[2.5rem] p-12 text-center space-y-8 animate-in fade-in zoom-in duration-500">
+        <div className="flex justify-center">
+          <div className="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+            <CheckCircle2 className="w-12 h-12 text-green-500" />
+          </div>
         </div>
-
-        <section className="relative z-10 pt-24 pb-16 text-center px-4">
-          <div className="mx-auto max-w-5xl">
-            <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
-              Preferences
-              <br />
-              <span className="text-[#FF5A1F]">Updated Successfully</span>
-            </h1>
-            <p className="mt-8 text-[18px] sm:text-[24px] max-w-2xl mx-auto leading-[1.1] text-[#B6B6B6]">
-              Your preferences have been saved. We&apos;ll use these to personalize your job search experience.
-            </p>
-          </div>
-        </section>
-
-        <div className="relative z-10 flex items-center justify-center px-4 py-8">
-          <div className="w-full max-w-3xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md shadow-2xl rounded-3xl p-10 text-center space-y-8">
-            <div className="flex justify-center">
-              <div className="w-20 h-20 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                <CheckCircle2 className="w-10 h-10 text-blue-500" />
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold text-white tracking-tight">All Done!</h2>
-              <p className="text-lg font-medium text-zinc-400">
-                Your profile is now optimised. Start discovery now.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link
-                href="/profile"
-                className="px-8 py-4 text-base font-bold bg-[#2563EB] text-white rounded-2xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
-              >
-                View Profile
-              </Link>
-              <Link
-                href="/jobs"
-                className="px-8 py-4 text-base font-bold border border-zinc-800 bg-zinc-800/50 text-white rounded-2xl hover:bg-zinc-800 transition-all shadow-sm cursor-pointer"
-              >
-                Browse Jobs
-              </Link>
-            </div>
-          </div>
+        <div className="space-y-4">
+          <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Preferences Saved!</h2>
+          <p className="text-xl font-medium text-gray-500 max-w-md mx-auto leading-relaxed">
+            Your profile is now optimised. We&apos;ll use these details to show you the best remote opportunities.
+          </p>
+        </div>
+        <div className="flex justify-center pt-6">
+          <Link
+            href="/jobs"
+            className="px-8 py-4 text-base font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+          >
+            Browse Jobs
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen bg-[#0B0B0B] text-white selection:bg-blue-500/30">
-      {/* Background Gradients */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.1)_0%,transparent_70%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
-      </div>
-
-      <section className="relative z-10 pb-16 text-center px-4">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
-            {isSignedIn ? "Update Your" : "Join the"}
-            <br />
-            <span className="text-[#FF5A1F]">{isSignedIn ? "Preferences" : "WorkIsWork"}</span> {isSignedIn ? "" : "community"}
-          </h1>
-          <p className="mt-8 text-[18px] sm:text-[24px] max-w-3xl mx-auto leading-[1.1] text-[#B6B6B6]">
-            {isSignedIn
-              ? "Update your preferences to better match you with remote roles and opportunities."
-              : "Answer a few quick questions so we can better match you with remote roles and opportunities."
-            }
-          </p>
-          {!isSignedIn && (
-            <div className="mt-8">
-              <p className="text-sm text-zinc-500 font-bold uppercase tracking-widest">
-                Already joined?{" "}
-                <Link
-                  href="/sign-in?callbackUrl=/jobs"
-                  className="text-white hover:text-blue-400 underline underline-offset-4 transition-colors"
-                >
-                  Login now
-                </Link>
-              </p>
-            </div>
-          )}
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="bg-white border border-gray-100 shadow-xl shadow-gray-200/50 rounded-[2.5rem] overflow-hidden">
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-gray-50">
+          <div
+            className="h-full bg-blue-600 transition-all duration-700 ease-in-out"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-      </section>
 
-      <div className="relative z-10 flex items-center justify-center px-4 pb-24">
-        <div className="w-full max-w-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md shadow-2xl rounded-3xl overflow-hidden">
-          <div className="w-full h-1.5 bg-zinc-800">
-            <div
-              className="h-full bg-blue-600 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(37,99,235,0.5)]"
-              style={{ width: `${progress}%` }}
-            />
+        <div className="p-8 sm:p-10 space-y-8">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">
+                Step {step + 1} of {total}
+              </span>
+              {isSkillsQuestion && (
+                <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  {currentAnswers.length}/{maxSkills} Selected
+                </span>
+              )}
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+              {current.label}
+            </h2>
+            {current.helper && (
+              <p className="text-base font-medium text-gray-500 leading-relaxed">
+                {current.helper}
+              </p>
+            )}
           </div>
 
-          <div className="px-8 py-10 space-y-8">
-            <div className="space-y-3">
-              <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
-                {current.label}
-              </h2>
-              {current.helper && (
-                <p className="text-lg font-medium text-zinc-400">
-                  {current.helper}
-                </p>
-              )}
-              {isSkillsQuestion && (
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500 pt-1">
-                  Select up to {maxSkills} skills ({currentAnswers.length}/{maxSkills} selected)
-                </p>
-              )}
-            </div>
-
-            {selectedCategory && step > 0 && (
-              <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-zinc-500 bg-zinc-800/50 px-4 py-3 border border-zinc-800 rounded-xl">
-                <span>Category:</span>
-                <span className="text-white">{selectedCategory}</span>
-                {step < 3 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setStep(0);
-                    }}
-                    className="ml-auto text-blue-500 hover:text-blue-400 transition-colors"
-                  >
-                    Change
-                  </button>
-                )}
-              </div>
-            )}
-
-            <div className="flex flex-wrap gap-3">
+          <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {current.options.map((opt) => {
                 const selected = currentAnswers.includes(opt);
                 const disabled = isSkillsQuestion && !selected && currentAnswers.length >= maxSkills;
@@ -299,61 +183,57 @@ export function JoinWizard() {
                     type="button"
                     onClick={() => handleSelect(opt)}
                     disabled={disabled}
-                    className={
-                      "flex-1 min-w-[200px] px-6 py-5 cursor-pointer text-base font-bold border rounded-2xl transition-all text-center " +
-                      (disabled
-                        ? "bg-zinc-800/30 text-zinc-600 border-zinc-800/50 cursor-not-allowed"
+                    className={cn(
+                      "w-full px-5 py-3 text-left text-[14px] font-bold border rounded-xl transition-all shadow-sm group relative",
+                      disabled
+                        ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed"
                         : selected
-                          ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-900/20"
-                          : "bg-zinc-800/30 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white hover:bg-zinc-800/80")
-                    }
+                          ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20"
+                          : "bg-white text-gray-600 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/10"
+                    )}
                   >
                     {opt}
+                    {selected && (
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <CheckCircle2 className="w-5 h-5 text-white" />
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
+          </div>
 
-            <div className="pt-6 space-y-4">
-              <button
-                type="button"
-                onClick={goNext}
-                disabled={!canProceed || isSaving}
-                className="w-full px-8 py-5 text-lg font-bold bg-[#2563EB] text-white rounded-2xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-900/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]"
-              >
-                {isSaving ? "Saving..." : isLast ? (isSignedIn ? "Save Preferences" : "Get Started") : "Continue"}
-              </button>
+          <div className="pt-6 flex flex-col items-center gap-6">
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!canProceed || isSaving}
+              className="w-full px-8 py-4 text-lg font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/25 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
+            >
+              {isLast ? "Save Preferences" : "Continue"}
+            </button>
 
-              <div className="flex flex-col gap-2">
-                {!isFirst && (
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    className="w-full py-3 text-sm font-bold text-zinc-500 hover:text-white transition-colors cursor-pointer"
-                  >
-                    ← Back
-                  </button>
-                )}
+            <div className="flex items-center gap-8">
+              {!isFirst && (
+                <button
+                  type="button"
+                  onClick={goBack}
+                  className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors"
+                >
+                  ← Previous Step
+                </button>
+              )}
 
-                {!isLast && (
-                  <button
-                    type="button"
-                    onClick={skipStep}
-                    disabled={isSaving}
-                    className="w-full py-3 text-sm font-bold text-zinc-500 hover:text-white transition-colors cursor-pointer"
-                  >
-                    Skip this step
-                  </button>
-                )}
-              </div>
-
-              {isLast && !isSignedIn && (
-                <p className="pt-4 text-xs font-bold uppercase tracking-widest text-zinc-600 text-center">
-                  All set?{" "}
-                  <Link href="/jobs" className="text-zinc-400 hover:text-white underline underline-offset-4">
-                    Browse jobs directly
-                  </Link>
-                </p>
+              {!isLast && (
+                <button
+                  type="button"
+                  onClick={skipStep}
+                  disabled={isSaving}
+                  className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors"
+                >
+                  Skip for now
+                </button>
               )}
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
@@ -48,6 +48,8 @@ export function CategoryFilters({ categories }: Props) {
     }
   }, [selectedCategories]);
 
+  const pathname = usePathname();
+
   const toggleCategory = React.useCallback(
     (slug: string, e: React.MouseEvent) => {
       e.preventDefault();
@@ -84,7 +86,7 @@ export function CategoryFilters({ categories }: Props) {
       }
 
       // Update URL
-      const newUrl = `/jobs${params.toString() ? `?${params.toString()}` : ""}`;
+      const newUrl = `${pathname}${params.toString() ? `?${params.toString()}` : ""}`;
 
       // Restore scroll immediately before navigation
       window.scrollTo(0, currentScroll);
@@ -107,7 +109,7 @@ export function CategoryFilters({ categories }: Props) {
       setTimeout(restoreScroll, 100);
       setTimeout(restoreScroll, 200);
     },
-    [router, searchParams, q],
+    [router, searchParams, q, pathname],
   );
 
   return (
@@ -121,10 +123,10 @@ export function CategoryFilters({ categories }: Props) {
             type="button"
             onClick={(e) => toggleCategory(slug, e)}
             className={cn(
-              "px-4 py-1.5 text-xs font-bold transition-all rounded-full cursor-pointer flex items-center gap-2",
+              "px-5 py-2 text-sm font-bold transition-all rounded-full cursor-pointer flex items-center gap-2 border",
               isActive
-                ? "bg-[#2563EB] text-white"
-                : "bg-zinc-900/50 text-zinc-500 border border-zinc-800 hover:bg-zinc-800 hover:text-white",
+                ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
+                : "bg-white text-gray-500 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50",
             )}
           >
             <span>{label}</span>

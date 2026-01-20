@@ -206,17 +206,17 @@ export function AdminJobForm({ categories }: Props) {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-6 border border-border bg-background rounded-lg p-8 text-sm text-foreground shadow-sm"
+      className="space-y-8 border border-zinc-200 bg-white rounded-2xl p-10 text-sm text-zinc-950 shadow-xl"
     >
-      <h2 className="text-2xl font-bold text-foreground">Post a job</h2>
+      <h2 className="text-3xl font-black text-zinc-950 tracking-tighter">Post a job</h2>
 
       <div className="space-y-5">
         {/* Company Name with Autocomplete */}
         <div className="space-y-2 relative">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Company Name
           </label>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500 font-medium">
             Your company's brand/trade name: without Inc., Ltd., B.V., Pte., etc. If your company already exists, select it from the suggestions.
           </p>
           <div className="relative">
@@ -232,21 +232,21 @@ export function AdminJobForm({ categories }: Props) {
               }}
               required
               placeholder="Acme"
-              className="border-border rounded-md"
+              className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
             />
             <input type="hidden" name="companyId" value={selectedCompanyId || ""} />
             {showSuggestions && companySuggestions.length > 0 && (
-              <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-50 w-full mt-2 bg-white border border-zinc-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto overflow-hidden">
                 {companySuggestions.map((company) => (
                   <button
                     key={company.id}
                     type="button"
                     onClick={() => selectCompany(company)}
-                    className="w-full text-left px-4 py-2 hover:bg-secondary/50 border-b border-border last:border-b-0 text-sm font-medium transition-colors"
+                    className="w-full text-left px-4 py-3 hover:bg-zinc-50 border-b border-zinc-100 last:border-b-0 text-sm font-medium transition-colors"
                   >
-                    <div className="font-bold text-foreground">{company.name}</div>
+                    <div className="font-bold text-zinc-900">{company.name}</div>
                     {company.websiteUrl && (
-                      <div className="text-xs text-muted-foreground">{company.websiteUrl}</div>
+                      <div className="text-xs text-zinc-500">{company.websiteUrl}</div>
                     )}
                   </button>
                 ))}
@@ -257,39 +257,39 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Job Title */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Job Title
           </label>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500 font-medium">
             Please specify as single job position like "Machine Learning Engineer"
           </p>
           <Input
             name="title"
             required
             placeholder="Machine Learning Engineer"
-            className="border-border rounded-md"
+            className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
           />
         </div>
 
         {/* Tags with comma-separated highlighting */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Tags, Keywords, or Stack
           </label>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500 font-medium">
             Short tags are preferred. Use tags like industry and tech stack. You can enter comma-separated values (e.g., "React, TypeScript, Node.js").
           </p>
           <div className="flex flex-wrap gap-2 mb-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 border border-primary/20 bg-secondary px-3 py-1 text-xs font-bold text-secondary-foreground rounded-full"
+                className="inline-flex items-center gap-1.5 border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-zinc-800 rounded-full"
               >
                 {tag}
                 <button
                   type="button"
                   onClick={() => removeTag(tag)}
-                  className="hover:text-primary transition-colors rounded-full p-0.5"
+                  className="hover:text-red-500 transition-all rounded-full p-0.5"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -326,10 +326,10 @@ export function AdminJobForm({ categories }: Props) {
                   }
                 }}
                 placeholder="Type tags separated by commas (e.g., React, TypeScript, Node.js)"
-                className="border-border rounded-md"
+                className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
                 style={{
                   color: tagInput ? "transparent" : "inherit",
-                  caretColor: "inherit"
+                  caretColor: "black"
                 }}
               />
             </div>
@@ -337,7 +337,7 @@ export function AdminJobForm({ categories }: Props) {
               type="button"
               onClick={addTag}
               variant="outline"
-              className="border-border"
+              className="border-zinc-200 rounded-xl font-bold hover:bg-zinc-50 transition-all"
             >
               Add Tags
             </Button>
@@ -346,24 +346,24 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Job Description */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Job Description
           </label>
           <textarea
             name="descriptionHtml"
             required
             rows={8}
-            className="w-full border border-border bg-background px-3 py-2 text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-zinc-900"
             placeholder="Write the full job description here..."
           />
         </div>
 
         {/* Apply URL */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Apply URL
           </label>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500 font-medium">
             Apply URLs with a form an applicant can fill out generally receive a lot more applicants
           </p>
           <Input
@@ -371,7 +371,7 @@ export function AdminJobForm({ categories }: Props) {
             type="url"
             required
             placeholder="https://company.com/jobs/123"
-            className="border-border rounded-md"
+            className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
           />
         </div>
 
@@ -382,9 +382,9 @@ export function AdminJobForm({ categories }: Props) {
               type="checkbox"
               checked={receiveByEmail}
               onChange={(e) => setReceiveByEmail(e.target.checked)}
-              className="h-4 w-4 border border-border rounded text-primary focus:ring-primary"
+              className="h-4 w-4 border border-zinc-300 rounded text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-bold text-foreground">
+            <span className="text-sm font-black uppercase tracking-widest text-zinc-900">
               I want to receive applications by email
             </span>
           </label>
@@ -392,10 +392,10 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Company Email */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Company Email (For invoice)
           </label>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500 font-medium">
             Make sure this email is accessible by you! We use this to send the invoice and edit link.
           </p>
           <Input
@@ -403,7 +403,7 @@ export function AdminJobForm({ categories }: Props) {
             type="email"
             required
             placeholder="contact@company.com"
-            className="border-border rounded-md"
+            className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
           />
         </div>
 
@@ -414,12 +414,12 @@ export function AdminJobForm({ categories }: Props) {
               type="checkbox"
               checked={highlightColor}
               onChange={(e) => setHighlightColor(e.target.checked)}
-              className="h-4 w-4 border border-border rounded text-primary focus:ring-primary"
+              className="h-4 w-4 border border-zinc-300 rounded text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm font-bold text-foreground">
+            <span className="text-sm font-black uppercase tracking-widest text-zinc-900">
               Highlight with a brand color (+$49)
             </span>
-            <span className="text-xs text-muted-foreground">2x more views</span>
+            <span className="text-xs text-zinc-500 font-bold">2x more views</span>
           </label>
           {highlightColor && (
             <Input
@@ -433,12 +433,12 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Category - using jobs page categories */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Category
           </label>
           <select
             name="category"
-            className="h-10 w-full border border-border bg-background px-3 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-12 w-full border border-zinc-200 bg-zinc-50 px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-zinc-900"
             required
             defaultValue={categories[0]?.slug}
           >
@@ -452,7 +452,7 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Job Type */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Job Type
           </label>
           <p className="text-xs text-muted-foreground">
@@ -460,7 +460,7 @@ export function AdminJobForm({ categories }: Props) {
           </p>
           <select
             name="jobType"
-            className="h-10 w-full border border-border bg-background px-3 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-12 w-full border border-zinc-200 bg-zinc-50 px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-zinc-900"
             required
             defaultValue="full_time"
           >
@@ -474,7 +474,7 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Remote Scope / Time Zones */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Remote Scope / Time Zones
           </label>
           <p className="text-xs text-muted-foreground">
@@ -482,7 +482,7 @@ export function AdminJobForm({ categories }: Props) {
           </p>
           <select
             name="remoteScope"
-            className="h-10 w-full border border-border bg-background px-3 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-12 w-full border border-zinc-200 bg-zinc-50 px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-zinc-900"
             required
             defaultValue="worldwide"
           >
@@ -496,7 +496,7 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Salary Range */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Salary Range (USD)
           </label>
           <p className="text-xs text-muted-foreground">
@@ -508,7 +508,7 @@ export function AdminJobForm({ categories }: Props) {
                 name="salaryMin"
                 type="number"
                 placeholder="Min (e.g., 90000)"
-                className="border-border rounded-md"
+                className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all font-bold"
               />
             </div>
             <div>
@@ -516,7 +516,7 @@ export function AdminJobForm({ categories }: Props) {
                 name="salaryMax"
                 type="number"
                 placeholder="Max (e.g., 130000)"
-                className="border-border rounded-md"
+                className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all font-bold"
               />
             </div>
           </div>
@@ -524,7 +524,7 @@ export function AdminJobForm({ categories }: Props) {
 
         {/* Location / Work Authorization */}
         <div className="space-y-2">
-          <label className="text-sm font-bold text-foreground">
+          <label className="text-sm font-black uppercase tracking-widest text-zinc-900">
             Location / Work Authorization
           </label>
           <p className="text-xs text-muted-foreground">
@@ -533,41 +533,41 @@ export function AdminJobForm({ categories }: Props) {
           <Input
             name="location"
             placeholder="e.g., US only, EU, Remote contractor worldwide"
-            className="border-border rounded-md"
+            className="border-zinc-200 rounded-xl h-12 bg-zinc-50 focus:bg-white transition-all"
             required
           />
         </div>
       </div>
 
-      <div className="pt-4 border-t border-border mt-8">
+      <div className="pt-8 border-t border-zinc-100 flex flex-col gap-6">
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all shadow-md py-6 rounded-md"
+          className="w-full h-16 bg-[#645cff] text-white text-[13px] font-black uppercase tracking-widest rounded-2xl hover:bg-[#5249ff] transition-all shadow-xl shadow-blue-500/10 active:scale-[0.98]"
         >
           {submitting ? "Redirecting to payment…" : "Post job - $199"}
         </Button>
-      </div>
 
-      {error && (
-        <div className="border border-red-200 bg-red-50 p-4 rounded-md">
-          <p className="text-sm font-bold text-red-600">Error: {error}</p>
-        </div>
-      )}
-      {successSlug && (
-        <div className="border border-green-200 bg-green-50 p-4 rounded-md">
-          <p className="text-sm font-bold text-green-600">
-            Job created successfully!{" "}
-            <button
-              type="button"
-              className="underline hover:text-green-800"
-              onClick={() => router.push(`/jobs/${successSlug}`)}
-            >
-              View it on the board
-            </button>
-          </p>
-        </div>
-      )}
+        {error && (
+          <div className="border border-red-100 bg-red-50 p-4 rounded-xl text-center">
+            <p className="text-xs font-bold text-red-600">Error: {error}</p>
+          </div>
+        )}
+        {successSlug && (
+          <div className="border border-green-100 bg-green-50 p-4 rounded-xl text-center">
+            <p className="text-sm font-bold text-green-600">
+              Job created successfully!{" "}
+              <button
+                type="button"
+                className="underline hover:text-green-800"
+                onClick={() => router.push(`/jobs/${successSlug}`)}
+              >
+                View it on the board
+              </button>
+            </p>
+          </div>
+        )}
+      </div>
     </form>
   );
 }

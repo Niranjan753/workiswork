@@ -24,7 +24,7 @@ export default function Home() {
                     {/* CTA */}
                     <div className="mt-8 flex flex-col items-center gap-3">
                         <Link
-                            href="/sign-in"
+                            href="/hire"
                             className="bg-[#2563EB] hover:bg-[#1D4ED8]
                    text-white text-[22px] mt-6 font-medium cursor-pointer
                    px-8 py-[8px] rounded-2xl

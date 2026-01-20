@@ -148,7 +148,7 @@ export function Navbar() {
       {/* ================= MOBILE DRAWER ================= */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-[85%] max-w-sm bg-[#121212] shadow-2xl transition-transform ease-in-out duration-200 md:hidden",
+          "fixed right-0 top-0 z-50 h-full w-[85%] max-w-sm bg-[#121212] shadow-2xl transition-all ease-[cubic-bezier(0.2,0.6,0.2,0.8)] duration-200 md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
       >

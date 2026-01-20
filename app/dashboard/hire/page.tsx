@@ -1,31 +1,69 @@
-"use client";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { categories } from "@/db/schema";
+import { inArray } from "drizzle-orm";
+import { AdminJobForm } from "@/components/admin/job-form";
 
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
+export const metadata: Metadata = {
+    title: "Post a Job – Dashboard",
+};
 
-export default function DashboardHirePage() {
-    const { data: session, isPending } = authClient.useSession();
-    const router = useRouter();
+const categoryChips: { label: string; slug: string }[] = [
+    { label: "Software Development", slug: "software-development" },
+    { label: "Customer Service", slug: "customer-support" },
+    { label: "Design", slug: "design" },
+    { label: "Marketing", slug: "marketing" },
+    { label: "Sales / Business", slug: "sales" },
+    { label: "Product", slug: "product" },
+    { label: "Project Management", slug: "project" },
+    { label: "AI / ML", slug: "ai-ml" },
+    { label: "Data Analysis", slug: "data-analysis" },
+    { label: "Devops / Sysadmin", slug: "devops" },
+    { label: "Finance", slug: "finance" },
+    { label: "Human Resources", slug: "human-resources" },
+    { label: "QA", slug: "qa" },
+    { label: "Writing", slug: "writing" },
+    { label: "Legal", slug: "legal" },
+    { label: "Medical", slug: "medical" },
+    { label: "Education", slug: "education" },
+    { label: "All Others", slug: "all-others" },
+];
 
-    useEffect(() => {
-        if (!isPending && !session) {
-            router.push("/sign-in?callbackUrl=/dashboard/hire");
-        }
-    }, [session, isPending, router]);
+async function getCategories() {
+    const slugs = categoryChips.map(c => c.slug);
+    const rows = await db
+        .select({
+            id: categories.id,
+            slug: categories.slug,
+            name: categories.name,
+        })
+        .from(categories)
+        .where(inArray(categories.slug, slugs));
 
-    if (isPending) {
-        return (
-            <div className="flex items-center bg-white justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-black" />
-            </div>
-        );
-    }
+    const mergedCategories = categoryChips.map(chip => {
+        const dbCategory = rows.find(c => c.slug === chip.slug);
+        return {
+            id: dbCategory?.id || 0,
+            slug: chip.slug,
+            name: chip.label,
+        };
+    });
+
+    return mergedCategories;
+}
+
+export default async function DashboardHirePage() {
+    const h = await headers();
+    const session = await auth.api.getSession({ headers: h });
 
     if (!session) {
-        return null;
+        redirect("/sign-in?callbackUrl=/dashboard/hire");
     }
+
+    const cats = await getCategories();
 
     return (
         <div className="p-6 max-w-5xl mx-auto">
@@ -36,62 +74,9 @@ export default function DashboardHirePage() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
-                    {/* Job Details Form */}
-                    <div className="p-8 rounded-3xl border border-zinc-200 bg-white shadow-sm space-y-6">
-                        <div className="space-y-4">
-                            <label className="block text-sm font-bold text-black uppercase tracking-wider">Job Title</label>
-                            <input
-                                type="text"
-                                placeholder="e.g. Senior Frontend Engineer"
-                                className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black transition-all"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4">
-                                <label className="block text-sm font-bold text-black uppercase tracking-wider">Category</label>
-                                <select className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black transition-all appearance-none cursor-pointer">
-                                    <option>Software Development</option>
-                                    <option>Design</option>
-                                    <option>Marketing</option>
-                                    <option>Customer Support</option>
-                                </select>
-                            </div>
-                            <div className="space-y-4">
-                                <label className="block text-sm font-bold text-black uppercase tracking-wider">Job Type</label>
-                                <select className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black transition-all appearance-none cursor-pointer">
-                                    <option>Full-time</option>
-                                    <option>Contract</option>
-                                    <option>Freelance</option>
-                                    <option>Internship</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <label className="block text-sm font-bold text-black uppercase tracking-wider">Salary Range (Annual USD)</label>
-                            <div className="flex items-center gap-4">
-                                <input type="number" placeholder="Min" className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black" />
-                                <span className="text-zinc-400 font-bold">-</span>
-                                <input type="number" placeholder="Max" className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black" />
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <label className="block text-sm font-bold text-black uppercase tracking-wider">Job Description</label>
-                            <textarea
-                                rows={8}
-                                placeholder="Describe the role, responsibilities, and requirements..."
-                                className="w-full p-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-black transition-all"
-                            />
-                        </div>
-
-                        <button className="w-full py-4 bg-black text-white rounded-2xl font-bold text-lg hover:bg-zinc-800 transition-all shadow-lg hover:shadow-black/10">
-                            Post Job for $249
-                        </button>
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-black">
+                <div className="lg:col-span-2">
+                    <AdminJobForm categories={cats} />
                 </div>
 
                 <div className="lg:col-span-1 space-y-6">

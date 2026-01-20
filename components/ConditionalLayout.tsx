@@ -13,7 +13,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     // Sidebar should stay on all pages when logged in
     // OR if we are specifically on a dashboard route
     const isDashboardRoute = pathname.startsWith("/dashboard");
-    const useSidebarLayout = session || isDashboardRoute;
+    const useSidebarLayout = session && isDashboardRoute;
 
     if (useSidebarLayout) {
         return <AdminPanelLayout>{children}</AdminPanelLayout>;

@@ -7,6 +7,9 @@ import { categories, companies, jobs } from "../../../db/schema";
 import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";
 import { GridBackground } from "../../../components/GridBackground";
 import { CreateAlertButton } from "../../../components/jobs/create-alert-button";
+import { auth } from "../../../lib/auth";
+import { headers } from "next/headers";
+import { Lock } from "lucide-react";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -113,23 +116,30 @@ export async function generateMetadata({
 export default async function JobDetailPage({ params }: Params) {
   const resolved = await params;
   const { job, similar } = await getJob(resolved.slug);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!job) return notFound();
 
   return (
+    <div className="relative min-h-screen bg-black text-white selection:bg-blue-500/30">
+      {/* Background Gradients */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.05)_0%,transparent_70%)]" />
+      </div>
 
-    <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
-      <header className="relative z-10 border-b border-border bg-background">
+      <header className="relative z-10 border-b border-zinc-900 bg-black/50 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href="/jobs" className="text-sm font-bold text-muted-foreground hover:text-foreground hover:underline transition-colors">
-            ← Back to jobs
+          <Link href={session ? "/dashboard/jobs" : "/jobs"} className="text-sm font-bold text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
+            ← {session ? "Dashboard" : "Back to jobs"}
           </Link>
-          <div className="flex items-center gap-2 text-xs font-bold">
-            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
+            <span className="bg-zinc-900 text-zinc-400 px-3 py-1 rounded-lg border border-zinc-800">
               {job.remoteScope}
             </span>
             {job.isFeatured && (
-              <span className="bg-primary text-primary-foreground px-3 py-1 rounded">
+              <span className="bg-blue-600 text-white px-3 py-1 rounded-lg shadow-lg shadow-blue-900/20">
                 Featured
               </span>
             )}
@@ -137,98 +147,141 @@ export default async function JobDetailPage({ params }: Params) {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        <section className="border border-border bg-background p-8 shadow-sm rounded-lg">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground font-bold">
-                {job.categoryName}
-              </p>
-              <h1 className="text-3xl font-bold text-foreground mb-1">
-                {job.title}
-              </h1>
-              <p className="text-sm text-foreground/80 font-medium">
-                {job.companyName || "Remote company"} • {job.location || "Remote"}
-              </p>
-              {job.companyWebsite && (
-                <p className="mt-1 text-xs">
-                  <a href={job.companyWebsite} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
-                    {job.companyWebsite}
-                  </a>
+      <main className="relative z-10 mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <section className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 p-8 sm:p-12 rounded-[2.5rem] shadow-2xl overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2" />
+
+          <div className="relative z-10">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-4">
+                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-500">
+                  {job.categoryName}
                 </p>
+                <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-[1.1]">
+                  {job.title}
+                </h1>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-lg font-medium text-zinc-400">
+                  <span className="text-white">{job.companyName || "Remote company"}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                  <span>{job.location || "Remote"}</span>
+                </div>
+                {job.companyWebsite && (
+                  <a href={job.companyWebsite} target="_blank" rel="noopener noreferrer" className="inline-block text-sm text-blue-500 hover:text-blue-400 transition-colors font-bold tracking-tight">
+                    {job.companyWebsite.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  </a>
+                )}
+              </div>
+              <div className="flex flex-col gap-3 min-w-[180px]">
+                <a
+                  href={session ? job.applyUrl : "/join"}
+                  target={session ? "_blank" : undefined}
+                  rel={session ? "noreferrer" : undefined}
+                  className="bg-white text-black h-14 px-8 text-sm font-black rounded-2xl hover:bg-zinc-200 transition-all shadow-xl active:scale-95 flex items-center justify-center uppercase tracking-widest"
+                >
+                  {session ? "Apply now" : "Join to apply"}
+                </a>
+                <CreateAlertButton />
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              <span className="bg-zinc-800/50 text-zinc-400 px-4 py-1.5 text-xs font-bold rounded-xl border border-zinc-700/50 uppercase tracking-wider">
+                {job.jobType.replace("_", " ")}
+              </span>
+              <span className="bg-zinc-800/50 text-zinc-400 px-4 py-1.5 text-xs font-bold rounded-xl border border-zinc-700/50 uppercase tracking-wider">
+                {job.remoteScope}
+              </span>
+              {job.salaryMin && (
+                <span className="bg-zinc-800/50 text-blue-400 px-4 py-1.5 text-xs font-bold rounded-xl border border-blue-900/30 uppercase tracking-wider">
+                  {job.salaryCurrency} {job.salaryMin}
+                  {job.salaryMax ? ` - ${job.salaryMax}` : ""} / yr
+                </span>
               )}
             </div>
-            <div className="flex gap-2">
-              <a
-                href={job.applyUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-primary text-primary-foreground px-5 py-2 text-xs font-bold rounded-md hover:bg-primary/90 transition-all shadow-sm flex items-center justify-center"
-              >
-                Apply now
-              </a>
-              <CreateAlertButton />
-            </div>
-          </div>
 
-          <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
-            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
-              {job.jobType.replace("_", " ")}
-            </span>
-            <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
-              {job.remoteScope}
-            </span>
-            {job.salaryMin && (
-              <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded">
-                {job.salaryCurrency} {job.salaryMin}
-                {job.salaryMax ? ` - ${job.salaryMax}` : ""} / yr
-              </span>
+            <div className="mt-12 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+
+            <div className="relative mt-12">
+              {!session ? (
+                <div className="space-y-8">
+                  <div className="relative group">
+                    <div
+                      className="prose prose-invert prose-zinc max-w-none text-zinc-400 line-clamp-[12] blur-[8px] select-none pointer-events-none opacity-40 transition-all"
+                      dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
+                    />
+                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-zinc-950 to-transparent" />
+                  </div>
+
+                  <div className="relative z-20 flex flex-col items-center justify-center py-12 px-6 rounded-3xl bg-zinc-900/80 border border-zinc-800 shadow-2xl text-center">
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-900/40">
+                      <Lock className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-3">Unlock the full job details</h2>
+                    <p className="text-zinc-400 max-w-sm mb-8 font-medium">
+                      Join the WorkIsWork community to see full job descriptions, salary data, and apply to vetted remote roles.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+                      <Link
+                        href="/join"
+                        className="flex-1 h-12 bg-white text-black font-black rounded-xl flex items-center justify-center hover:bg-zinc-200 transition-all uppercase tracking-widest text-xs"
+                      >
+                        Join WorkIsWork
+                      </Link>
+                      <Link
+                        href="/login?callbackUrl=/jobs"
+                        className="flex-1 h-12 bg-zinc-800 text-white font-black rounded-xl flex items-center justify-center hover:bg-zinc-700 transition-all uppercase tracking-widest text-xs border border-zinc-700"
+                      >
+                        Sign In
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="prose prose-invert prose-zinc max-w-none text-zinc-300 prose-headings:text-white prose-strong:text-white prose-a:text-blue-500 prose-a:font-bold hover:prose-a:underline"
+                  dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
+                />
+              )}
+            </div>
+
+            {job.tags && job.tags.length > 0 && (
+              <div className="mt-12 flex flex-wrap gap-2">
+                {job.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-zinc-800/80 text-zinc-500 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest rounded-xl hover:text-white transition-colors cursor-default border border-zinc-700/30"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
-
-          <div
-            className="prose prose-sm mt-6 max-w-none text-foreground prose-a:text-primary prose-a:underline hover:prose-a:text-primary/80"
-            dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
-          />
-
-          {job.tags && job.tags.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2 text-xs">
-              {job.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-secondary text-secondary-foreground px-3 py-1 font-bold rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
         </section>
 
         {similar.length > 0 && (
-          <section className="mt-8 border border-border bg-background p-6 shadow-sm rounded-lg">
-            <h2 className="mb-4 text-lg font-bold text-foreground">Similar jobs</h2>
+          <section className="mt-12 space-y-8">
+            <h2 className="text-2xl font-black text-white tracking-tight px-4">Similar Remote Opportunities</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {similar.map((item) => (
                 <Link
                   key={item.id}
                   href={`/jobs/${item.slug}`}
-                  className="block border border-border bg-background p-4 rounded-lg hover:bg-secondary/50 transition-all"
+                  className="group bg-zinc-900/30 backdrop-blur-sm border border-zinc-800 p-6 rounded-3xl hover:bg-zinc-900 transition-all hover:border-zinc-700 shadow-sm"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div className="min-w-0">
-                      <p className="text-base font-bold text-foreground mb-1">
+                      <h3 className="text-lg font-bold text-white mb-1 group-hover:text-blue-500 transition-colors">
                         {item.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground font-medium">
-                        {item.companyName || "Remote company"} •{" "}
+                      </h3>
+                      <p className="text-sm text-zinc-500 font-medium">
+                        {item.companyName || "Remote company"} <br />
                         {item.location || "Remote"}
                       </p>
                     </div>
-                    <div>
-                      <span className="inline-flex w-full items-center justify-center bg-secondary text-secondary-foreground px-4 py-2 text-xs font-bold rounded-md hover:bg-secondary/80 transition-all">
-                        View job →
-                      </span>
+                    <div className="pt-4 border-t border-zinc-800 flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-zinc-600 group-hover:text-zinc-400">
+                      <span>{item.postedAt ? new Date(item.postedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "Just now"}</span>
+                      <span>View →</span>
                     </div>
                   </div>
                 </Link>
@@ -240,3 +293,4 @@ export default async function JobDetailPage({ params }: Params) {
     </div>
   );
 }
+

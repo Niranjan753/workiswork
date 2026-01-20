@@ -47,11 +47,11 @@ export function Navbar() {
   }
 
   const navLinks = [
-    { name: "Remote Jobs", href: "/jobs", active: isJobs },
-    { name: "Blog", href: "/blog", active: isBlog },
-    { name: "Portfolio", href: "/portfolio", active: isPortfolio },
-    { name: "Join", href: "/join", active: isJoin },
-    { name: "Post a Job", href: "/hire", active: isHire },
+    { name: "Remote Jobs", href: session ? "/dashboard/jobs" : "/jobs", active: isJobs },
+    { name: "Blog", href: session ? "/dashboard/blog" : "/blog", active: isBlog },
+    { name: "Portfolio", href: session ? "/dashboard/portfolio" : "/portfolio", active: isPortfolio },
+    { name: "Join", href: session ? "/dashboard/join" : "/join", active: isJoin },
+    { name: "Post a Job", href: session ? "/dashboard/hire" : "/hire", active: isHire },
   ];
 
   return (

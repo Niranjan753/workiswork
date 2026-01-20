@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
-import { JobsBoard } from "../../components/jobs/jobs-board";
-import { JobsSearchBar } from "../../components/jobs/search-bar";
-import { CategoryFilters } from "../../components/jobs/category-filters";
 import { getSiteUrl, getOgImageUrl } from "../../lib/site-url";
 
 const siteUrl = getSiteUrl();
@@ -35,25 +31,6 @@ export const metadata: Metadata = {
 };
 
 export default function JobsPage() {
-  const categoryChips: { label: string; slug: string }[] = [
-    { label: "All Jobs", slug: "" },
-    { label: "Frontend Developer", slug: "frontend" },
-    { label: "Backend Developer", slug: "backend" },
-    { label: "Full Stack Developer", slug: "full-stack" },
-    { label: "Blockchain Developer", slug: "blockchain" },
-    { label: "Smart Contract Developer", slug: "smart-contract" },
-    { label: "Designer", slug: "design" },
-    { label: "Sales & Marketing", slug: "sales" },
-    { label: "Product Manager", slug: "product" },
-    { label: "Customer Support", slug: "customer-support" },
-    { label: "InfoSec Engineer", slug: "infosec" },
-    { label: "Management & Finance", slug: "finance" },
-    { label: "No-Code Developer", slug: "no-code" },
-    { label: "DevOps Engineer", slug: "devops" },
-    { label: "Community Manager", slug: "community-manager" },
-    { label: "Writer", slug: "writing" },
-    { label: "Non-Tech", slug: "non-tech" },
-  ];
 
   return (
     <div className="relative min-h-screen bg-[#0B0B0B] text-white selection:bg-blue-500/30">
@@ -64,7 +41,7 @@ export default function JobsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 pb-16 text-center px-4">
+      <section className="relative z-10 pb-16 text-center px-4 min-h-[60vh] flex flex-col justify-center">
         <div className="mx-auto max-w-5xl">
           <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             Built for the future
@@ -79,10 +56,10 @@ export default function JobsPage() {
 
           <div className="mt-8 flex flex-col items-center gap-3">
             <Link
-              href="#jobs"
+              href="/join"
               className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] mt-4 sm:mt-6 font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
             >
-              View Jobs
+              Get started for free
             </Link>
             <span className="text-[13px] text-[#8C8C8C] mt-2">
               TRUSTED BY 5,000+ COMPANIES WORLDWIDE
@@ -122,33 +99,8 @@ export default function JobsPage() {
             </form>
           </div>
         </div>
-
-        {/* Job Board Section */}
-        <section id="jobs" className="space-y-12">
-          <div className="space-y-10">
-            <div className="w-full max-w-3xl mx-auto px-4">
-              <Suspense fallback={null}>
-                <JobsSearchBar categories={categoryChips} />
-              </Suspense>
-            </div>
-
-            <div className="flex flex-col items-center gap-8">
-              <div className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em]">
-                Filter by category
-              </div>
-              <Suspense fallback={null}>
-                <CategoryFilters categories={categoryChips} />
-              </Suspense>
-            </div>
-          </div>
-
-          <div className="pt-8">
-            <Suspense fallback={<div className="text-center py-20 text-zinc-500 font-medium">Loading opportunities...</div>}>
-              <JobsBoard />
-            </Suspense>
-          </div>
-        </section>
       </main>
     </div>
   );
 }
+

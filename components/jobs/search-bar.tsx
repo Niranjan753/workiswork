@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { cn } from "../../lib/utils";
 import { Search } from "lucide-react";
 
@@ -84,12 +84,14 @@ export function JobsSearchBar({ categories }: Props) {
     };
   }, [q, matches]);
 
+  const pathname = usePathname();
+
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const params = new URLSearchParams();
     if (q) params.set("q", q);
     if (selectedCategory) params.set("category", selectedCategory);
-    router.push(`/jobs${params.toString() ? `?${params.toString()}` : ""}`);
+    router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ""}`);
     setOpen(false);
   }
 
@@ -109,13 +111,13 @@ export function JobsSearchBar({ categories }: Props) {
       onSubmit={onSubmit}
       className="relative w-full"
     >
-      <div className="relative flex items-center">
-        <Search className="absolute left-4 w-5 h-5 text-zinc-500" />
+      <div className="relative flex items-center group">
+        <Search className="absolute left-4 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
         <input
           type="text"
           name="q"
           placeholder="Search for jobs..."
-          className="h-14 w-full pl-12 pr-4 bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all font-sans text-base"
+          className="h-14 w-full pl-12 pr-4 bg-gray-50/50 border border-gray-200 rounded-2xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all font-sans text-base shadow-sm"
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
@@ -134,22 +136,22 @@ export function JobsSearchBar({ categories }: Props) {
 
       {open && (
         <div
-          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl bg-[#0B0B0B] border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
+          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]"
           onMouseDown={(e) => e.preventDefault()}
         >
           <div className="max-h-96 overflow-y-auto">
             {loading && (
-              <div className="px-4 py-4 text-sm text-zinc-500 text-center">
+              <div className="px-4 py-4 text-sm text-gray-400 text-center">
                 <div className="inline-block animate-pulse">Searching…</div>
               </div>
             )}
 
             {!loading && !q.trim() && matches.length > 0 && (
               <>
-                <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
+                <div className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
                   Quick categories
                 </div>
-                <ul className="divide-y divide-zinc-800">
+                <ul className="divide-y divide-gray-100">
                   {matches.map((cat) => {
                     const isActive = selectedCategory === cat.slug;
                     return (
@@ -158,8 +160,8 @@ export function JobsSearchBar({ categories }: Props) {
                           type="button"
                           onClick={() => selectCategory(cat)}
                           className={cn(
-                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors",
-                            isActive && "bg-blue-500/10 text-blue-500 font-bold",
+                            "flex w-full items-center justify-between px-4 py-3 text-left text-[15px] text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors",
+                            isActive && "bg-blue-50 text-blue-600 font-bold",
                           )}
                         >
                           <span>{cat.label}</span>
@@ -175,16 +177,16 @@ export function JobsSearchBar({ categories }: Props) {
               <>
                 {suggestions.titles.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
+                    <div className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
                       Suggested titles
                     </div>
-                    <ul className="divide-y divide-zinc-800">
+                    <ul className="divide-y divide-gray-100">
                       {suggestions.titles.map((title) => (
                         <li key={title}>
                           <button
                             type="button"
                             onClick={() => selectTerm(title)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-900 hover:text-white text-sm text-zinc-400 transition-colors"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 hover:text-blue-600 text-[15px] text-gray-600 transition-colors"
                           >
                             <span>{title}</span>
                           </button>
@@ -196,16 +198,16 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {suggestions.companies.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
+                    <div className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
                       Companies
                     </div>
-                    <ul className="divide-y divide-zinc-800">
+                    <ul className="divide-y divide-gray-100">
                       {suggestions.companies.map((comp) => (
                         <li key={comp}>
                           <button
                             type="button"
                             onClick={() => selectTerm(comp)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-900 hover:text-white text-sm text-zinc-400 transition-colors"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50 hover:text-blue-600 text-[15px] text-gray-600 transition-colors"
                           >
                             <span>{comp}</span>
                           </button>
@@ -217,10 +219,10 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {matches.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
+                    <div className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
                       Matching categories
                     </div>
-                    <ul className="divide-y divide-zinc-800">
+                    <ul className="divide-y divide-gray-100">
                       {matches.map((cat) => {
                         const isActive = selectedCategory === cat.slug;
                         return (
@@ -229,8 +231,8 @@ export function JobsSearchBar({ categories }: Props) {
                               type="button"
                               onClick={() => selectCategory(cat)}
                               className={cn(
-                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors",
-                                isActive && "bg-blue-500/10 text-blue-500 font-bold",
+                                "flex w-full items-center justify-between px-4 py-3 text-left text-[15px] text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors",
+                                isActive && "bg-blue-50 text-blue-600 font-bold",
                               )}
                             >
                               <span>{cat.label}</span>
@@ -245,7 +247,7 @@ export function JobsSearchBar({ categories }: Props) {
                 {suggestions.titles.length === 0 &&
                   suggestions.companies.length === 0 &&
                   matches.length === 0 && (
-                    <div className="px-4 py-8 text-sm text-zinc-500 text-center">
+                    <div className="px-4 py-8 text-sm text-gray-400 text-center font-medium">
                       No matches found
                     </div>
                   )}

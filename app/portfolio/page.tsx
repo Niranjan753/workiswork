@@ -102,7 +102,7 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      <section className="relative z-10 pb-16 text-center px-4">
+      <section className="relative z-10 pb-16 text-center px-4 min-h-[70vh] flex flex-col justify-center">
         <div className="mx-auto max-w-5xl">
           <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
             Portfolios from the
@@ -121,7 +121,7 @@ export default function PortfolioPage() {
               href="/join"
               className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
             >
-              Get featured
+              Join the community
             </Link>
             <span className="text-[13px] text-[#8C8C8C] mt-2 uppercase tracking-widest font-bold">
               Join the elite
@@ -129,67 +129,8 @@ export default function PortfolioPage() {
           </div>
         </div>
       </section>
-
-      <main className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-0">
-        <div className="space-y-4">
-          {PORTFOLIOS.map((profile) => (
-            <a
-              key={profile.id}
-              href={profile.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 transition-all hover:bg-zinc-800/80 group shadow-sm"
-              title={`Visit ${profile.name} website`}
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="min-w-0 flex-1 space-y-2">
-                  <h3 className="text-xl font-bold text-white leading-tight group-hover:text-blue-400 transition-colors">
-                    {profile.name}
-                  </h3>
-                  <p className="text-sm font-medium text-zinc-500">
-                    {profile.role} • {profile.location}
-                  </p>
-                  <p className="text-sm font-medium text-zinc-400">
-                    {profile.bio}
-                  </p>
-                  {profile.specialties.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {profile.specialties.map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-zinc-800 text-zinc-500 border border-transparent rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider group-hover:text-white group-hover:bg-zinc-700 transition-colors"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="flex flex-wrap items-center gap-4 pt-3 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                    {profile.github && (
-                      <span className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
-                        <Github className="w-3.5 h-3.5" />
-                        GitHub
-                      </span>
-                    )}
-                    {profile.twitter && (
-                      <span className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
-                        <Twitter className="w-3.5 h-3.5" />
-                        Twitter
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="shrink-0 w-full sm:w-auto">
-                  <span className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-white text-black text-sm font-bold rounded-xl hover:bg-zinc-200 transition-all shadow-lg active:scale-95">
-                    Visit site <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </main>
     </div>
   );
 }
+
 

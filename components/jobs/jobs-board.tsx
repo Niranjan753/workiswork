@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import * as React from "react";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
@@ -82,8 +82,11 @@ function buildQueryString(params: URLSearchParams) {
 export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const { data: session } = authClient.useSession();
+
+  const isDashboard = pathname.startsWith("/dashboard");
 
   const q = searchParams.get("q") ?? "";
   const activeCategories = searchParams.getAll("category").filter(Boolean);
@@ -203,7 +206,7 @@ export function JobsBoard() {
     }
 
     if (optimised) {
-      router.replace("/jobs");
+      router.replace(isDashboard ? "/dashboard/jobs" : "/jobs");
       return;
     }
 
@@ -318,7 +321,7 @@ export function JobsBoard() {
       }
 
       if (params.toString()) {
-        router.replace(`/jobs${buildQueryString(params)}`);
+        router.replace(`${isDashboard ? "/dashboard/jobs" : "/jobs"}${buildQueryString(params)}`);
       }
     } catch (error) {
       console.error("[Optimise] Error:", error);
@@ -327,15 +330,15 @@ export function JobsBoard() {
 
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
-      {/* Filters */}
-      <aside className="space-y-6 border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 text-sm text-zinc-400 shadow-sm h-fit">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+      {/* Filters Sidebar */}
+      <aside className="space-y-6 border border-gray-200 bg-white rounded-2xl p-6 text-sm text-gray-600 shadow-sm h-fit">
+        <div className="space-y-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
             I want to work remotely from...
           </p>
-          <div className="space-y-1">
+          <div className="space-y-2">
             {COUNTRIES.map((country) => (
-              <label key={country} className="flex cursor-pointer items-center gap-2">
+              <label key={country} className="flex cursor-pointer items-center gap-2 group">
                 <input
                   type="radio"
                   name="country"
@@ -344,14 +347,14 @@ export function JobsBoard() {
                   onChange={(e) =>
                     setLocation(e.target.checked ? country : "")
                   }
-                  className="h-3 w-3 accent-blue-500"
+                  className="h-4 w-4 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-xs text-zinc-400">{country}</span>
+                <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{country}</span>
               </label>
             ))}
             <button
               type="button"
-              className="mt-1 text-[11px] font-medium text-blue-500 cursor-pointer hover:underline"
+              className="mt-2 text-xs font-bold text-blue-600 cursor-pointer hover:text-blue-700 transition-colors"
               onClick={() => setLocation("")}
             >
               Clear location
@@ -359,30 +362,32 @@ export function JobsBoard() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        <div className="h-px bg-gray-100" />
+
+        <div className="space-y-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
             Employment types
           </p>
-          <div className="space-y-1">
+          <div className="space-y-2">
             {EMPLOYMENT_TYPES.map((type) => (
-              <label key={type.value} className="flex cursor-pointer items-center gap-2">
+              <label key={type.value} className="flex cursor-pointer items-center gap-2 group">
                 <input
                   type="checkbox"
                   value={type.value}
                   checked={jobTypes.includes(type.value)}
                   onChange={() => toggleJobType(type.value)}
-                  className="h-3 w-3 accent-blue-500"
+                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-xs capitalize text-zinc-400">{type.label}</span>
+                <span className="text-sm font-medium text-gray-600 capitalize group-hover:text-blue-600 transition-colors">{type.label}</span>
               </label>
             ))}
           </div>
         </div>
 
-        <div className="pt-2">
+        <div className="pt-4">
           <Link
-            href="/join"
-            className="block w-full text-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-500 transition-colors"
+            href={isDashboard ? "/dashboard/join" : "/join"}
+            className="block w-full text-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-[0.98]"
           >
             Join the community
           </Link>
@@ -391,158 +396,82 @@ export function JobsBoard() {
 
 
       <section className="space-y-4">
-        <div className="flex flex-col gap-4 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
+        <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative">
+            <div className="flex bg-gray-100 p-1 rounded-xl">
               <button
                 type="button"
                 onClick={() => setViewMode("jobs")}
                 className={cn(
-                  "px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer",
+                  "px-6 py-2 text-sm font-bold rounded-lg transition-all cursor-pointer",
                   viewMode === "jobs"
-                    ? "bg-blue-600 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-900"
                 )}
               >
                 Jobs
               </button>
-            </div>
-            <div className="relative">
               <button
                 type="button"
                 onClick={() => setViewMode("companies")}
                 className={cn(
-                  "px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer",
+                  "px-6 py-2 text-sm font-bold rounded-lg transition-all cursor-pointer",
                   viewMode === "companies"
-                    ? "bg-blue-600 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-900"
                 )}
               >
                 Companies
               </button>
             </div>
+
             {viewMode === "jobs" && (
               <>
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!session?.user) {
-                        setShowUnlockDialog(true);
-                      } else {
-                        router.push("/pricing");
-                      }
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-500 transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-blue-900/20"
-                  >
-                    <LockOpen className="w-4 h-4" />
-                    Unlock All Jobs
-                  </button>
-                </div>
-                <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
-                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
-                        Join to Unlock All Jobs
-                      </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
-                        Join WorkIsWork to access all job listings and unlock premium features.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="sm:justify-start">
-                      <Link
-                        href="/join"
-                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
-                        onClick={() => setShowUnlockDialog(false)}
-                      >
-                        Join Now
-                      </Link>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </>
-            )}
-            {viewMode === "jobs" && (
-              <>
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!session?.user) {
-                        setShowAlertDialog(true);
-                      } else {
-                        router.push("/alerts");
-                      }
-                    }}
-                    className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-bold hover:bg-zinc-800 cursor-pointer transition-all"
-                  >
-                    Create Job Alert
-                  </button>
-                </div>
-                <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
-                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
-                        Join to Create Job Alerts
-                      </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
-                        Join WorkIsWork to create personalized job alerts and get notified about new opportunities.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="sm:justify-start">
-                      <Link
-                        href="/join"
-                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
-                        onClick={() => setShowAlertDialog(false)}
-                      >
-                        Join Now
-                      </Link>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </>
-            )}
-            {viewMode === "jobs" && (
-              <>
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={handleOptimise}
-                    className={cn(
-                      "px-4 py-2 border rounded-xl cursor-pointer text-sm font-bold transition-all",
-                      optimised
-                        ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-900/20"
-                        : "bg-zinc-900/50 text-white border-zinc-800 hover:bg-zinc-800",
-                    )}
-                  >
-                    {optimised ? "Optimised ✓" : "Optimise"}
-                  </button>
-                </div>
-                <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
-                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
-                        Join to Optimise Your Job Search
-                      </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
-                        You can modify your preferences after joining to get personalized job recommendations.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="sm:justify-start">
-                      <Link
-                        href="/join"
-                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
-                        onClick={() => setShowJoinDialog(false)}
-                      >
-                        Join Now
-                      </Link>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!session?.user) {
+                      setShowUnlockDialog(true);
+                    } else {
+                      router.push("/dashboard/membership");
+                    }
+                  }}
+                  className="px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-blue-500/20"
+                >
+                  <LockOpen className="w-4 h-4" />
+                  Unlock All Jobs
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!session?.user) {
+                      setShowAlertDialog(true);
+                    } else {
+                      router.push("/dashboard/alerts");
+                    }
+                  }}
+                  className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:border-blue-500 hover:text-blue-600 cursor-pointer transition-all shadow-sm"
+                >
+                  Create Job Alert
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOptimise}
+                  className={cn(
+                    "px-5 py-2.5 border rounded-xl cursor-pointer text-sm font-bold transition-all shadow-sm",
+                    optimised
+                      ? "bg-blue-50 text-blue-600 border-blue-200"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:text-blue-600",
+                  )}
+                >
+                  {optimised ? "Optimised ✓" : "Optimise"}
+                </button>
               </>
             )}
           </div>
-          <p className="text-sm font-medium text-zinc-500">
+          <p className="text-sm font-bold text-gray-400 tabular-nums">
             {viewMode === "jobs"
               ? `${total.toLocaleString()} matching jobs`
               : `${totalCompanies.toLocaleString()} companies`
@@ -573,42 +502,53 @@ export function JobsBoard() {
                 return (
                   <Link
                     key={job.id}
-                    href={`/jobs/${job.slug}`}
+                    href={isDashboard ? `/dashboard/jobs/${job.slug}` : `/jobs/${job.slug}`}
                     className={cn(
-                      "block border rounded-2xl p-6 transition-all font-sans",
+                      "group block border rounded-3xl p-6 transition-all font-sans",
                       isNeonYellow && "bg-[#E1FF00] border-[#E1FF00] text-black shadow-[0_8px_30px_rgb(225,255,0,0.1)] hover:scale-[1.01]",
                       isNeonGreen && "bg-[#00FFA3] border-[#00FFA3] text-black shadow-[0_8px_30px_rgb(0,255,163,0.1)] hover:scale-[1.01]",
-                      !job.isFeatured && "bg-zinc-900/50 border-zinc-800 text-white shadow-sm hover:border-zinc-700 hover:shadow-md"
+                      !job.isFeatured && "bg-white border-gray-100 text-gray-900 shadow-sm hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 hover:scale-[1.005]"
                     )}
                   >
-                    <div className="flex flex-wrap items-start justify-between gap-6">
-                      <div className="min-w-0 flex-1 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-6">
+                      <div className="min-w-0 flex-1 space-y-4">
                         <div className="flex flex-wrap items-center gap-3">
                           <h3 className={cn(
-                            "text-xl font-bold leading-tight tracking-tight",
-                            job.isFeatured ? "text-black" : "text-white"
+                            "text-xl font-bold leading-tight tracking-tight group-hover:text-blue-600 transition-colors",
+                            job.isFeatured ? "text-black" : "text-gray-900"
                           )}>
                             {job.title}
                           </h3>
                           {job.isFeatured && (
-                            <span className="px-2 py-0.5 rounded-md bg-black/5 text-[10px] font-black uppercase tracking-[0.2em] text-black/40">
-                              Promoted
+                            <span className="px-2 py-0.5 rounded-md bg-black/5 text-[10px] font-black uppercase tracking-[0.2em] text-black/60">
+                              Featured
                             </span>
                           )}
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium">
-                          <span className={cn(
-                            job.isFeatured ? "text-black/80" : "text-zinc-400"
-                          )}>
-                            {job.companyName ?? "Remote company"}
-                          </span>
-                          <span className="w-1 h-1 rounded-full bg-zinc-700" />
-                          <span className={cn(
-                            job.isFeatured ? "text-black/60" : "text-zinc-500"
-                          )}>
-                            {job.location ?? "Remote"}
-                          </span>
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold">
+                          <div className="flex items-center gap-2">
+                            <div className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black",
+                              job.isFeatured ? "bg-black/5 text-black" : "bg-gray-100 text-gray-500"
+                            )}>
+                              {job.companyName?.[0] || 'R'}
+                            </div>
+                            <span className={cn(
+                              job.isFeatured ? "text-black/80" : "text-gray-700"
+                            )}>
+                              {job.companyName ?? "Remote company"}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            <span className={cn(
+                              job.isFeatured ? "text-black/60 font-bold" : "text-gray-400 font-medium"
+                            )}>
+                              {job.location ?? "Remote"}
+                            </span>
+                          </div>
                         </div>
 
                         {job.tags && job.tags.length > 0 && (
@@ -617,10 +557,10 @@ export function JobsBoard() {
                               <span
                                 key={tag}
                                 className={cn(
-                                  "rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-colors",
+                                  "rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-colors border",
                                   job.isFeatured
-                                    ? "bg-black/5 text-black/70 border border-black/5"
-                                    : "bg-zinc-800 text-zinc-500 border border-transparent hover:bg-zinc-700 hover:text-white"
+                                    ? "bg-black/5 text-black/70 border-black/10"
+                                    : "bg-gray-50 text-gray-500 border-gray-100 group-hover:border-blue-100 group-hover:text-blue-500"
                                 )}
                               >
                                 {tag}
@@ -632,16 +572,16 @@ export function JobsBoard() {
 
                       <div className="shrink-0 flex flex-col items-end gap-4">
                         <span className={cn(
-                          "text-xs font-bold font-mono px-2 py-1 rounded-md",
-                          job.isFeatured ? "bg-black/5 text-black/60" : "bg-zinc-800 text-zinc-500"
+                          "text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full",
+                          job.isFeatured ? "bg-black/5 text-black/40" : "bg-gray-50 text-gray-400"
                         )}>
                           {job.postedAt ? new Date(job.postedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "Just now"}
                         </span>
                         <div className={cn(
-                          "px-6 py-2.5 text-sm font-bold rounded-full transition-all border shadow-sm",
+                          "px-8 py-3 text-sm font-bold rounded-2xl transition-all border shadow-sm",
                           job.isFeatured
                             ? "bg-black text-white border-black hover:bg-zinc-900"
-                            : "bg-white border-zinc-200 text-black hover:bg-zinc-200"
+                            : "bg-white border-gray-200 text-gray-900 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600"
                         )}>
                           {job.isFeatured ? "Apply Now" : "View Details"}
                         </div>
@@ -654,23 +594,23 @@ export function JobsBoard() {
 
             {/* Pagination for jobs */}
             {!isLoading && total > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-zinc-800">
+              <div className="flex flex-wrap items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => {
                     if (jobsPage > 1) {
                       const params = new URLSearchParams(searchParams.toString());
                       params.set("jobsPage", String(jobsPage - 1));
-                      router.push(`/jobs?${params.toString()}`);
+                      router.push(`${pathname}?${params.toString()}`);
                     }
                   }}
                   disabled={jobsPage <= 1}
-                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
                 >
                   Previous
                 </button>
 
-                <span className="px-4 py-2 text-sm font-medium text-zinc-500">
+                <span className="text-xs font-black uppercase tracking-widest text-gray-400">
                   Page {jobsPage} of {jobsTotalPages}
                 </span>
 
@@ -680,11 +620,11 @@ export function JobsBoard() {
                     if (jobsPage < jobsTotalPages) {
                       const params = new URLSearchParams(searchParams.toString());
                       params.set("jobsPage", String(jobsPage + 1));
-                      router.push(`/jobs?${params.toString()}`);
+                      router.push(`${pathname}?${params.toString()}`);
                     }
                   }}
                   disabled={jobsPage >= jobsTotalPages}
-                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
                 >
                   Next
                 </button>
@@ -712,58 +652,29 @@ export function JobsBoard() {
               {companies.map((company) => (
                 <div
                   key={company.id}
-                  onClick={() => router.push(`/companies/${company.slug}`)}
-                  className="block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 transition-all hover:bg-zinc-800/80 cursor-pointer group shadow-sm"
+                  onClick={() => router.push(`${isDashboard ? "/dashboard/companies" : "/companies"}/${company.slug}`)}
+                  className="group block bg-white border border-gray-100 rounded-3xl p-6 transition-all hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 hover:scale-[1.005] cursor-pointer shadow-sm"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="min-w-0 flex-1 space-y-2">
-                      <h3 className="text-xl font-bold text-white leading-tight group-hover:text-blue-400 transition-colors">
-                        {company.name}
-                      </h3>
-                      {company.location && (
-                        <p className="text-sm font-medium text-zinc-400">
-                          {company.location}
-                        </p>
-                      )}
-                      {company.websiteUrl && (
-                        <a
-                          href={company.websiteUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-sm text-blue-500 hover:text-blue-400 hover:underline font-medium"
-                        >
-                          {company.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                        </a>
-                      )}
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {company.twitterUrl && (
-                          <a
-                            href={company.twitterUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-xs text-zinc-500 hover:text-zinc-300"
-                          >
-                            Twitter
-                          </a>
-                        )}
-                        {company.linkedinUrl && (
-                          <a
-                            href={company.linkedinUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-xs text-zinc-500 hover:text-zinc-300"
-                          >
-                            LinkedIn
-                          </a>
+                  <div className="flex flex-wrap items-center justify-between gap-6">
+                    <div className="min-w-0 flex-1 flex items-center gap-6">
+                      <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl font-black text-gray-300 group-hover:bg-blue-50 group-hover:border-blue-100 group-hover:text-blue-200 transition-all">
+                        {company.name[0]}
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
+                          {company.name}
+                        </h3>
+                        {company.location && (
+                          <div className="flex items-center gap-2 text-sm font-bold text-gray-400">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            {company.location}
+                          </div>
                         )}
                       </div>
                     </div>
                     <div className="shrink-0">
-                      <span className="inline-block px-4 py-2 bg-zinc-800 text-white text-sm font-bold rounded-xl hover:bg-zinc-700 transition-colors cursor-pointer border border-zinc-700">
-                        View company →
+                      <span className="inline-block px-8 py-3 bg-gray-50 text-gray-900 text-sm font-bold rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all border border-gray-200 group-hover:border-blue-600 shadow-sm">
+                        Browse Positions
                       </span>
                     </div>
                   </div>
@@ -780,7 +691,7 @@ export function JobsBoard() {
                     if (companiesPage > 1) {
                       const params = new URLSearchParams(searchParams.toString());
                       params.set("companiesPage", String(companiesPage - 1));
-                      router.push(`/jobs?${params.toString()}`);
+                      router.push(`${pathname}?${params.toString()}`);
                     }
                   }}
                   disabled={companiesPage <= 1}
@@ -799,7 +710,7 @@ export function JobsBoard() {
                     if (companiesPage < companiesTotalPages) {
                       const params = new URLSearchParams(searchParams.toString());
                       params.set("companiesPage", String(companiesPage + 1));
-                      router.push(`/jobs?${params.toString()}`);
+                      router.push(`${pathname}?${params.toString()}`);
                     }
                   }}
                   disabled={companiesPage >= companiesTotalPages}

@@ -18,7 +18,7 @@ export default function AdminPanelLayout({
       <Sidebar />
       <main
         className={cn(
-          "min-h-screen bg-white text-black transition-[margin-left] ease-in-out duration-300",
+          "min-h-screen bg-[#F8F9FA] text-black transition-[margin-left] ease-in-out duration-300",
           !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-64")
         )}
       >

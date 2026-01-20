@@ -86,7 +86,7 @@ export default function RootLayout({
         <meta property="twitter:image" content={ogImage} />
       </head>
       <body
-        className={`${Tusker.variable} font-sans antialiased bg-[#0B0B0B] text-black relative overflow-x-hidden`}
+        className={`${Tusker.variable} font-sans antialiased bg-[#0B0B0B] text-white relative overflow-x-hidden`}
       >
         <AppProviders>
           <ConditionalLayout>{children}</ConditionalLayout>

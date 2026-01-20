@@ -328,9 +328,9 @@ export function JobsBoard() {
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
       {/* Filters */}
-      <aside className="space-y-6 border border-border bg-background rounded-lg p-4 text-sm text-foreground shadow-sm h-fit">
+      <aside className="space-y-6 border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 text-sm text-zinc-400 shadow-sm h-fit">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             I want to work remotely from...
           </p>
           <div className="space-y-1">
@@ -344,14 +344,14 @@ export function JobsBoard() {
                   onChange={(e) =>
                     setLocation(e.target.checked ? country : "")
                   }
-                  className="h-3 w-3 accent-primary"
+                  className="h-3 w-3 accent-blue-500"
                 />
-                <span className="text-xs">{country}</span>
+                <span className="text-xs text-zinc-400">{country}</span>
               </label>
             ))}
             <button
               type="button"
-              className="mt-1 text-[11px] font-medium text-primary cursor-pointer hover:underline"
+              className="mt-1 text-[11px] font-medium text-blue-500 cursor-pointer hover:underline"
               onClick={() => setLocation("")}
             >
               Clear location
@@ -360,7 +360,7 @@ export function JobsBoard() {
         </div>
 
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             Employment types
           </p>
           <div className="space-y-1">
@@ -371,9 +371,9 @@ export function JobsBoard() {
                   value={type.value}
                   checked={jobTypes.includes(type.value)}
                   onChange={() => toggleJobType(type.value)}
-                  className="h-3 w-3 accent-primary"
+                  className="h-3 w-3 accent-blue-500"
                 />
-                <span className="text-xs capitalize">{type.label}</span>
+                <span className="text-xs capitalize text-zinc-400">{type.label}</span>
               </label>
             ))}
           </div>
@@ -382,26 +382,26 @@ export function JobsBoard() {
         <div className="pt-2">
           <Link
             href="/join"
-            className="block w-full text-center rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+            className="block w-full text-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-500 transition-colors"
           >
-            Join
+            Join the community
           </Link>
         </div>
       </aside>
 
 
       <section className="space-y-4">
-        <div className="flex flex-col gap-4 bg-background border border-border rounded-lg p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
+        <div className="flex flex-col gap-4 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setViewMode("jobs")}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
+                  "px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer",
                   viewMode === "jobs"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    ? "bg-blue-600 text-white"
+                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                 )}
               >
                 Jobs
@@ -412,10 +412,10 @@ export function JobsBoard() {
                 type="button"
                 onClick={() => setViewMode("companies")}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
+                  "px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer",
                   viewMode === "companies"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    ? "bg-blue-600 text-white"
+                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                 )}
               >
                 Companies
@@ -433,26 +433,26 @@ export function JobsBoard() {
                         router.push("/pricing");
                       }
                     }}
-                    className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-2"
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-500 transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-blue-900/20"
                   >
                     <LockOpen className="w-4 h-4" />
                     Unlock All Jobs
                   </button>
                 </div>
                 <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
-                  <DialogContent className="bg-background border border-border sm:rounded-lg">
+                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
                     <DialogHeader>
-                      <DialogTitle className="text-xl font-bold text-foreground">
+                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
                         Join to Unlock All Jobs
                       </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-muted-foreground pt-2">
+                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
                         Join WorkIsWork to access all job listings and unlock premium features.
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="sm:justify-start">
                       <Link
                         href="/join"
-                        className="px-6 py-2.5 rounded-md bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm"
+                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
                         onClick={() => setShowUnlockDialog(false)}
                       >
                         Join Now
@@ -474,25 +474,25 @@ export function JobsBoard() {
                         router.push("/alerts");
                       }
                     }}
-                    className="px-4 py-2 border border-border rounded-md text-foreground text-sm font-medium hover:bg-secondary cursor-pointer transition-colors"
+                    className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-bold hover:bg-zinc-800 cursor-pointer transition-all"
                   >
                     Create Job Alert
                   </button>
                 </div>
                 <Dialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
-                  <DialogContent className="bg-background border border-border sm:rounded-lg">
+                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
                     <DialogHeader>
-                      <DialogTitle className="text-xl font-bold text-foreground">
+                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
                         Join to Create Job Alerts
                       </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-muted-foreground pt-2">
+                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
                         Join WorkIsWork to create personalized job alerts and get notified about new opportunities.
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="sm:justify-start">
                       <Link
                         href="/join"
-                        className="px-6 py-2.5 rounded-md bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm"
+                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
                         onClick={() => setShowAlertDialog(false)}
                       >
                         Join Now
@@ -509,29 +509,29 @@ export function JobsBoard() {
                     type="button"
                     onClick={handleOptimise}
                     className={cn(
-                      "px-4 py-2 border border-border rounded-md cursor-pointer text-sm font-medium transition-colors",
+                      "px-4 py-2 border rounded-xl cursor-pointer text-sm font-bold transition-all",
                       optimised
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "bg-background text-foreground hover:bg-secondary transition-all",
+                        ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-900/20"
+                        : "bg-zinc-900/50 text-white border-zinc-800 hover:bg-zinc-800",
                     )}
                   >
                     {optimised ? "Optimised ✓" : "Optimise"}
                   </button>
                 </div>
                 <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
-                  <DialogContent className="bg-background border border-border sm:rounded-lg">
+                  <DialogContent className="bg-zinc-900 border border-zinc-800 sm:rounded-2xl shadow-2xl">
                     <DialogHeader>
-                      <DialogTitle className="text-xl font-bold text-foreground">
+                      <DialogTitle className="text-2xl font-bold text-white tracking-tight">
                         Join to Optimise Your Job Search
                       </DialogTitle>
-                      <DialogDescription className="text-sm font-medium text-muted-foreground pt-2">
+                      <DialogDescription className="text-sm font-medium text-zinc-400 pt-2">
                         You can modify your preferences after joining to get personalized job recommendations.
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="sm:justify-start">
                       <Link
                         href="/join"
-                        className="px-6 py-2.5 rounded-md bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm"
+                        className="px-8 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
                         onClick={() => setShowJoinDialog(false)}
                       >
                         Join Now
@@ -542,7 +542,7 @@ export function JobsBoard() {
               </>
             )}
           </div>
-          <p className="text-sm font-medium text-muted-foreground">
+          <p className="text-sm font-medium text-zinc-500">
             {viewMode === "jobs"
               ? `${total.toLocaleString()} matching jobs`
               : `${totalCompanies.toLocaleString()} companies`
@@ -554,14 +554,14 @@ export function JobsBoard() {
         {viewMode === "jobs" && (
           <>
             <div className="space-y-4">
-              {isLoading && <p className="px-3 py-4 text-sm font-medium text-muted-foreground">Loading jobs…</p>}
+              {isLoading && <p className="px-3 py-4 text-sm font-medium text-zinc-500">Loading jobs…</p>}
               {isError && (
-                <p className="px-3 py-4 text-sm font-medium text-red-600">
+                <p className="px-3 py-4 text-sm font-medium text-red-400">
                   Failed to load jobs. Please try again.
                 </p>
               )}
               {!isLoading && jobs.length === 0 && (
-                <p className="px-3 py-4 text-sm font-medium text-muted-foreground">
+                <p className="px-3 py-4 text-sm font-medium text-zinc-500">
                   No jobs match your filters yet.
                 </p>
               )}
@@ -578,7 +578,7 @@ export function JobsBoard() {
                       "block border rounded-2xl p-6 transition-all font-sans",
                       isNeonYellow && "bg-[#E1FF00] border-[#E1FF00] text-black shadow-[0_8px_30px_rgb(225,255,0,0.1)] hover:scale-[1.01]",
                       isNeonGreen && "bg-[#00FFA3] border-[#00FFA3] text-black shadow-[0_8px_30px_rgb(0,255,163,0.1)] hover:scale-[1.01]",
-                      !job.isFeatured && "bg-white border-zinc-100 text-black shadow-sm hover:border-zinc-300 hover:shadow-md"
+                      !job.isFeatured && "bg-zinc-900/50 border-zinc-800 text-white shadow-sm hover:border-zinc-700 hover:shadow-md"
                     )}
                   >
                     <div className="flex flex-wrap items-start justify-between gap-6">
@@ -586,7 +586,7 @@ export function JobsBoard() {
                         <div className="flex flex-wrap items-center gap-3">
                           <h3 className={cn(
                             "text-xl font-bold leading-tight tracking-tight",
-                            job.isFeatured ? "text-black" : "text-zinc-900"
+                            job.isFeatured ? "text-black" : "text-white"
                           )}>
                             {job.title}
                           </h3>
@@ -599,13 +599,13 @@ export function JobsBoard() {
 
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium">
                           <span className={cn(
-                            job.isFeatured ? "text-black/80" : "text-zinc-600"
+                            job.isFeatured ? "text-black/80" : "text-zinc-400"
                           )}>
                             {job.companyName ?? "Remote company"}
                           </span>
-                          <span className="w-1 h-1 rounded-full bg-zinc-300" />
+                          <span className="w-1 h-1 rounded-full bg-zinc-700" />
                           <span className={cn(
-                            job.isFeatured ? "text-black/60" : "text-zinc-400"
+                            job.isFeatured ? "text-black/60" : "text-zinc-500"
                           )}>
                             {job.location ?? "Remote"}
                           </span>
@@ -620,7 +620,7 @@ export function JobsBoard() {
                                   "rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-colors",
                                   job.isFeatured
                                     ? "bg-black/5 text-black/70 border border-black/5"
-                                    : "bg-zinc-100 text-zinc-500 border border-transparent hover:bg-zinc-200"
+                                    : "bg-zinc-800 text-zinc-500 border border-transparent hover:bg-zinc-700 hover:text-white"
                                 )}
                               >
                                 {tag}
@@ -633,7 +633,7 @@ export function JobsBoard() {
                       <div className="shrink-0 flex flex-col items-end gap-4">
                         <span className={cn(
                           "text-xs font-bold font-mono px-2 py-1 rounded-md",
-                          job.isFeatured ? "bg-black/5 text-black/60" : "bg-zinc-50 text-zinc-400"
+                          job.isFeatured ? "bg-black/5 text-black/60" : "bg-zinc-800 text-zinc-500"
                         )}>
                           {job.postedAt ? new Date(job.postedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "Just now"}
                         </span>
@@ -641,7 +641,7 @@ export function JobsBoard() {
                           "px-6 py-2.5 text-sm font-bold rounded-full transition-all border shadow-sm",
                           job.isFeatured
                             ? "bg-black text-white border-black hover:bg-zinc-900"
-                            : "bg-white border-zinc-200 text-zinc-900 hover:border-zinc-400 hover:bg-zinc-50"
+                            : "bg-white border-zinc-200 text-black hover:bg-zinc-200"
                         )}>
                           {job.isFeatured ? "Apply Now" : "View Details"}
                         </div>
@@ -654,7 +654,7 @@ export function JobsBoard() {
 
             {/* Pagination for jobs */}
             {!isLoading && total > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-border">
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-zinc-800">
                 <button
                   type="button"
                   onClick={() => {
@@ -665,12 +665,12 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={jobsPage <= 1}
-                  className="px-4 py-2 border border-border rounded-md bg-background text-foreground text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Previous
                 </button>
 
-                <span className="px-4 py-2 text-sm font-medium text-muted-foreground">
+                <span className="px-4 py-2 text-sm font-medium text-zinc-500">
                   Page {jobsPage} of {jobsTotalPages}
                 </span>
 
@@ -684,7 +684,7 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={jobsPage >= jobsTotalPages}
-                  className="px-4 py-2 border border-border rounded-md bg-background text-foreground text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>
@@ -697,14 +697,14 @@ export function JobsBoard() {
         {viewMode === "companies" && (
           <>
             <div className="space-y-4">
-              {isLoadingCompanies && <p className="px-3 py-4 text-sm font-medium text-muted-foreground">Loading companies…</p>}
+              {isLoadingCompanies && <p className="px-3 py-4 text-sm font-medium text-zinc-500">Loading companies…</p>}
               {isCompaniesError && (
-                <p className="px-3 py-4 text-sm font-medium text-red-600">
+                <p className="px-3 py-4 text-sm font-medium text-red-400">
                   Failed to load companies. Please try again.
                 </p>
               )}
               {!isLoadingCompanies && companies.length === 0 && (
-                <p className="px-3 py-4 text-sm font-medium text-muted-foreground">
+                <p className="px-3 py-4 text-sm font-medium text-zinc-500">
                   No companies found.
                 </p>
               )}
@@ -713,15 +713,15 @@ export function JobsBoard() {
                 <div
                   key={company.id}
                   onClick={() => router.push(`/companies/${company.slug}`)}
-                  className="block bg-background border border-border rounded-lg p-6 transition-all hover:bg-secondary/50 cursor-pointer"
+                  className="block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 transition-all hover:bg-zinc-800/80 cursor-pointer group shadow-sm"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="min-w-0 flex-1 space-y-2">
-                      <h3 className="text-lg font-bold text-foreground leading-tight">
+                      <h3 className="text-xl font-bold text-white leading-tight group-hover:text-blue-400 transition-colors">
                         {company.name}
                       </h3>
                       {company.location && (
-                        <p className="text-sm font-medium text-muted-foreground">
+                        <p className="text-sm font-medium text-zinc-400">
                           {company.location}
                         </p>
                       )}
@@ -731,7 +731,7 @@ export function JobsBoard() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-sm text-primary hover:underline font-medium"
+                          className="text-sm text-blue-500 hover:text-blue-400 hover:underline font-medium"
                         >
                           {company.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                         </a>
@@ -743,7 +743,7 @@ export function JobsBoard() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="text-xs text-muted-foreground hover:text-foreground"
+                            className="text-xs text-zinc-500 hover:text-zinc-300"
                           >
                             Twitter
                           </a>
@@ -754,7 +754,7 @@ export function JobsBoard() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="text-xs text-muted-foreground hover:text-foreground"
+                            className="text-xs text-zinc-500 hover:text-zinc-300"
                           >
                             LinkedIn
                           </a>
@@ -762,7 +762,7 @@ export function JobsBoard() {
                       </div>
                     </div>
                     <div className="shrink-0">
-                      <span className="inline-block px-4 py-2 bg-secondary text-secondary-foreground text-sm font-medium rounded-md hover:bg-secondary/80 transition-colors cursor-pointer">
+                      <span className="inline-block px-4 py-2 bg-zinc-800 text-white text-sm font-bold rounded-xl hover:bg-zinc-700 transition-colors cursor-pointer border border-zinc-700">
                         View company →
                       </span>
                     </div>
@@ -773,7 +773,7 @@ export function JobsBoard() {
 
             {/* Pagination for companies */}
             {!isLoadingCompanies && totalCompanies > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-border">
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-zinc-800">
                 <button
                   type="button"
                   onClick={() => {
@@ -784,12 +784,12 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={companiesPage <= 1}
-                  className="px-4 py-2 border border-border rounded-md bg-background text-foreground text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Previous
                 </button>
 
-                <span className="px-4 py-2 text-sm font-medium text-muted-foreground">
+                <span className="px-4 py-2 text-sm font-medium text-zinc-500">
                   Page {companiesPage} of {companiesTotalPages}
                 </span>
 
@@ -803,7 +803,7 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={companiesPage >= companiesTotalPages}
-                  className="px-4 py-2 border border-border rounded-md bg-background text-foreground text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>

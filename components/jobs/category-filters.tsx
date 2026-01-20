@@ -123,8 +123,8 @@ export function CategoryFilters({ categories }: Props) {
             className={cn(
               "px-4 py-1.5 text-xs font-bold transition-all rounded-full cursor-pointer flex items-center gap-2",
               isActive
-                ? "bg-primary text-white"
-                : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900",
+                ? "bg-[#2563EB] text-white"
+                : "bg-zinc-900/50 text-zinc-500 border border-zinc-800 hover:bg-zinc-800 hover:text-white",
             )}
           >
             <span>{label}</span>

@@ -95,32 +95,42 @@ const PORTFOLIOS: Portfolio[] = [
 
 export default function PortfolioPage() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      <section className="relative z-10 py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none text-foreground">
-              Portfolios from the{" "}
-              <span className="text-primary relative inline-block">
-                WorkIsWork
-              </span>{" "}
-              community
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed">
-              Browse a curated set of portfolios from people who build products, write, design, and ship remote work.
-            </p>
-            <p className="text-sm text-muted-foreground font-medium">
-              Want to be featured here?{" "}
-              <Link href="/join" className="underline text-foreground font-semibold hover:text-primary transition-colors">
-                Join WorkIsWork
-              </Link>
-              .
-            </p>
+    <div className="relative min-h-screen bg-[#0B0B0B] text-white selection:bg-blue-500/30">
+      {/* Background Gradients */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.1)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
+      </div>
+
+      <section className="relative z-10 pb-16 text-center px-4">
+        <div className="mx-auto max-w-5xl">
+          <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1] sm:text-[56px] md:text-[90px]">
+            Portfolios from the
+            <br />
+            <span className="text-[#FF5A1F]">WorkIsWork</span> community
+          </h1>
+
+          <p className="mt-6 text-[18px] sm:text-[24px] max-w-3xl mx-auto leading-[1.1] text-[#B6B6B6]">
+            Browse a curated set of portfolios from people who build products,
+            <br className="hidden sm:block" />
+            write, design, and ship remote work.
+          </p>
+
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <Link
+              href="/join"
+              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[22px] mt-6 font-medium cursor-pointer px-8 py-[8px] rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
+            >
+              Get featured
+            </Link>
+            <span className="text-[13px] text-[#8C8C8C] mt-2 uppercase tracking-widest font-bold">
+              Join the elite
+            </span>
           </div>
         </div>
       </section>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-0 sm:px-6 lg:px-8 bg-background">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-0">
         <div className="space-y-4">
           {PORTFOLIOS.map((profile) => (
             <a
@@ -128,18 +138,18 @@ export default function PortfolioPage() {
               href={profile.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="block bg-background border border-border rounded-lg p-6 transition-all hover:bg-secondary/50"
+              className="block bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 transition-all hover:bg-zinc-800/80 group shadow-sm"
               title={`Visit ${profile.name} website`}
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0 flex-1 space-y-2">
-                  <h3 className="text-lg font-bold text-foreground leading-tight">
+                  <h3 className="text-xl font-bold text-white leading-tight group-hover:text-blue-400 transition-colors">
                     {profile.name}
                   </h3>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-zinc-500">
                     {profile.role} • {profile.location}
                   </p>
-                  <p className="text-sm font-medium text-foreground/80">
+                  <p className="text-sm font-medium text-zinc-400">
                     {profile.bio}
                   </p>
                   {profile.specialties.length > 0 && (
@@ -147,31 +157,31 @@ export default function PortfolioPage() {
                       {profile.specialties.map((tag) => (
                         <span
                           key={tag}
-                          className="bg-secondary text-secondary-foreground rounded px-2 py-1 text-[11px] font-medium"
+                          className="bg-zinc-800 text-zinc-500 border border-transparent rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider group-hover:text-white group-hover:bg-zinc-700 transition-colors"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
                   )}
-                  <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-medium text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-4 pt-3 text-xs font-bold uppercase tracking-widest text-zinc-500">
                     {profile.github && (
-                      <span className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
-                        <Github className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
+                        <Github className="w-3.5 h-3.5" />
                         GitHub
                       </span>
                     )}
                     {profile.twitter && (
-                      <span className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
-                        <Twitter className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1.5 hover:text-white transition-colors">
+                        <Twitter className="w-3.5 h-3.5" />
                         Twitter
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="shrink-0">
-                  <span className="inline-block px-4 py-2 bg-secondary text-secondary-foreground text-sm font-medium rounded-md hover:bg-secondary/80 transition-colors cursor-pointer flex items-center gap-1">
-                    Visit site <ArrowUpRight className="w-4 h-4 ml-1" />
+                  <span className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-black text-sm font-bold rounded-xl hover:bg-zinc-200 transition-all shadow-lg active:scale-95">
+                    Visit site <ArrowUpRight className="w-4 h-4" />
                   </span>
                 </div>
               </div>

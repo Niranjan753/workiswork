@@ -110,12 +110,12 @@ export function JobsSearchBar({ categories }: Props) {
       className="relative w-full"
     >
       <div className="relative flex items-center">
-        <Search className="absolute left-4 w-5 h-5 text-zinc-400" />
+        <Search className="absolute left-4 w-5 h-5 text-zinc-500" />
         <input
           type="text"
           name="q"
           placeholder="Search for jobs..."
-          className="h-14 w-full pl-12 pr-4 bg-zinc-50 border border-zinc-200 rounded-xl text-black placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-sans text-base"
+          className="h-14 w-full pl-12 pr-4 bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all font-sans text-base"
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
@@ -134,22 +134,22 @@ export function JobsSearchBar({ categories }: Props) {
 
       {open && (
         <div
-          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl bg-white border border-zinc-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]"
+          className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl bg-[#0B0B0B] border border-zinc-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
           onMouseDown={(e) => e.preventDefault()}
         >
           <div className="max-h-96 overflow-y-auto">
             {loading && (
-              <div className="px-4 py-3 text-sm text-zinc-500">
-                Searching…
+              <div className="px-4 py-4 text-sm text-zinc-500 text-center">
+                <div className="inline-block animate-pulse">Searching…</div>
               </div>
             )}
 
             {!loading && !q.trim() && matches.length > 0 && (
               <>
-                <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
                   Quick categories
                 </div>
-                <ul className="divide-y divide-zinc-50">
+                <ul className="divide-y divide-zinc-800">
                   {matches.map((cat) => {
                     const isActive = selectedCategory === cat.slug;
                     return (
@@ -158,8 +158,8 @@ export function JobsSearchBar({ categories }: Props) {
                           type="button"
                           onClick={() => selectCategory(cat)}
                           className={cn(
-                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-700 hover:bg-zinc-50 hover:text-primary transition-colors",
-                            isActive && "bg-primary/5 text-primary font-bold",
+                            "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors",
+                            isActive && "bg-blue-500/10 text-blue-500 font-bold",
                           )}
                         >
                           <span>{cat.label}</span>
@@ -175,16 +175,16 @@ export function JobsSearchBar({ categories }: Props) {
               <>
                 {suggestions.titles.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
                       Suggested titles
                     </div>
-                    <ul className="divide-y divide-zinc-50">
+                    <ul className="divide-y divide-zinc-800">
                       {suggestions.titles.map((title) => (
                         <li key={title}>
                           <button
                             type="button"
                             onClick={() => selectTerm(title)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-50 hover:text-primary text-sm text-zinc-700 transition-colors"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-900 hover:text-white text-sm text-zinc-400 transition-colors"
                           >
                             <span>{title}</span>
                           </button>
@@ -196,16 +196,16 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {suggestions.companies.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
                       Companies
                     </div>
-                    <ul className="divide-y divide-zinc-50">
+                    <ul className="divide-y divide-zinc-800">
                       {suggestions.companies.map((comp) => (
                         <li key={comp}>
                           <button
                             type="button"
                             onClick={() => selectTerm(comp)}
-                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-50 hover:text-primary text-sm text-zinc-700 transition-colors"
+                            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-zinc-900 hover:text-white text-sm text-zinc-400 transition-colors"
                           >
                             <span>{comp}</span>
                           </button>
@@ -217,10 +217,10 @@ export function JobsSearchBar({ categories }: Props) {
 
                 {matches.length > 0 && (
                   <>
-                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-50/50 border-b border-zinc-100">
+                    <div className="px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest bg-zinc-900/50 border-b border-zinc-800">
                       Matching categories
                     </div>
-                    <ul className="divide-y divide-zinc-50">
+                    <ul className="divide-y divide-zinc-800">
                       {matches.map((cat) => {
                         const isActive = selectedCategory === cat.slug;
                         return (
@@ -229,8 +229,8 @@ export function JobsSearchBar({ categories }: Props) {
                               type="button"
                               onClick={() => selectCategory(cat)}
                               className={cn(
-                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-700 hover:bg-zinc-50 hover:text-primary transition-colors",
-                                isActive && "bg-primary/5 text-primary font-bold",
+                                "flex w-full items-center justify-between px-4 py-3 text-left text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors",
+                                isActive && "bg-blue-500/10 text-blue-500 font-bold",
                               )}
                             >
                               <span>{cat.label}</span>
@@ -245,7 +245,7 @@ export function JobsSearchBar({ categories }: Props) {
                 {suggestions.titles.length === 0 &&
                   suggestions.companies.length === 0 &&
                   matches.length === 0 && (
-                    <div className="px-4 py-8 text-sm text-zinc-400 text-center">
+                    <div className="px-4 py-8 text-sm text-zinc-500 text-center">
                       No matches found
                     </div>
                   )}

@@ -5,6 +5,8 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getSiteUrl, getOgImageUrl } from "../lib/site-url";
 import localFont from "next/font/local";
+import { ConditionalLayout } from "@/components/ConditionalLayout";
+
 
 const Tusker = localFont({
   src: "../public/fonts/tusker.otf",
@@ -84,12 +86,10 @@ export default function RootLayout({
         <meta property="twitter:image" content={ogImage} />
       </head>
       <body
-        className={`${Tusker.variable} font-sans antialiased bg-white text-black relative overflow-x-hidden`}
+        className={`${Tusker.variable} font-sans antialiased bg-[#0B0B0B] text-white relative overflow-x-hidden`}
       >
         <AppProviders>
-          <Navbar />
-          <div>{children}</div>
-          <Footer />
+          <ConditionalLayout>{children}</ConditionalLayout>
         </AppProviders>
       </body>
     </html>

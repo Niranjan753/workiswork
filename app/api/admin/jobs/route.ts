@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     // No authentication required - anyone can post a job
     const h = await headers();
     const session = await auth.api.getSession({ headers: h });
-    
+
     // Optional: Link to user if they're logged in, but not required
     let userId: string | null = null;
     if (session?.user?.id) {
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         .where(eq(users.id, session.user.id))
         .limit(1)
         .then((rows) => rows[0]);
-      
+
       if (userRow) {
         userId = userRow.id;
       }
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
     // Find or create company
     let company;
     let isNewCompany = false;
-    
+
     // If companyId is provided, use that company
     if (data.companyId) {
       company = await db
@@ -106,14 +106,14 @@ export async function POST(request: Request) {
         .where(eq(companies.id, data.companyId))
         .limit(1)
         .then((rows) => rows[0]);
-      
+
       if (!company) {
         return NextResponse.json(
           { error: `Company with ID ${data.companyId} not found` },
           { status: 400 }
         );
       }
-      
+
       // Update company name and website if provided
       if (data.companyName !== company.name || data.companyWebsite) {
         try {

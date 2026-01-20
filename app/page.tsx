@@ -23,8 +23,8 @@ export default function Home() {
                     <div className="mt-8 flex flex-col items-center gap-3">
                         <button
                             className="bg-[#2563EB] hover:bg-[#1D4ED8]
-                   text-white text-[20px] font-semibold cursor-pointer
-                   px-12 py-[14px] rounded-lg
+                   text-white text-[22px] mt-6 font-medium cursor-pointer
+                   px-8 py-[8px] rounded-2xl
                    transition-colors"
                         >
                             Start hiring for free

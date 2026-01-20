@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { getJoinQuestions } from "@/lib/join-questions";
-import type { JoinQuestion } from "@/lib/join-questions";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { GridBackground } from "@/components/GridBackground";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "workiswork_join_preferences";
@@ -15,9 +12,6 @@ const STORAGE_KEY = "workiswork_join_preferences";
 export function JoinWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const fromProfile = searchParams.get("from") === "profile";
-  const { data: session } = authClient.useSession();
-  const isSignedIn = !!session?.user;
   const [step, setStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [answers, setAnswers] = useState<string[][]>(() => []);
@@ -88,39 +82,9 @@ export function JoinWizard() {
 
   async function goNext() {
     if (isLast) {
-      if (isSignedIn) {
-        await savePreferencesToDatabase();
-        setPreferencesSaved(true);
-      } else {
-        router.push("/sign-up?callbackUrl=/jobs&from=join");
-      }
+      setPreferencesSaved(true);
     } else {
       setStep((s) => Math.min(s + 1, total - 1));
-    }
-  }
-
-  async function savePreferencesToDatabase() {
-    setIsSaving(true);
-    try {
-      const answersByQuestionId: Record<string, string[]> = {};
-      questions.forEach((q, idx) => {
-        answersByQuestionId[String(q.id)] = answers[idx] ?? [];
-      });
-      const payload = { answersByQuestionId, selectedCategory };
-
-      const res = await fetch("/api/user/preferences", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        setPreferencesSaved(true);
-      }
-    } catch (error) {
-      console.error("Failed to save preferences:", error);
-    } finally {
-      setIsSaving(false);
     }
   }
 
@@ -132,12 +96,7 @@ export function JoinWizard() {
 
   async function skipStep() {
     if (isLast) {
-      if (isSignedIn) {
-        await savePreferencesToDatabase();
-        setPreferencesSaved(true);
-      } else {
-        router.push("/sign-up?callbackUrl=/jobs&from=join");
-      }
+      setPreferencesSaved(true);
     } else {
       setStep((s) => Math.min(s + 1, total - 1));
     }
@@ -153,7 +112,7 @@ export function JoinWizard() {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   }, [answers, selectedCategory, questions]);
 
-  if (preferencesSaved && isSignedIn) {
+  if (preferencesSaved) {
     return (
       <div className="bg-white border border-gray-100 shadow-xl shadow-gray-200/50 rounded-[2.5rem] p-12 text-center space-y-8 animate-in fade-in zoom-in duration-500">
         <div className="flex justify-center">
@@ -162,21 +121,15 @@ export function JoinWizard() {
           </div>
         </div>
         <div className="space-y-4">
-          <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Preferences Updated!</h2>
+          <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Preferences Saved!</h2>
           <p className="text-xl font-medium text-gray-500 max-w-md mx-auto leading-relaxed">
             Your profile is now optimised. We&apos;ll use these details to show you the best remote opportunities.
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+        <div className="flex justify-center pt-6">
           <Link
-            href="/dashboard/portfolio"
+            href="/jobs"
             className="px-8 py-4 text-base font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-95"
-          >
-            Go to Portfolio
-          </Link>
-          <Link
-            href="/dashboard/jobs"
-            className="px-8 py-4 text-base font-bold bg-gray-900 text-white rounded-2xl hover:bg-black transition-all shadow-xl active:scale-95"
           >
             Browse Jobs
           </Link>
@@ -258,7 +211,7 @@ export function JoinWizard() {
               disabled={!canProceed || isSaving}
               className="w-full px-8 py-4 text-lg font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/25 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
             >
-              {isSaving ? "Saving..." : isLast ? "Save Preferences" : "Continue"}
+              {isLast ? "Save Preferences" : "Continue"}
             </button>
 
             <div className="flex items-center gap-8">

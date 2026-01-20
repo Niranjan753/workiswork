@@ -5,11 +5,6 @@ import { and, eq, ne } from "drizzle-orm";
 import { db } from "../../../db";
 import { categories, companies, jobs } from "../../../db/schema";
 import { getSiteUrl, getOgImageUrl } from "../../../lib/site-url";
-import { GridBackground } from "../../../components/GridBackground";
-import { CreateAlertButton } from "../../../components/jobs/create-alert-button";
-import { auth } from "../../../lib/auth";
-import { headers } from "next/headers";
-import { Lock } from "lucide-react";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -116,9 +111,6 @@ export async function generateMetadata({
 export default async function JobDetailPage({ params }: Params) {
   const resolved = await params;
   const { job, similar } = await getJob(resolved.slug);
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
 
   if (!job) return notFound();
 
@@ -131,8 +123,8 @@ export default async function JobDetailPage({ params }: Params) {
 
       <header className="relative z-10 border-b border-zinc-900 bg-black/50 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href={session ? "/dashboard/jobs" : "/jobs"} className="text-sm font-bold text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
-            ← {session ? "Dashboard" : "Back to jobs"}
+          <Link href="/jobs" className="text-sm font-bold text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
+            ← Back to jobs
           </Link>
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
             <span className="bg-zinc-900 text-zinc-400 px-3 py-1 rounded-lg border border-zinc-800">
@@ -173,14 +165,13 @@ export default async function JobDetailPage({ params }: Params) {
               </div>
               <div className="flex flex-col gap-3 min-w-[180px]">
                 <a
-                  href={session ? job.applyUrl : "/join"}
-                  target={session ? "_blank" : undefined}
-                  rel={session ? "noreferrer" : undefined}
-                  className="bg-white text-black h-14 px-8 text-sm font-black rounded-2xl hover:bg-zinc-200 transition-all shadow-xl active:scale-95 flex items-center justify-center uppercase tracking-widest"
+                  href={job.applyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white text-black h-14 px-8 text-sm font-black rounded-2xl hover:bg-zinc-200 transition-all shadow-xl active:scale-95 flex items-center justify-center uppercase tracking-widest text-center"
                 >
-                  {session ? "Apply now" : "Join to apply"}
+                  Apply now
                 </a>
-                <CreateAlertButton />
               </div>
             </div>
 
@@ -202,46 +193,10 @@ export default async function JobDetailPage({ params }: Params) {
             <div className="mt-12 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
 
             <div className="relative mt-12">
-              {!session ? (
-                <div className="space-y-8">
-                  <div className="relative group">
-                    <div
-                      className="prose prose-invert prose-zinc max-w-none text-zinc-400 line-clamp-[12] blur-[8px] select-none pointer-events-none opacity-40 transition-all"
-                      dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
-                    />
-                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-zinc-950 to-transparent" />
-                  </div>
-
-                  <div className="relative z-20 flex flex-col items-center justify-center py-12 px-6 rounded-3xl bg-zinc-900/80 border border-zinc-800 shadow-2xl text-center">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-900/40">
-                      <Lock className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-white mb-3">Unlock the full job details</h2>
-                    <p className="text-zinc-400 max-w-sm mb-8 font-medium">
-                      Join the WorkIsWork community to see full job descriptions, salary data, and apply to vetted remote roles.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-                      <Link
-                        href="/join"
-                        className="flex-1 h-12 bg-white text-black font-black rounded-xl flex items-center justify-center hover:bg-zinc-200 transition-all uppercase tracking-widest text-xs"
-                      >
-                        Join WorkIsWork
-                      </Link>
-                      <Link
-                        href="/login?callbackUrl=/jobs"
-                        className="flex-1 h-12 bg-zinc-800 text-white font-black rounded-xl flex items-center justify-center hover:bg-zinc-700 transition-all uppercase tracking-widest text-xs border border-zinc-700"
-                      >
-                        Sign In
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className="prose prose-invert prose-zinc max-w-none text-zinc-300 prose-headings:text-white prose-strong:text-white prose-a:text-blue-500 prose-a:font-bold hover:prose-a:underline"
-                  dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
-                />
-              )}
+              <div
+                className="prose prose-invert prose-zinc max-w-none text-zinc-300 prose-headings:text-white prose-strong:text-white prose-a:text-blue-500 prose-a:font-bold hover:prose-a:underline"
+                dangerouslySetInnerHTML={{ __html: job.descriptionHtml }}
+              />
             </div>
 
             {job.tags && job.tags.length > 0 && (
@@ -293,4 +248,3 @@ export default async function JobDetailPage({ params }: Params) {
     </div>
   );
 }
-

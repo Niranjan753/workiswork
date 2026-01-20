@@ -7,7 +7,6 @@ import { companies, jobs, categories } from "@/db/schema";
 import { GridBackground } from "@/components/GridBackground";
 import { getSiteUrl, getOgImageUrl } from "@/lib/site-url";
 import { ExternalLink, MapPin, Globe, Calendar, Lock } from "lucide-react";
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export const runtime = "nodejs";

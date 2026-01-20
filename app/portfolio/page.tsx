@@ -1,136 +1,47 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { GridBackground } from "@/components/GridBackground";
-import { getSiteUrl, getOgImageUrl } from "@/lib/site-url";
-import { ArrowUpRight, Github, Twitter } from "lucide-react";
 
-const siteUrl = getSiteUrl();
-const ogImage = getOgImageUrl();
+export default function Home() {
+    return (
+        <div>
+            <section className="bg-[#0B0B0B] text-white flex  justify-center min-h-screen px-6">
+                <div className="max-w-[720px] text-center">
 
-export const metadata: Metadata = {
-  title: "Portfolio – WorkIsWork",
-  description: "Discover standout portfolios from talented people in the WorkIsWork community.",
-  openGraph: {
-    type: "website",
-    url: `${siteUrl}/portfolio`,
-    title: "Portfolio – WorkIsWork",
-    description: "Discover standout portfolios from talented people in the WorkIsWork community.",
-    images: [
-      {
-        url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: "WorkIsWork - Portfolio",
-      },
-      {
-        url: "https://berlified.xyz/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "berlified.xyz",
-      },
-      {
-        url: "https://pocketsflow.com/og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "pocketsflow.com",
-      }
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Portfolio – WorkIsWork",
-    description: "Discover standout portfolios from talented people in the WorkIsWork community.",
-    images: [
-      ogImage,
-      "https://berlified.xyz/og-image.png",
-      "https://pocketsflow.com/og.jpg"
-    ],
-  },
-};
+                    {/* Headline */}
+                    <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1]
+                   sm:text-[56px] md:text-[90px]">
+                        Built for the future
+                        <br />
+                        of <span className="text-[#FF5A1F]">remote work</span>
+                    </h1>
 
-type Portfolio = {
-  id: number;
-  name: string;
-  role: string;
-  location: string;
-  avatarInitials: string;
-  avatarUrl?: string;
-  bio: string;
-  specialties: string[];
-  website?: string;
-  twitter?: string;
-  github?: string;
-  metaImageUrl?: string;
-};
+                    {/* Description */}
+                    <p className="mt-6 text-[18px] sm:text-[24px] leading-[1.1] text-[#B6B6B6]">
+                        Best place for companies to hire real talent
+                        <br />
+                        from around the world & find remote jobs.
+                    </p>
 
-const PORTFOLIOS: Portfolio[] = [
-  {
-    id: 1,
-    name: "Berlified",
-    role: "Web Platform, Creator Tools",
-    location: "Remote · Berlin",
-    avatarInitials: "BF",
-    bio: "Product, platform and creative tech — current at berlified.xyz, building digital storytelling tools.",
-    specialties: ["Next.js", "Storytelling", "Experimental UX"],
-    website: "https://berlified.xyz",
-    metaImageUrl: "https://berlified.xyz/og-image.png",
-    twitter: "https://twitter.com/berlified",
-  },
-  {
-    id: 2,
-    name: "Pocketsflow",
-    role: "Indie Founder",
-    location: "Remote · UK",
-    avatarInitials: "PF",
-    bio: "I’m building Pocketsflow — simple, set-and-forget business analytics for indie makers.",
-    specialties: ["Product", "Analytics", "Indie SaaS"],
-    website: "https://pocketsflow.com",
-    metaImageUrl: "https://pocketsflow.com/og.jpg",
-    twitter: "https://twitter.com/pocketsflow",
-    github: "https://github.com/pocketsflow",
-  }
-];
+                    {/* CTA */}
+                    <div className="mt-8 flex flex-col items-center gap-3">
+                        <Link
+                            href="/hire"
+                            className="bg-[#2563EB] hover:bg-[#1D4ED8]
+                   text-white text-[22px] mt-6 font-medium cursor-pointer
+                   px-8 py-[8px] rounded-2xl
+                   transition-colors"
+                        >
+                            Start hiring for free
+                        </Link>
 
-export default function PortfolioPage() {
-  return (
-    <div className="relative min-h-screen bg-[#0B0B0B] text-white selection:bg-blue-500/30">
-      {/* Background Gradients */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.1)_0%,transparent_70%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
-      </div>
+                        <span className="text-[13px] text-[#8C8C8C]">
+                            No subscription required
+                        </span>
+                    </div>
 
-      <section className="relative z-10 pb-16 text-center px-4 min-h-[70vh] flex flex-col justify-center">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="font-semibold tracking-tighter mt-12 sm:mt-16 text-[36px] leading-[1.1] sm:text-[56px] md:text-[80px] lg:text-[90px]">
-            Portfolios from the
-            <br />
-            <span className="text-[#FF5A1F]">WorkIsWork</span> community
-          </h1>
+                </div>
+            </section>
 
-          <p className="mt-6 text-[16px] sm:text-[22px] md:text-[24px] max-w-3xl mx-auto leading-[1.2] text-[#B6B6B6] px-4">
-            Browse a curated set of portfolios from people who build products,
-            <br className="hidden sm:block" />
-            write, design, and ship remote work.
-          </p>
 
-          <div className="mt-6 sm:mt-10 flex flex-col items-center gap-3">
-            <Link
-              href="/join"
-              className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[18px] sm:text-[22px] font-medium cursor-pointer px-8 py-3 rounded-2xl transition-colors shadow-lg shadow-blue-900/20"
-            >
-              Join the community
-            </Link>
-            <span className="text-[13px] text-[#8C8C8C] mt-2 uppercase tracking-widest font-bold">
-              Join the elite
-            </span>
-          </div>
         </div>
-      </section>
-    </div>
-  );
+    )
 }
-
-

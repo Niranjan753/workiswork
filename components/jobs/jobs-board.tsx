@@ -1,21 +1,11 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import * as React from "react";
-import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
 import { LockOpen } from "lucide-react";
-import { authClient } from "../../lib/auth-client";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
 
 type Job = {
   id: number;
@@ -83,10 +73,6 @@ export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const queryClient = useQueryClient();
-  const { data: session } = authClient.useSession();
-
-  const isDashboard = pathname.startsWith("/dashboard");
 
   const q = searchParams.get("q") ?? "";
   const activeCategories = searchParams.getAll("category").filter(Boolean);
@@ -101,9 +87,6 @@ export function JobsBoard() {
     searchParams.getAll("job_type"),
   );
   const [optimised, setOptimised] = React.useState(isOptimisedFromUrl);
-  const [showJoinDialog, setShowJoinDialog] = React.useState(false);
-  const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
-  const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [viewMode, setViewMode] = React.useState<"jobs" | "companies">("jobs");
 
   React.useEffect(() => {
@@ -199,133 +182,8 @@ export function JobsBoard() {
     );
   }
 
-  async function handleOptimise() {
-    if (!session?.user) {
-      setShowJoinDialog(true);
-      return;
-    }
-
-    if (optimised) {
-      router.replace(isDashboard ? "/dashboard/jobs" : "/jobs");
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/user/preferences");
-      if (!res.ok) return;
-      const json = await res.json();
-      const prefs = json.preferences as
-        | { answersByQuestionId?: Record<string, string[]>; selectedCategory?: string }
-        | null;
-      if (!prefs || !prefs.answersByQuestionId) return;
-
-      const answers = prefs.answersByQuestionId;
-      const categoryAnswers = answers["0"] ?? [];
-      const roleAnswers = answers["1"] ?? [];
-      const skillAnswers = answers["2"] ?? [];
-      const jobTypeAnswers = answers["3"] ?? [];
-      const remoteScopeAnswers = answers["4"] ?? [];
-      const salaryAnswers = answers["5"] ?? [];
-      const locationAnswers = answers["6"] ?? [];
-
-      const categoryLabel = prefs.selectedCategory || categoryAnswers[0];
-
-      const categorySlugMap: Record<string, string> = {
-        "Software Development": "software-development",
-        "Customer Service": "customer-support",
-        "Design": "design",
-        "Marketing": "marketing",
-        "Sales / Business": "sales",
-        "Product": "product",
-        "Project Management": "project",
-        "AI / ML": "ai-ml",
-        "Data Analysis": "data-analysis",
-        "Devops / Sysadmin": "devops",
-        "Finance": "finance",
-        "Human Resources": "human-resources",
-        "QA": "qa",
-        "Writing": "writing",
-        "Legal": "legal",
-        "Medical": "medical",
-        "Education": "education",
-        "All Others": "all-others",
-      };
-
-      const jobTypeMap: Record<string, string> = {
-        "Full-time": "full_time",
-        "Part-time": "part_time",
-        "Freelance": "freelance",
-        "Contract": "contract",
-        "Internship": "internship",
-      };
-
-      const remoteScopeMap: Record<string, string> = {
-        "Worldwide / Any": "worldwide",
-        "North America (US, Canada, Mexico)": "north_america",
-        "Europe": "europe",
-        "Latin America": "latam",
-        "Asia-Pacific": "asia",
-      };
-
-      const params = new URLSearchParams();
-      params.set("optimised", "true");
-
-      if (categoryLabel && categorySlugMap[categoryLabel]) {
-        params.append("category", categorySlugMap[categoryLabel]);
-      }
-
-      const searchTerms = [...roleAnswers, ...skillAnswers].join(" ").trim();
-      if (searchTerms) {
-        params.set("q", searchTerms);
-      }
-
-      if (jobTypeAnswers.length > 0) {
-        const jobTypes = jobTypeAnswers
-          .map((jt) => jobTypeMap[jt])
-          .filter(Boolean);
-        if (jobTypes.length > 0) {
-          jobTypes.forEach((jt) => params.append("job_type", jt));
-        }
-      }
-
-      if (remoteScopeAnswers.length > 0) {
-        const remoteScope = remoteScopeMap[remoteScopeAnswers[0]];
-        if (remoteScope) {
-          params.set("remote_scope", remoteScope);
-        }
-      }
-
-      if (locationAnswers.length > 0) {
-        const location = locationAnswers[0];
-        if (location && location !== "Other / Not Listed") {
-          params.set("location", location);
-        }
-      }
-
-      if (salaryAnswers.length > 0) {
-        const salaryRange = salaryAnswers[0];
-        if (salaryRange && salaryRange !== "Flexible / Open" && salaryRange !== "Prefer not to say") {
-          const salaryMap: Record<string, number> = {
-            "$50k–$70k": 50000,
-            "$70k–$90k": 70000,
-            "$90k–$110k": 90000,
-            "$110k–$130k": 110000,
-            "$130k–$150k": 130000,
-            "$150k+": 150000,
-          };
-          const minSalary = salaryMap[salaryRange];
-          if (minSalary) {
-            params.set("min_salary", String(minSalary));
-          }
-        }
-      }
-
-      if (params.toString()) {
-        router.replace(`${isDashboard ? "/dashboard/jobs" : "/jobs"}${buildQueryString(params)}`);
-      }
-    } catch (error) {
-      console.error("[Optimise] Error:", error);
-    }
+  function handleOptimise() {
+    router.push("/join");
   }
 
   return (
@@ -386,7 +244,7 @@ export function JobsBoard() {
 
         <div className="pt-4">
           <Link
-            href={isDashboard ? "/dashboard/join" : "/join"}
+            href="/join"
             className="block w-full text-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-[0.98]"
           >
             Join the community
@@ -429,31 +287,11 @@ export function JobsBoard() {
               <>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!session?.user) {
-                      setShowUnlockDialog(true);
-                    } else {
-                      router.push("/dashboard/membership");
-                    }
-                  }}
+                  onClick={() => router.push("/join")}
                   className="px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-blue-500/20"
                 >
                   <LockOpen className="w-4 h-4" />
                   Unlock All Jobs
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!session?.user) {
-                      setShowAlertDialog(true);
-                    } else {
-                      router.push("/dashboard/alerts");
-                    }
-                  }}
-                  className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:border-blue-500 hover:text-blue-600 cursor-pointer transition-all shadow-sm"
-                >
-                  Create Job Alert
                 </button>
 
                 <button
@@ -502,7 +340,7 @@ export function JobsBoard() {
                 return (
                   <Link
                     key={job.id}
-                    href={isDashboard ? `/dashboard/jobs/${job.slug}` : `/jobs/${job.slug}`}
+                    href={`/jobs/${job.slug}`}
                     className={cn(
                       "group block border rounded-3xl p-6 transition-all font-sans",
                       isNeonYellow && "bg-[#E1FF00] border-[#E1FF00] text-black shadow-[0_8px_30px_rgb(225,255,0,0.1)] hover:scale-[1.01]",
@@ -652,7 +490,7 @@ export function JobsBoard() {
               {companies.map((company) => (
                 <div
                   key={company.id}
-                  onClick={() => router.push(`${isDashboard ? "/dashboard/companies" : "/companies"}/${company.slug}`)}
+                  onClick={() => router.push(`/companies/${company.slug}`)}
                   className="group block bg-white border border-gray-100 rounded-3xl p-6 transition-all hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 hover:scale-[1.005] cursor-pointer shadow-sm"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-6">
@@ -684,7 +522,7 @@ export function JobsBoard() {
 
             {/* Pagination for companies */}
             {!isLoadingCompanies && totalCompanies > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-6 pt-6 border-t border-zinc-800">
+              <div className="flex flex-wrap items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => {
@@ -695,12 +533,12 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={companiesPage <= 1}
-                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
                 >
                   Previous
                 </button>
 
-                <span className="px-4 py-2 text-sm font-medium text-zinc-500">
+                <span className="text-xs font-black uppercase tracking-widest text-gray-400">
                   Page {companiesPage} of {companiesTotalPages}
                 </span>
 
@@ -714,7 +552,7 @@ export function JobsBoard() {
                     }
                   }}
                   disabled={companiesPage >= companiesTotalPages}
-                  className="px-4 py-2 border border-zinc-800 rounded-xl bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
                 >
                   Next
                 </button>
@@ -727,4 +565,3 @@ export function JobsBoard() {
     </div>
   );
 }
-

@@ -35,13 +35,13 @@ export function Menu({ isOpen }: MenuProps) {
   }
 
   return (
-    <ScrollArea className="[&>div>div[style]]:!block">
+    <ScrollArea className="flex-1 [&>div>div[style]]:!block">
       <nav className="mt-8 h-full w-full">
-        <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
+        <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-2 px-3">
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="text-sm font-medium text-[#B6B6B6] px-4 pb-2 max-w-[248px] truncate">
+                <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest px-4 pb-3 max-w-[248px] truncate">
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (
@@ -49,7 +49,7 @@ export function Menu({ isOpen }: MenuProps) {
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger className="w-full">
                       <div className="w-full flex justify-center items-center">
-                        <Ellipsis className="h-5 w-5" />
+                        <Ellipsis className="h-5 w-5 text-zinc-500" />
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="right">
@@ -68,18 +68,12 @@ export function Menu({ isOpen }: MenuProps) {
                         <Tooltip delayDuration={100}>
                           <TooltipTrigger asChild>
                             <Button
-                              variant={
-                                (active === undefined &&
-                                  pathname.startsWith(href)) ||
-                                  active
-                                  ? "secondary"
-                                  : "ghost"
-                              }
+                              variant="ghost"
                               className={cn(
-                                "w-full justify-start h-10 mb-1 text-white hover:bg-zinc-800",
+                                "w-full justify-start h-11 mb-1 transition-all rounded-xl",
                                 (active === undefined && pathname.startsWith(href)) || active
-                                  ? "bg-zinc-800"
-                                  : ""
+                                  ? "bg-[#2563EB]/10 text-[#2563EB] font-bold"
+                                  : "text-zinc-400 hover:bg-zinc-50 hover:text-zinc-500"
                               )}
                               asChild
                             >
@@ -87,7 +81,7 @@ export function Menu({ isOpen }: MenuProps) {
                                 <span
                                   className={cn(isOpen === false ? "" : "mr-4")}
                                 >
-                                  <Icon size={18} />
+                                  <Icon size={20} />
                                 </span>
                                 <p
                                   className={cn(
@@ -134,15 +128,15 @@ export function Menu({ isOpen }: MenuProps) {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={handleSignOut}
-                    variant="outline"
-                    className="w-full justify-center h-10 mt-5 text-white border-zinc-800 hover:bg-zinc-800"
+                    variant="ghost"
+                    className="w-full justify-start h-11 mb-6 text-zinc-400 hover:bg-white/5 hover:text-zinc-500 transition-all hover:bg-zinc-50 cursor-pointer rounded-xl"
                   >
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      <LogOut size={18} />
+                      <LogOut size={20} />
                     </span>
                     <p
                       className={cn(
-                        "whitespace-nowrap",
+                        "whitespace-nowrap font-medium",
                         isOpen === false ? "opacity-0 hidden" : "opacity-100"
                       )}
                     >
@@ -151,7 +145,7 @@ export function Menu({ isOpen }: MenuProps) {
                   </Button>
                 </TooltipTrigger>
                 {isOpen === false && (
-                  <TooltipContent side="right">Sign out</TooltipContent>
+                  <TooltipContent side="right" className="cursor-pointer">Sign out</TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>

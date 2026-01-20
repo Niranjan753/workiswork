@@ -26,28 +26,28 @@ function SignInForm() {
   const [role, setRole] = useState<Role>(roleParam || "user");
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-[#0B0B0B]">
       {/* Sign In Form */}
-      <div className="w-full bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
+      <div className="w-full text-white flex items-center justify-center p-8 overflow-y-auto">
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-2">Welcome to WorkIsWork</h1>
-            <p className="text-black/80 text-sm font-medium">
-              Sign in to access your account
+            <h1 className="text-4xl font-bold tracking-tighter mb-3">Welcome Back</h1>
+            <p className="text-[#B6B6B6] text-lg">
+              Sign in to your WorkIsWork account
             </p>
           </div>
 
           {/* Role Selection */}
-          <div className="space-y-2">
-            <Label className="text-sm text-black font-bold">I am a...</Label>
-            <div className="flex gap-2">
+          <div className="space-y-3">
+            <Label className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">I am a...</Label>
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${role === "user"
-                    ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-white text-black hover:bg-yellow-100"
+                className={`flex-1 cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${role === "user"
+                  ? "bg-white text-black border-white"
+                  : "bg-transparent text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"
                   }`}
               >
                 Job Seeker
@@ -55,9 +55,9 @@ function SignInForm() {
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${role === "employer"
-                    ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-white text-black hover:bg-yellow-100"
+                className={`flex-1 cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${role === "employer"
+                  ? "bg-white text-black border-white"
+                  : "bg-transparent text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"
                   }`}
               >
                 Employer
@@ -66,9 +66,9 @@ function SignInForm() {
           </div>
 
           {/* Form */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-black font-bold">Email</Label>
+              <Label htmlFor="email" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -76,16 +76,16 @@ function SignInForm() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
               />
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm text-black font-bold">Password</Label>
+                <Label htmlFor="password" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Password</Label>
                 <Link
                   href="#"
-                  className="text-xs text-black font-bold underline hover:text-black/80"
+                  className="text-xs text-[#2563EB] font-bold hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -97,25 +97,25 @@ function SignInForm() {
                 autoComplete="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
               />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Checkbox
                 id="remember"
                 checked={rememberMe}
                 onCheckedChange={(checked) => setRememberMe(checked === true)}
-                className="border-2 border-black data-[state=checked]:bg-black data-[state=checked]:border-black"
+                className="border-zinc-800 data-[state=checked]:bg-[#2563EB] data-[state=checked]:border-[#2563EB] rounded-md"
               />
-              <Label htmlFor="remember" className="text-sm text-black cursor-pointer font-medium">
+              <Label htmlFor="remember" className="text-sm text-[#B6B6B6] cursor-pointer font-medium">
                 Keep me signed in
               </Label>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-black hover:bg-yellow-500 text-yellow-400 hover:text-black cursor-pointer font-bold border-2 border-black transition-all shadow-lg"
+              className="w-full h-12 bg-[#2563EB] hover:bg-[#1D4ED8] text-white cursor-pointer font-bold rounded-2xl transition-all shadow-lg active:scale-[0.98]"
               disabled={loading}
               onClick={async () => {
                 await signIn.email(
@@ -143,18 +143,18 @@ function SignInForm() {
               }}
             >
               {loading ? (
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={20} className="animate-spin" />
               ) : (
                 "Sign in"
               )}
             </Button>
 
             <div className="text-center">
-              <p className="text-sm text-black/80 font-medium">
+              <p className="text-[#B6B6B6] font-medium">
                 Are you a new member?{" "}
                 <Link
                   href={`/sign-up${roleParam ? `?role=${roleParam}` : ""}`}
-                  className="text-black font-bold underline hover:text-black/80 cursor-pointer"
+                  className="text-white font-bold underline hover:text-[#2563EB] transition-colors"
                 >
                   Create Account
                 </Link>
@@ -163,10 +163,10 @@ function SignInForm() {
           </div>
 
           {/* Footer */}
-          <div className="text-center text-xs text-black/80 space-x-2 pt-4 border-t-2 border-black font-medium">
-            <Link href="#" className="hover:text-black font-bold">Terms of Use</Link>
+          <div className="text-center text-xs text-zinc-600 space-x-2 pt-6 border-t border-zinc-800 font-medium">
+            <Link href="#" className="hover:text-white transition-colors">Terms of Use</Link>
             <span>•</span>
-            <Link href="#" className="hover:text-black font-bold">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>
@@ -177,7 +177,7 @@ function SignInForm() {
 export default function SignIn() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white text-black">
+      <div className="min-h-screen flex items-center justify-center bg-[#0B0B0B] text-white">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     }>

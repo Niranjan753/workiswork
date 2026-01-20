@@ -17,8 +17,8 @@ export default function DashboardPage() {
 
     if (isPending) {
         return (
-            <div className="flex items-center bg-zinc-900 justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex items-center bg-white justify-center min-h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-black" />
             </div>
         );
     }
@@ -30,33 +30,33 @@ export default function DashboardPage() {
     return (
         <div className="p-6">
             <div className="mb-8">
-                <h1 className="text-4xl font-bold mb-2 text-white">Dashboard</h1>
-                <p className="text-[#B6B6B6] text-lg">
+                <h1 className="text-4xl font-bold mb-2 text-black tracking-tight">Dashboard</h1>
+                <p className="text-[#64748b] text-lg">
                     Welcome back, {session.user?.email}
                 </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {/* Stats Cards */}
-                <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 transition-colors">
-                    <h3 className="text-sm font-medium text-[#B6B6B6]">Total Jobs</h3>
-                    <p className="text-4xl font-bold mt-3 text-white">0</p>
+                <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-sm font-semibold text-[#64748b] uppercase tracking-wider">Total Jobs</h3>
+                    <p className="text-4xl font-bold mt-3 text-black">0</p>
                 </div>
 
-                <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 transition-colors">
-                    <h3 className="text-sm font-medium text-[#B6B6B6]">Applications</h3>
-                    <p className="text-4xl font-bold mt-3 text-white">0</p>
+                <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-sm font-semibold text-[#64748b] uppercase tracking-wider">Applications</h3>
+                    <p className="text-4xl font-bold mt-3 text-black">0</p>
                 </div>
 
-                <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 transition-colors">
-                    <h3 className="text-sm font-medium text-[#B6B6B6]">Active Posts</h3>
-                    <p className="text-4xl font-bold mt-3 text-white">0</p>
+                <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-sm font-semibold text-[#64748b] uppercase tracking-wider">Active Posts</h3>
+                    <p className="text-4xl font-bold mt-3 text-black">0</p>
                 </div>
             </div>
 
-            <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/50">
-                <h2 className="text-2xl font-semibold mb-3 text-white">Quick Actions</h2>
-                <p className="text-[#B6B6B6] text-lg">
+            <div className="p-8 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                <h2 className="text-2xl font-bold mb-3 text-black">Quick Actions</h2>
+                <p className="text-[#64748b] text-lg">
                     Navigate using the sidebar to access Remote Jobs, Blog, Portfolio, and more.
                 </p>
             </div>

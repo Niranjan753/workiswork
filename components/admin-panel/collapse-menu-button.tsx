@@ -62,17 +62,22 @@ export function CollapseMenuButton({
       className="w-full"
     >
       <CollapsibleTrigger
-        className="[&[data-state=open]>div>div>svg]:rotate-180 mb-1"
+        className="[&[data-state=open]>div>div>svg]:rotate-180 mb-1 outline-none"
         asChild
       >
         <Button
-          variant={isSubmenuActive ? "secondary" : "ghost"}
-          className="w-full justify-start h-10"
+          variant="ghost"
+          className={cn(
+            "w-full justify-start h-11 transition-all rounded-xl",
+            isSubmenuActive
+              ? "bg-[#2563EB]/10 text-[#2563EB] font-bold"
+              : "text-zinc-400 hover:bg-white/5 hover:text-white"
+          )}
         >
           <div className="w-full items-center flex justify-between">
             <div className="flex items-center">
               <span className="mr-4">
-                <Icon size={18} />
+                <Icon size={20} />
               </span>
               <p
                 className={cn(
@@ -87,7 +92,7 @@ export function CollapseMenuButton({
             </div>
             <div
               className={cn(
-                "whitespace-nowrap",
+                "whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
                 isOpen
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-96 opacity-0"
@@ -105,18 +110,16 @@ export function CollapseMenuButton({
         {submenus.map(({ href, label, active }, index) => (
           <Button
             key={index}
-            variant={
+            variant="ghost"
+            className={cn(
+              "w-full justify-start h-10 mb-1 mt-1 transition-all rounded-xl pl-12",
               (active === undefined && pathname === href) || active
-                ? "secondary"
-                : "ghost"
-            }
-            className="w-full justify-start h-10 mb-1"
+                ? "text-white font-semibold bg-zinc-900"
+                : "text-zinc-500 hover:bg-white/5 hover:text-white"
+            )}
             asChild
           >
             <Link href={href}>
-              <span className="mr-4 ml-2">
-                <Dot size={18} />
-              </span>
               <p
                 className={cn(
                   "max-w-[170px] truncate",
@@ -139,13 +142,18 @@ export function CollapseMenuButton({
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
               <Button
-                variant={isSubmenuActive ? "secondary" : "ghost"}
-                className="w-full justify-start h-10 mb-1"
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start h-11 mb-1 transition-all rounded-xl",
+                  isSubmenuActive
+                    ? "bg-[#2563EB]/10 text-[#2563EB]"
+                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                )}
               >
                 <div className="w-full items-center flex justify-between">
                   <div className="flex items-center">
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      <Icon size={18} />
+                      <Icon size={20} />
                     </span>
                     <p
                       className={cn(
@@ -165,25 +173,27 @@ export function CollapseMenuButton({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <DropdownMenuContent side="right" sideOffset={25} align="start">
-        <DropdownMenuLabel className="max-w-[190px] truncate">
+      <DropdownMenuContent side="right" sideOffset={25} align="start" className="bg-[#0B0B0B] border-zinc-800 text-white">
+        <DropdownMenuLabel className="max-w-[190px] truncate text-white">
           {label}
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-zinc-800" />
         {submenus.map(({ href, label, active }, index) => (
-          <DropdownMenuItem key={index} asChild>
+          <DropdownMenuItem key={index} asChild className="hover:bg-white/5 focus:bg-white/5 text-zinc-400 focus:text-white">
             <Link
-              className={`cursor-pointer ${
-                ((active === undefined && pathname === href) || active) &&
-                "bg-secondary"
-              }`}
+              className={cn(
+                "cursor-pointer",
+                ((active === undefined && pathname === href) || active)
+                  ? "bg-zinc-900 text-white font-semibold"
+                  : ""
+              )}
               href={href}
             >
               <p className="max-w-[180px] truncate">{label}</p>
             </Link>
           </DropdownMenuItem>
         ))}
-        <DropdownMenuArrow className="fill-border" />
+        <DropdownMenuArrow className="fill-[#0B0B0B]" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

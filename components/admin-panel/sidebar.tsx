@@ -15,30 +15,22 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 z-20 h-screen -translate-x-full lg:translate-x-0 transition-[width] ease-in-out duration-300 bg-[#0B0B0B] border-r border-zinc-800",
+        "fixed top-0 left-0 z-20 h-screen -translate-x-full lg:translate-x-0 transition-[width] ease-in-out duration-300 bg-white border-r border-[#e5e7eb] overflow-hidden",
         !getOpenState() ? "w-[90px]" : "w-72",
         settings.disabled && "hidden"
       )}
     >
-      <SidebarToggle isOpen={getOpenState()} setIsOpen={toggleOpen} />
       <div
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className="relative h-full flex flex-col px-3 py-4 overflow-y-auto"
+        className="relative h-full flex flex-col"
       >
-        <Button
-          className={cn(
-            "transition-transform ease-in-out duration-300 mb-1 hover:bg-zinc-900",
-            !getOpenState() ? "translate-x-1" : "translate-x-0"
-          )}
-          variant="link"
-          asChild
-        >
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <Logo className="w-8 h-8 text-white flex-shrink-0" />
+        <div className="flex items-center justify-between mt-6 mb-4 px-6">
+          <Link href="/dashboard" className="flex items-center gap-3 text-black overflow-hidden">
+            <Logo className="w-8 h-8 text-black flex-shrink-0" />
             <h1
               className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300 text-white",
+                "font-bold text-xl tracking-tighter whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300 text-black",
                 !getOpenState()
                   ? "-translate-x-96 opacity-0 hidden"
                   : "translate-x-0 opacity-100"
@@ -47,7 +39,21 @@ export function Sidebar() {
               WorkIsWork
             </h1>
           </Link>
-        </Button>
+          <div className={cn(
+            "transition-opacity duration-300",
+            !getOpenState() ? "opacity-0 hidden" : "opacity-100"
+          )}>
+            <SidebarToggle isOpen={getOpenState()} setIsOpen={toggleOpen} />
+          </div>
+        </div>
+
+        {/* Mobile Toggle (Visible when collapsed) */}
+        {!getOpenState() && (
+          <div className="flex justify-center mb-4 mt-2">
+            <SidebarToggle isOpen={getOpenState()} setIsOpen={toggleOpen} />
+          </div>
+        )}
+
         <Menu isOpen={getOpenState()} />
       </div>
     </aside>

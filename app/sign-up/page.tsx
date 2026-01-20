@@ -28,41 +28,39 @@ function SignUpForm() {
   const [role, setRole] = useState<Role>(roleParam || "user");
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-[#0B0B0B]">
       {/* Sign Up Form */}
-      <div className="w-full bg-white text-black flex items-center justify-center p-8 overflow-y-auto">
-        <div className="w-full max-w-md space-y-6">
+      <div className="w-full text-white flex items-center justify-center p-8 overflow-y-auto">
+        <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-2">Create your account</h1>
-            <p className="text-black/80 text-sm font-medium">
-              Join WorkIsWork and start your remote work journey
+            <h1 className="text-4xl font-bold tracking-tighter mb-3">Create Account</h1>
+            <p className="text-[#B6B6B6] text-lg">
+              Join WorkIsWork and find your next remote role
             </p>
           </div>
 
           {/* Role Selection */}
-          <div className="space-y-2">
-            <Label className="text-sm text-black font-bold">I am a...</Label>
-            <div className="flex gap-2">
+          <div className="space-y-3">
+            <Label className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">I am a...</Label>
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`flex-1 cursor-pointer border-2 px-4 py-2.5 text-sm font-bold transition-all ${
-                  role === "user"
-                    ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-white text-black hover:bg-yellow-100"
-                }`}
+                className={`flex-1 cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${role === "user"
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"
+                  }`}
               >
                 Job Seeker
               </button>
               <button
                 type="button"
                 onClick={() => setRole("employer")}
-                className={`flex-1 border-2 cursor-pointer px-4 py-2.5 text-sm font-bold transition-all ${
-                  role === "employer"
-                    ? "border-black bg-black text-yellow-400 shadow-lg"
-                    : "border-black bg-white text-black hover:bg-yellow-100"
-                }`}
+                className={`flex-1 cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${role === "employer"
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-white border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"
+                  }`}
               >
                 Employer
               </button>
@@ -70,34 +68,34 @@ function SignUpForm() {
           </div>
 
           {/* Form */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="first-name" className="text-sm text-black font-bold">First name</Label>
+                <Label htmlFor="first-name" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">First name</Label>
                 <Input
                   id="first-name"
                   placeholder="John"
                   required
                   onChange={(e) => setFirstName(e.target.value)}
                   value={firstName}
-                  className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                  className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last-name" className="text-sm text-black font-bold">Last name</Label>
+                <Label htmlFor="last-name" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Last name</Label>
                 <Input
                   id="last-name"
                   placeholder="Doe"
                   required
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
-                  className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                  className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-black font-bold">Email</Label>
+              <Label htmlFor="email" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -105,12 +103,12 @@ function SignUpForm() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm text-black font-bold">Password</Label>
+              <Label htmlFor="password" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -118,12 +116,12 @@ function SignUpForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 placeholder="At least 8 characters"
-                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password_confirmation" className="text-sm text-black font-bold">Confirm Password</Label>
+              <Label htmlFor="password_confirmation" className="text-sm text-[#B6B6B6] font-medium uppercase tracking-wider">Confirm Password</Label>
               <Input
                 id="password_confirmation"
                 type="password"
@@ -131,13 +129,13 @@ function SignUpForm() {
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 autoComplete="new-password"
                 placeholder="Confirm your password"
-                className="bg-white border-2 border-black text-black placeholder:text-black/50 focus:border-black"
+                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl placeholder:text-zinc-600 focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-black hover:bg-yellow-500 text-yellow-400 hover:text-black cursor-pointer font-bold border-2 border-black transition-all shadow-lg"
+              className="w-full h-12 bg-[#2563EB] hover:bg-[#1D4ED8] text-white cursor-pointer font-bold rounded-2xl transition-all shadow-lg active:scale-[0.98]"
               disabled={loading || password !== passwordConfirmation}
               onClick={async () => {
                 if (password !== passwordConfirmation) {
@@ -177,7 +175,7 @@ function SignUpForm() {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ role: "employer" }),
-                      }).catch(() => {}); // Fail silently
+                      }).catch(() => { }); // Fail silently
                     }
                     // Save join preferences if they exist in localStorage
                     if (typeof window !== "undefined") {
@@ -189,7 +187,7 @@ function SignUpForm() {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: stored,
-                        }).catch(() => {});
+                        }).catch(() => { });
                       }
                     }
                     toast.success("Account created successfully!");
@@ -204,24 +202,24 @@ function SignUpForm() {
               }}
             >
               {loading ? (
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={20} className="animate-spin" />
               ) : (
                 "Create Account"
               )}
             </Button>
 
             {password && passwordConfirmation && password !== passwordConfirmation && (
-              <p className="text-xs text-black font-bold text-center">
+              <p className="text-sm text-red-500 font-bold text-center">
                 Passwords do not match
               </p>
             )}
 
             <div className="text-center">
-              <p className="text-sm text-black/80 font-medium">
+              <p className="text-[#B6B6B6] font-medium">
                 Already have an account?{" "}
                 <Link
                   href={`/sign-in${callbackUrl ? `?callbackUrl=${callbackUrl}` : ""}${roleParam ? `&role=${roleParam}` : ""}`}
-                  className="text-black font-bold underline hover:text-black/80"
+                  className="text-white font-bold underline hover:text-[#2563EB] transition-colors"
                 >
                   Sign In
                 </Link>
@@ -230,10 +228,10 @@ function SignUpForm() {
           </div>
 
           {/* Footer */}
-          <div className="text-center text-xs text-black/80 space-x-2 pt-4 border-t-2 border-black font-medium">
-            <Link href="#" className="hover:text-black font-bold">Terms of Use</Link>
+          <div className="text-center text-xs text-zinc-600 space-x-2 pt-6 border-t border-zinc-800 font-medium">
+            <Link href="#" className="hover:text-white transition-colors">Terms of Use</Link>
             <span>•</span>
-            <Link href="#" className="hover:text-black font-bold">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>
@@ -244,7 +242,7 @@ function SignUpForm() {
 export default function SignUp() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white text-black">
+      <div className="min-h-screen flex items-center justify-center bg-[#0B0B0B] text-white">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     }>

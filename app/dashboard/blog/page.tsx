@@ -17,8 +17,8 @@ export default function DashboardBlogPage() {
 
     if (isPending) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex items-center bg-[#0B0B0B] justify-center min-h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-white" />
             </div>
         );
     }
@@ -30,14 +30,14 @@ export default function DashboardBlogPage() {
     return (
         <div className="p-6">
             <div className="mb-8">
-                <h1 className="text-4xl font-bold mb-2 text-white">Blog</h1>
-                <p className="text-[#B6B6B6] text-lg">
+                <h1 className="text-4xl font-bold mb-2 text-black tracking-tight">Blog</h1>
+                <p className="text-[#64748b] text-lg">
                     Read and manage blog posts
                 </p>
             </div>
 
-            <div className="p-8 rounded-xl border border-zinc-800 bg-zinc-900/50">
-                <p className="text-[#B6B6B6] text-lg">
+            <div className="p-8 rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                <p className="text-[#64748b] text-lg">
                     Blog content will be displayed here.
                 </p>
             </div>

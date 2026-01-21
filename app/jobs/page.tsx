@@ -1,13 +1,15 @@
 import Link from "next/link";
+import { JobsBoard } from "../../components/jobs/jobs-board";
+import { Suspense } from "react";
 
 export default function Home() {
     return (
         <div>
-            <section className="bg-[#0B0B0B] text-white flex  justify-center min-h-screen px-6">
+            <section className="bg-[#0B0B0B] text-white flex flex-col items-center justify-center pt-20 pb-20 px-6">
                 <div className="max-w-[720px] text-center">
 
                     {/* Headline */}
-                    <h1 className="font-semibold tracking-tighter mt-16 text-[44px] leading-[1]
+                    <h1 className="font-semibold tracking-tighter text-[44px] leading-[1]
                    sm:text-[56px] md:text-[90px]">
                         Built for the future
                         <br />
@@ -41,6 +43,13 @@ export default function Home() {
                 </div>
             </section>
 
+            <section className="bg-gray-50 min-h-screen px-6 py-12">
+                <div className="max-w-[1200px] mx-auto">
+                    <Suspense fallback={<div className="text-center py-20">Loading jobs...</div>}>
+                        <JobsBoard />
+                    </Suspense>
+                </div>
+            </section>
 
         </div>
     )

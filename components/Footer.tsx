@@ -17,7 +17,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
           {/* Brand/Logo Section (2 columns wide on large screens) */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center gap-2">
-              <Logo />
+              <Logo className="w-8 h-8" />
               <span className="text-xl font-bold tracking-tight">WorkIsWork</span>
             </div>
             <p className="text-zinc-500 font-medium text-lg max-w-sm leading-relaxed">

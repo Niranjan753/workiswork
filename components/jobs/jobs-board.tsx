@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
@@ -27,10 +27,7 @@ type Job = {
 };
 
 type JobsResponse = {
-  page: number;
-  pageSize: number;
   total: number;
-  totalPages: number;
   jobs: Job[];
 };
 
@@ -47,16 +44,13 @@ type Company = {
 };
 
 type CompaniesResponse = {
-  page: number;
-  pageSize: number;
   total: number;
-  totalPages: number;
   companies: Company[];
 };
 
 const COUNTRIES = ["USA", "UK", "Germany", "France", "Canada", "Spain"];
 
-const EMPLOYMENT_TYPES: { value: string; label: string }[] = [
+const EMPLOYMENT_TYPES = [
   { value: "contract", label: "contract" },
   { value: "freelance", label: "freelance" },
   { value: "full_time", label: "full-time" },
@@ -72,495 +66,171 @@ function buildQueryString(params: URLSearchParams) {
 export function JobsBoard() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const pathname = usePathname();
 
   const q = searchParams.get("q") ?? "";
-  const activeCategories = searchParams.getAll("category").filter(Boolean);
+  const activeCategories = searchParams.getAll("category");
   const remoteScope = searchParams.get("remote_scope") ?? "";
   const minSalary = searchParams.get("min_salary") ?? "";
-  const isOptimisedFromUrl = searchParams.get("optimised") === "true";
 
-  const [location, setLocation] = React.useState(
-    searchParams.get("location") ?? "",
-  );
+  const [location, setLocation] = React.useState(searchParams.get("location") ?? "");
   const [jobTypes, setJobTypes] = React.useState<string[]>(
     searchParams.getAll("job_type"),
   );
-  const [optimised, setOptimised] = React.useState(isOptimisedFromUrl);
+  const [optimised, setOptimised] = React.useState(
+    searchParams.get("optimised") === "true",
+  );
   const [viewMode, setViewMode] = React.useState<"jobs" | "companies">("jobs");
 
   React.useEffect(() => {
-    const newLocation = searchParams.get("location") ?? "";
-    const newJobTypes = searchParams.getAll("job_type");
-    const newOptimised = searchParams.get("optimised") === "true";
-
-    setLocation(newLocation);
-    setJobTypes(newJobTypes);
-    setOptimised(newOptimised);
+    setLocation(searchParams.get("location") ?? "");
+    setJobTypes(searchParams.getAll("job_type"));
+    setOptimised(searchParams.get("optimised") === "true");
   }, [searchParams]);
 
-
-  // Jobs query with pagination
-  const jobsPage = Number(searchParams.get("jobsPage") || "1");
-  const queryKey = React.useMemo(
-    () => ["jobs", { q, location, jobTypes, activeCategories, remoteScope, minSalary, optimised: isOptimisedFromUrl, page: jobsPage }],
-    [q, location, jobTypes, activeCategories, remoteScope, minSalary, isOptimisedFromUrl, jobsPage],
-  );
-
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey,
+  const jobsQuery = useQuery({
+    queryKey: ["jobs", q, location, jobTypes, activeCategories, remoteScope, minSalary],
     queryFn: async (): Promise<JobsResponse> => {
       const params = new URLSearchParams();
-      params.set("page", String(jobsPage));
-      params.set("limit", "20");
+      params.set("limit", "1000");
       if (q) params.set("q", q);
       if (location) params.set("location", location);
-      activeCategories.forEach((cat) => params.append("category", cat));
-      jobTypes.forEach((jt) => params.append("job_type", jt));
+      activeCategories.forEach((c) => params.append("category", c));
+      jobTypes.forEach((t) => params.append("job_type", t));
       if (remoteScope) params.set("remote_scope", remoteScope);
       if (minSalary) params.set("min_salary", minSalary);
 
       const res = await fetch(`/api/jobs${buildQueryString(params)}`);
-      if (!res.ok) {
-        throw new Error("Failed to load jobs");
-      }
+      if (!res.ok) throw new Error("Failed to load jobs");
       return res.json();
     },
     enabled: viewMode === "jobs",
-    staleTime: 0,
-    refetchOnMount: true,
   });
 
-  const total = data?.total ?? 0;
-  const jobs = data?.jobs ?? [];
-  const jobsTotalPages = data?.totalPages ?? 1;
-
-  // Companies query with pagination
-  const companiesPage = Number(searchParams.get("companiesPage") || "1");
-  const companiesQueryKey = React.useMemo(
-    () => ["companies", { q, location, page: companiesPage }],
-    [q, location, companiesPage],
-  );
-
-  const {
-    data: companiesData,
-    isLoading: isLoadingCompanies,
-    isError: isCompaniesError,
-  } = useQuery({
-    queryKey: companiesQueryKey,
+  const companiesQuery = useQuery({
+    queryKey: ["companies", q, location],
     queryFn: async (): Promise<CompaniesResponse> => {
       const params = new URLSearchParams();
-      params.set("page", String(companiesPage));
-      params.set("limit", "20");
+      params.set("limit", "1000");
       if (q) params.set("q", q);
       if (location) params.set("location", location);
 
       const res = await fetch(`/api/companies${buildQueryString(params)}`);
-      if (!res.ok) {
-        throw new Error("Failed to load companies");
-      }
+      if (!res.ok) throw new Error("Failed to load companies");
       return res.json();
     },
     enabled: viewMode === "companies",
-    staleTime: 0,
-    refetchOnMount: true,
   });
-
-  const totalCompanies = companiesData?.total ?? 0;
-  const companies = companiesData?.companies ?? [];
-  const companiesTotalPages = companiesData?.totalPages ?? 1;
 
   function toggleJobType(value: string) {
     setJobTypes((prev) =>
-      prev.includes(value)
-        ? prev.filter((v) => v !== value)
-        : [...prev, value],
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
-  }
-
-  function handleOptimise() {
-    router.push("/join");
   }
 
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
-      {/* Filters Sidebar */}
+      {/* Sidebar */}
       <aside className="space-y-6 border border-gray-200 bg-white rounded-2xl p-6 text-sm text-gray-600 shadow-sm h-fit">
-        <div className="space-y-4">
-          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">
             I want to work remotely from...
           </p>
-          <div className="space-y-2">
-            {COUNTRIES.map((country) => (
-              <label key={country} className="flex cursor-pointer items-center gap-2 group">
-                <input
-                  type="radio"
-                  name="country"
-                  value={country}
-                  checked={location === country}
-                  onChange={(e) =>
-                    setLocation(e.target.checked ? country : "")
-                  }
-                  className="h-4 w-4 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">{country}</span>
-              </label>
-            ))}
-            <button
-              type="button"
-              className="mt-2 text-xs font-bold text-blue-600 cursor-pointer hover:text-blue-700 transition-colors"
-              onClick={() => setLocation("")}
-            >
-              Clear location
-            </button>
-          </div>
+          {COUNTRIES.map((country) => (
+            <label key={country} className="flex items-center gap-2 mb-2 cursor-pointer">
+              <input
+                type="radio"
+                checked={location === country}
+                onChange={() => setLocation(country)}
+              />
+              <span>{country}</span>
+            </label>
+          ))}
+          <button onClick={() => setLocation("")} className="text-xs font-bold text-blue-600 mt-2">
+            Clear location
+          </button>
         </div>
 
-        <div className="h-px bg-gray-100" />
-
-        <div className="space-y-4">
-          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">
             Employment types
           </p>
-          <div className="space-y-2">
-            {EMPLOYMENT_TYPES.map((type) => (
-              <label key={type.value} className="flex cursor-pointer items-center gap-2 group">
-                <input
-                  type="checkbox"
-                  value={type.value}
-                  checked={jobTypes.includes(type.value)}
-                  onChange={() => toggleJobType(type.value)}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-600 capitalize group-hover:text-blue-600 transition-colors">{type.label}</span>
-              </label>
-            ))}
-          </div>
+          {EMPLOYMENT_TYPES.map((t) => (
+            <label key={t.value} className="flex items-center gap-2 mb-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={jobTypes.includes(t.value)}
+                onChange={() => toggleJobType(t.value)}
+              />
+              <span className="capitalize">{t.label}</span>
+            </label>
+          ))}
         </div>
 
-        <div className="pt-4">
-          <Link
-            href="/join"
-            className="block w-full text-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-[0.98]"
-          >
-            Join the community
-          </Link>
-        </div>
+        <Link
+          href="/join"
+          className="block text-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white"
+        >
+          Join the community
+        </Link>
       </aside>
 
-
+      {/* Main */}
       <section className="space-y-4">
-        <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex bg-gray-100 p-1 rounded-xl">
+        <div className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+          <div className="flex bg-gray-100 p-1 rounded-xl">
+            {["jobs", "companies"].map((v) => (
               <button
-                type="button"
-                onClick={() => setViewMode("jobs")}
+                key={v}
+                onClick={() => setViewMode(v as any)}
                 className={cn(
-                  "px-6 py-2 text-sm font-bold rounded-lg transition-all cursor-pointer",
-                  viewMode === "jobs"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
+                  "px-6 py-2 text-sm font-bold rounded-lg",
+                  viewMode === v ? "bg-white text-blue-600" : "text-gray-500",
                 )}
               >
-                Jobs
+                {v}
               </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("companies")}
-                className={cn(
-                  "px-6 py-2 text-sm font-bold rounded-lg transition-all cursor-pointer",
-                  viewMode === "companies"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                )}
-              >
-                Companies
-              </button>
-            </div>
-
-            {viewMode === "jobs" && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => router.push("/join")}
-                  className="px-5 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-blue-500/20"
-                >
-                  <LockOpen className="w-4 h-4" />
-                  Unlock All Jobs
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleOptimise}
-                  className={cn(
-                    "px-5 py-2.5 border rounded-xl cursor-pointer text-sm font-bold transition-all shadow-sm",
-                    optimised
-                      ? "bg-blue-50 text-blue-600 border-blue-200"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:text-blue-600",
-                  )}
-                >
-                  {optimised ? "Optimised ✓" : "Optimise"}
-                </button>
-              </>
-            )}
+            ))}
           </div>
-          <p className="text-sm font-bold text-gray-400 tabular-nums">
+
+          <p className="text-sm font-bold text-gray-400">
             {viewMode === "jobs"
-              ? `${total.toLocaleString()} matching jobs`
-              : `${totalCompanies.toLocaleString()} companies`
-            }
+              ? `${jobsQuery.data?.total ?? 0} jobs`
+              : `${companiesQuery.data?.total ?? 0} companies`}
           </p>
         </div>
 
-        {/* Jobs list - Standard Style */}
-        {viewMode === "jobs" && (
-          <>
-            <div className="space-y-4">
-              {isLoading && <p className="px-3 py-4 text-sm font-medium text-zinc-500">Loading jobs…</p>}
-              {isError && (
-                <p className="px-3 py-4 text-sm font-medium text-red-400">
-                  Failed to load jobs. Please try again.
-                </p>
+        {/* Jobs */}
+        {viewMode === "jobs" &&
+          jobsQuery.data?.jobs.map((job) => (
+            <Link
+              key={job.id}
+              href={`/jobs/${job.slug}`}
+              className={cn(
+                "block border rounded-3xl text-black p-6",
+                job.isFeatured
+                  ? "bg-[#E1FF00] border-[#E1FF00]"
+                  : "bg-white border-gray-100 text-black hover:bg-gray-50",
               )}
-              {!isLoading && jobs.length === 0 && (
-                <p className="px-3 py-4 text-sm font-medium text-zinc-500">
-                  No jobs match your filters yet.
-                </p>
+            >
+              <h3 className="text-xl font-bold">{job.title}</h3>
+              <p className="text-sm text-gray-500">{job.companyName}</p>
+            </Link>
+          ))}
+
+        {/* Companies */}
+        {viewMode === "companies" &&
+          companiesQuery.data?.companies.map((company) => (
+            <div
+              key={company.id}
+              onClick={() => router.push(`/companies/${company.slug}`)}
+              className="bg-white border border-gray-100 rounded-3xl p-6 cursor-pointer text-black transition-colors hover:bg-gray-50"
+            >
+              <h3 className="text-xl font-bold">{company.name}</h3>
+              {company.location && (
+                <p className="text-sm text-gray-400">{company.location}</p>
               )}
-
-              {jobs.map((job, index) => {
-                const isNeonYellow = job.isFeatured && index % 2 === 0;
-                const isNeonGreen = job.isFeatured && index % 2 !== 0;
-
-                return (
-                  <Link
-                    key={job.id}
-                    href={`/jobs/${job.slug}`}
-                    className={cn(
-                      "group block border rounded-3xl p-6 transition-all font-sans",
-                      isNeonYellow && "bg-[#E1FF00] border-[#E1FF00] text-black shadow-[0_8px_30px_rgb(225,255,0,0.1)] hover:scale-[1.01]",
-                      isNeonGreen && "bg-[#00FFA3] border-[#00FFA3] text-black shadow-[0_8px_30px_rgb(0,255,163,0.1)] hover:scale-[1.01]",
-                      !job.isFeatured && "bg-white border-gray-100 text-gray-900 shadow-sm hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 hover:scale-[1.005]"
-                    )}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-6">
-                      <div className="min-w-0 flex-1 space-y-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h3 className={cn(
-                            "text-xl font-bold leading-tight tracking-tight group-hover:text-blue-600 transition-colors",
-                            job.isFeatured ? "text-black" : "text-gray-900"
-                          )}>
-                            {job.title}
-                          </h3>
-                          {job.isFeatured && (
-                            <span className="px-2 py-0.5 rounded-md bg-black/5 text-[10px] font-black uppercase tracking-[0.2em] text-black/60">
-                              Featured
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold">
-                          <div className="flex items-center gap-2">
-                            <div className={cn(
-                              "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black",
-                              job.isFeatured ? "bg-black/5 text-black" : "bg-gray-100 text-gray-500"
-                            )}>
-                              {job.companyName?.[0] || 'R'}
-                            </div>
-                            <span className={cn(
-                              job.isFeatured ? "text-black/80" : "text-gray-700"
-                            )}>
-                              {job.companyName ?? "Remote company"}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-gray-400">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <span className={cn(
-                              job.isFeatured ? "text-black/60 font-bold" : "text-gray-400 font-medium"
-                            )}>
-                              {job.location ?? "Remote"}
-                            </span>
-                          </div>
-                        </div>
-
-                        {job.tags && job.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {job.tags.slice(0, 5).map((tag) => (
-                              <span
-                                key={tag}
-                                className={cn(
-                                  "rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-colors border",
-                                  job.isFeatured
-                                    ? "bg-black/5 text-black/70 border-black/10"
-                                    : "bg-gray-50 text-gray-500 border-gray-100 group-hover:border-blue-100 group-hover:text-blue-500"
-                                )}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="shrink-0 flex flex-col items-end gap-4">
-                        <span className={cn(
-                          "text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full",
-                          job.isFeatured ? "bg-black/5 text-black/40" : "bg-gray-50 text-gray-400"
-                        )}>
-                          {job.postedAt ? new Date(job.postedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "Just now"}
-                        </span>
-                        <div className={cn(
-                          "px-8 py-3 text-sm font-bold rounded-2xl transition-all border shadow-sm",
-                          job.isFeatured
-                            ? "bg-black text-white border-black hover:bg-zinc-900"
-                            : "bg-white border-gray-200 text-gray-900 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600"
-                        )}>
-                          {job.isFeatured ? "Apply Now" : "View Details"}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
             </div>
-
-            {/* Pagination for jobs */}
-            {!isLoading && total > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (jobsPage > 1) {
-                      const params = new URLSearchParams(searchParams.toString());
-                      params.set("jobsPage", String(jobsPage - 1));
-                      router.push(`${pathname}?${params.toString()}`);
-                    }
-                  }}
-                  disabled={jobsPage <= 1}
-                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
-                >
-                  Previous
-                </button>
-
-                <span className="text-xs font-black uppercase tracking-widest text-gray-400">
-                  Page {jobsPage} of {jobsTotalPages}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (jobsPage < jobsTotalPages) {
-                      const params = new URLSearchParams(searchParams.toString());
-                      params.set("jobsPage", String(jobsPage + 1));
-                      router.push(`${pathname}?${params.toString()}`);
-                    }
-                  }}
-                  disabled={jobsPage >= jobsTotalPages}
-                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Companies list */}
-        {viewMode === "companies" && (
-          <>
-            <div className="space-y-4">
-              {isLoadingCompanies && <p className="px-3 py-4 text-sm font-medium text-zinc-500">Loading companies…</p>}
-              {isCompaniesError && (
-                <p className="px-3 py-4 text-sm font-medium text-red-400">
-                  Failed to load companies. Please try again.
-                </p>
-              )}
-              {!isLoadingCompanies && companies.length === 0 && (
-                <p className="px-3 py-4 text-sm font-medium text-zinc-500">
-                  No companies found.
-                </p>
-              )}
-
-              {companies.map((company) => (
-                <div
-                  key={company.id}
-                  onClick={() => router.push(`/companies/${company.slug}`)}
-                  className="group block bg-white border border-gray-100 rounded-3xl p-6 transition-all hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 hover:scale-[1.005] cursor-pointer shadow-sm"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-6">
-                    <div className="min-w-0 flex-1 flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl font-black text-gray-300 group-hover:bg-blue-50 group-hover:border-blue-100 group-hover:text-blue-200 transition-all">
-                        {company.name[0]}
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
-                          {company.name}
-                        </h3>
-                        {company.location && (
-                          <div className="flex items-center gap-2 text-sm font-bold text-gray-400">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            {company.location}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="shrink-0">
-                      <span className="inline-block px-8 py-3 bg-gray-50 text-gray-900 text-sm font-bold rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all border border-gray-200 group-hover:border-blue-600 shadow-sm">
-                        Browse Positions
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pagination for companies */}
-            {!isLoadingCompanies && totalCompanies > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (companiesPage > 1) {
-                      const params = new URLSearchParams(searchParams.toString());
-                      params.set("companiesPage", String(companiesPage - 1));
-                      router.push(`${pathname}?${params.toString()}`);
-                    }
-                  }}
-                  disabled={companiesPage <= 1}
-                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
-                >
-                  Previous
-                </button>
-
-                <span className="text-xs font-black uppercase tracking-widest text-gray-400">
-                  Page {companiesPage} of {companiesTotalPages}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (companiesPage < companiesTotalPages) {
-                      const params = new URLSearchParams(searchParams.toString());
-                      params.set("companiesPage", String(companiesPage + 1));
-                      router.push(`${pathname}?${params.toString()}`);
-                    }
-                  }}
-                  disabled={companiesPage >= companiesTotalPages}
-                  className="px-6 py-2 border border-gray-200 rounded-xl bg-white text-gray-700 text-sm font-bold hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </>
-        )}
-
+          ))}
       </section>
     </div>
   );

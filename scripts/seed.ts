@@ -72,11 +72,11 @@ async function main() {
     Array.from({ length: 100 }).map(() => {
       const company =
         insertedCompanies[
-          Math.floor(Math.random() * insertedCompanies.length)
+        Math.floor(Math.random() * insertedCompanies.length)
         ];
       const category =
         insertedCategories[
-          Math.floor(Math.random() * insertedCategories.length)
+        Math.floor(Math.random() * insertedCategories.length)
         ];
       const minSalary = faker.number.int({ min: 40000, max: 80000 });
       const maxSalary = minSalary + faker.number.int({ min: 5000, max: 70000 });
@@ -107,7 +107,9 @@ async function main() {
         jobType: faker.helpers.arrayElement(jobTypeValues),
         remoteScope: faker.helpers.arrayElement(remoteScopeValues),
         isFeatured: faker.datatype.boolean(0.25),
-        isPremium: faker.datatype.boolean(0.15),
+        isPublished: true,
+        paymentStatus: "paid",
+        polarCheckoutId: faker.string.alphanumeric(10),
         applyUrl: faker.internet.url(),
         source: faker.helpers.arrayElement(["internal", "rss", "api"]),
         sourceUrl: faker.internet.url(),

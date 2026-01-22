@@ -26,7 +26,7 @@ export async function GET(_request: NextRequest, context: Context) {
       jobType: jobs.jobType,
       remoteScope: jobs.remoteScope,
       isFeatured: jobs.isFeatured,
-      isPremium: jobs.isPremium,
+
       postedAt: jobs.postedAt,
       applyUrl: jobs.applyUrl,
       descriptionHtml: jobs.descriptionHtml,

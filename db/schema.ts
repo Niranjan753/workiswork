@@ -143,7 +143,9 @@ export const jobs = pgTable("jobs", {
   jobType: jobTypeEnum("job_type").notNull().default("full_time"),
   remoteScope: remoteScopeEnum("remote_scope").notNull().default("worldwide"),
   isFeatured: boolean("is_featured").notNull().default(false),
-  isPremium: boolean("is_premium").notNull().default(false),
+  isPublished: boolean("is_published").notNull().default(false),
+  paymentStatus: text("payment_status").notNull().default("pending"), // pending | paid | failed
+  polarCheckoutId: text("polar_checkout_id").unique(),
   applyUrl: text("apply_url").notNull(),
   receiveApplicationsByEmail: boolean("receive_applications_by_email").notNull().default(false),
   companyEmail: text("company_email"), // For invoice and email applications

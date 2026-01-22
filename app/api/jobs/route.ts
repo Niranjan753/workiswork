@@ -31,17 +31,16 @@ export async function GET(request: Request) {
   const sort = searchParams.get("sort") || "date"; // date | relevance
   const premiumOnly = searchParams.get("premium") === "true";
 
-  const filters = [];
+  const filters = [eq(jobs.isPublished, true)];
 
   if (q) {
     const pattern = `%${q}%`;
-    filters.push(
-      or(
-        ilike(jobs.title, pattern),
-        ilike(jobs.descriptionHtml, pattern),
-        ilike(companies.name, pattern),
-      ),
+    const searchFilter = or(
+      ilike(jobs.title, pattern),
+      ilike(jobs.descriptionHtml, pattern),
+      ilike(companies.name, pattern),
     );
+    if (searchFilter) filters.push(searchFilter);
   }
 
   // Handle multiple categories
@@ -77,16 +76,14 @@ export async function GET(request: Request) {
     filters.push(ilike(jobs.location, pattern));
   }
 
-  if (premiumOnly) {
-    filters.push(eq(jobs.isPremium, true));
-  }
+
 
   const where =
     filters.length > 0 ? and.apply(null, filters as any) : undefined;
 
   const orderBy =
     sort === "relevance" && q
-      ? [desc(jobs.isFeatured), desc(jobs.isPremium), desc(jobs.postedAt)]
+      ? [desc(jobs.isFeatured), desc(jobs.postedAt)]
       : [desc(jobs.postedAt)];
 
   const offset = (page - 1) * pageSize;
@@ -104,7 +101,7 @@ export async function GET(request: Request) {
         jobType: jobs.jobType,
         remoteScope: jobs.remoteScope,
         isFeatured: jobs.isFeatured,
-        isPremium: jobs.isPremium,
+
         postedAt: jobs.postedAt,
         companyName: companies.name,
         companyLogo: companies.logoUrl,

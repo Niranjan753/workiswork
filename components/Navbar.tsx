@@ -27,6 +27,7 @@ export function Navbar() {
   const isBlog = pathname.startsWith("/blog");
   const isJoin = pathname.startsWith("/join");
   const isHire = pathname.startsWith("/hire");
+  const isPost = pathname.startsWith("/post");
   const isPortfolio = pathname.startsWith("/portfolio");
 
   React.useEffect(() => {
@@ -34,11 +35,11 @@ export function Navbar() {
   }, [pathname]);
 
   const navLinks = [
-    { name: "Remote Jobs", href: "/jobs", active: isJobs },
+    { name: "Jobs", href: "/hire", active: isHire },
     { name: "Blog", href: "/blog", active: isBlog },
     { name: "Portfolio", href: "/portfolio", active: isPortfolio },
     { name: "Join", href: "/join", active: isJoin },
-    { name: "Post a Job", href: "/hire", active: isHire },
+    { name: "Post a Job", href: "/post", active: isPost },
   ];
 
   return (

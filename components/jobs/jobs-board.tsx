@@ -18,7 +18,7 @@ type Job = {
   jobType: string;
   remoteScope: string;
   isFeatured: boolean;
-  isPremium: boolean;
+
   postedAt: string | null;
   companyName: string | null;
   companyLogo: string | null;
@@ -48,8 +48,6 @@ type CompaniesResponse = {
   companies: Company[];
 };
 
-const COUNTRIES = ["USA", "UK", "Germany", "France", "Canada", "Spain"];
-
 const EMPLOYMENT_TYPES = [
   { value: "contract", label: "contract" },
   { value: "freelance", label: "freelance" },
@@ -57,6 +55,23 @@ const EMPLOYMENT_TYPES = [
   { value: "part_time", label: "part-time" },
   { value: "internship", label: "internship" },
 ];
+
+function getTimeAgo(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  const diffWeeks = Math.floor(diffMs / 604800000);
+  const diffMonths = Math.floor(diffMs / 2592000000);
+
+  if (diffMins < 1) return "just now";
+  if (diffMins < 60) return `about ${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
+  if (diffHours < 24) return `about ${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+  if (diffDays < 7) return `about ${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  if (diffWeeks < 4) return `about ${diffWeeks} week${diffWeeks > 1 ? "s" : ""} ago`;
+  return `about ${diffMonths} month${diffMonths > 1 ? "s" : ""} ago`;
+}
 
 function buildQueryString(params: URLSearchParams) {
   const qs = params.toString();
@@ -72,7 +87,6 @@ export function JobsBoard() {
   const remoteScope = searchParams.get("remote_scope") ?? "";
   const minSalary = searchParams.get("min_salary") ?? "";
 
-  const [location, setLocation] = React.useState(searchParams.get("location") ?? "");
   const [jobTypes, setJobTypes] = React.useState<string[]>(
     searchParams.getAll("job_type"),
   );
@@ -82,18 +96,16 @@ export function JobsBoard() {
   const [viewMode, setViewMode] = React.useState<"jobs" | "companies">("jobs");
 
   React.useEffect(() => {
-    setLocation(searchParams.get("location") ?? "");
     setJobTypes(searchParams.getAll("job_type"));
     setOptimised(searchParams.get("optimised") === "true");
   }, [searchParams]);
 
   const jobsQuery = useQuery({
-    queryKey: ["jobs", q, location, jobTypes, activeCategories, remoteScope, minSalary],
+    queryKey: ["jobs", q, jobTypes, activeCategories, remoteScope, minSalary],
     queryFn: async (): Promise<JobsResponse> => {
       const params = new URLSearchParams();
       params.set("limit", "1000");
       if (q) params.set("q", q);
-      if (location) params.set("location", location);
       activeCategories.forEach((c) => params.append("category", c));
       jobTypes.forEach((t) => params.append("job_type", t));
       if (remoteScope) params.set("remote_scope", remoteScope);
@@ -107,12 +119,11 @@ export function JobsBoard() {
   });
 
   const companiesQuery = useQuery({
-    queryKey: ["companies", q, location],
+    queryKey: ["companies", q],
     queryFn: async (): Promise<CompaniesResponse> => {
       const params = new URLSearchParams();
       params.set("limit", "1000");
       if (q) params.set("q", q);
-      if (location) params.set("location", location);
 
       const res = await fetch(`/api/companies${buildQueryString(params)}`);
       if (!res.ok) throw new Error("Failed to load companies");
@@ -130,36 +141,18 @@ export function JobsBoard() {
   return (
     <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
       {/* Sidebar */}
-      <aside className="space-y-6 border border-gray-200 bg-white rounded-2xl p-6 text-sm text-gray-600 shadow-sm h-fit">
+      <aside className="space-y-6 border border-[#3a3a3a] bg-[#2a2a2a] rounded-xl p-6 text-sm text-gray-300 shadow-sm h-fit">
         <div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">
-            I want to work remotely from...
-          </p>
-          {COUNTRIES.map((country) => (
-            <label key={country} className="flex items-center gap-2 mb-2 cursor-pointer">
-              <input
-                type="radio"
-                checked={location === country}
-                onChange={() => setLocation(country)}
-              />
-              <span>{country}</span>
-            </label>
-          ))}
-          <button onClick={() => setLocation("")} className="text-xs font-bold text-blue-600 mt-2">
-            Clear location
-          </button>
-        </div>
-
-        <div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-3">
+          <p className="text-[11px] font-black uppercase tracking-widest text-gray-500 mb-3">
             Employment types
           </p>
           {EMPLOYMENT_TYPES.map((t) => (
-            <label key={t.value} className="flex items-center gap-2 mb-2 cursor-pointer">
+            <label key={t.value} className="flex items-center gap-2 mb-2 cursor-pointer hover:text-white transition-colors">
               <input
                 type="checkbox"
                 checked={jobTypes.includes(t.value)}
                 onChange={() => toggleJobType(t.value)}
+                className="h-4 w-4 border border-gray-600 rounded bg-[#1a1a1a] text-orange-500 focus:ring-orange-500"
               />
               <span className="capitalize">{t.label}</span>
             </label>
@@ -168,7 +161,7 @@ export function JobsBoard() {
 
         <Link
           href="/join"
-          className="block text-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white"
+          className="block text-center rounded-xl bg-orange-500 px-4 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
         >
           Join the community
         </Link>
@@ -176,15 +169,15 @@ export function JobsBoard() {
 
       {/* Main */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-          <div className="flex bg-gray-100 p-1 rounded-xl">
+        <div className="flex items-center justify-between bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-4 shadow-sm">
+          <div className="flex bg-[#1a1a1a] p-1 rounded-xl">
             {["jobs", "companies"].map((v) => (
               <button
                 key={v}
                 onClick={() => setViewMode(v as any)}
                 className={cn(
-                  "px-6 py-2 text-sm font-bold rounded-lg",
-                  viewMode === v ? "bg-white text-blue-600" : "text-gray-500",
+                  "px-6 py-2 text-sm font-bold rounded-lg transition-colors",
+                  viewMode === v ? "bg-orange-500 text-white" : "text-gray-400 hover:text-white",
                 )}
               >
                 {v}
@@ -201,21 +194,103 @@ export function JobsBoard() {
 
         {/* Jobs */}
         {viewMode === "jobs" &&
-          jobsQuery.data?.jobs.map((job) => (
-            <Link
-              key={job.id}
-              href={`/jobs/${job.slug}`}
-              className={cn(
-                "block border rounded-3xl text-black p-6",
-                job.isFeatured
-                  ? "bg-[#E1FF00] border-[#E1FF00]"
-                  : "bg-white border-gray-100 text-black hover:bg-gray-50",
-              )}
-            >
-              <h3 className="text-xl font-bold">{job.title}</h3>
-              <p className="text-sm text-gray-500">{job.companyName}</p>
-            </Link>
-          ))}
+          jobsQuery.data?.jobs.map((job) => {
+            const timeAgo = job.postedAt ? getTimeAgo(new Date(job.postedAt)) : null;
+
+            return (
+              <Link
+                key={job.id}
+                href={`/jobs/${job.slug}`}
+                className={cn(
+                  "block border rounded-xl p-5 transition-all duration-200",
+                  job.isFeatured
+                    ? "bg-[#2a2a2a] border-orange-500/50 shadow-[0_0_20px_rgba(255,90,31,0.05)]"
+                    : "bg-[#2a2a2a] border-[#3a3a3a] hover:bg-[#323232]",
+                )}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  {/* Left: Logo + Content */}
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
+                    {/* Company Logo */}
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      {job.companyLogo ? (
+                        <img
+                          src={job.companyLogo}
+                          alt={job.companyName || "Company"}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-bold text-lg">
+                          {job.companyName?.charAt(0) || "?"}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Job Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <h3 className="text-base font-semibold text-white truncate">
+                          {job.title}
+                        </h3>
+                        {job.isFeatured && (
+                          <span className="bg-orange-500/20 text-orange-400 text-[10px] font-black uppercase tracking-tighter px-1.5 py-0.5 rounded">
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-400 mb-2">
+                        {job.companyName}
+                      </p>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {/* Remote Scope Badge */}
+                        <div className="flex items-center gap-1 text-xs text-gray-400">
+                          <svg
+                            className="w-3.5 h-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          <span className="capitalize">
+                            {job.remoteScope === "worldwide" ? "Worldwide" : job.remoteScope.replace("_", " ")}
+                          </span>
+                        </div>
+
+                        {/* Tags */}
+                        {job.tags && job.tags.length > 0 && (
+                          <>
+                            {job.tags.slice(0, 1).map((tag, idx) => (
+                              <span
+                                key={idx}
+                                className="px-2 py-0.5 bg-[#3a3a3a] text-gray-300 rounded text-xs"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Time Posted */}
+                  {timeAgo && (
+                    <div className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
+                      {timeAgo}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
 
         {/* Companies */}
         {viewMode === "companies" &&
@@ -223,7 +298,7 @@ export function JobsBoard() {
             <div
               key={company.id}
               onClick={() => router.push(`/companies/${company.slug}`)}
-              className="bg-white border border-gray-100 rounded-3xl p-6 cursor-pointer text-black transition-colors hover:bg-gray-50"
+              className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6 cursor-pointer text-white transition-all hover:bg-[#323232]"
             >
               <h3 className="text-xl font-bold">{company.name}</h3>
               {company.location && (

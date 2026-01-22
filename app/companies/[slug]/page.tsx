@@ -35,7 +35,7 @@ async function getCompany(slug: string) {
       remoteScope: jobs.remoteScope,
       postedAt: jobs.postedAt,
       isFeatured: jobs.isFeatured,
-      isPremium: jobs.isPremium,
+
       tags: jobs.tags,
       categoryName: categories.name,
       categorySlug: categories.slug,
@@ -61,9 +61,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   const { company, jobs } = data;
   const title = `${company.name} – Remote Jobs | WorkIsWork`;
-  const description = `View all remote jobs at ${company.name}. ${jobs.length} ${
-    jobs.length === 1 ? "job" : "jobs"
-  } available.`;
+  const description = `View all remote jobs at ${company.name}. ${jobs.length} ${jobs.length === 1 ? "job" : "jobs"
+    } available.`;
   const url = `${siteUrl}/companies/${resolved.slug}`;
 
   return {

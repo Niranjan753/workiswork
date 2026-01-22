@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getSiteUrl } from "@/lib/site-url";
 import { createPolarCheckout, ensurePolarConfig } from "@/lib/polar-sdk";
+import { db } from "@/db";
+import { jobs } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +12,7 @@ type JobData = {
   title: string;
   companyName: string;
   companyWebsite?: string;
+  companyLogo?: string; // base64 encoded image
   categorySlug: string;
   applyUrl: string;
   receiveApplicationsByEmail?: boolean;
@@ -80,6 +84,15 @@ function buildJobMetadata(jobData: JobData) {
     }
   }
 
+  // Chunk the company logo (base64) with custom_ prefix
+  if (jobData.companyLogo) {
+    const logo = jobData.companyLogo;
+    for (let i = 0; i < logo.length; i += MAX_METADATA_VALUE) {
+      const chunkIndex = String(i / MAX_METADATA_VALUE).padStart(2, "0");
+      metadata[`custom_logo_${chunkIndex}`] = logo.slice(i, i + MAX_METADATA_VALUE);
+    }
+  }
+
   return metadata;
 }
 
@@ -89,24 +102,25 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { jobData } = body as { jobData?: JobData };
+    const { jobId } = body as { jobId?: number };
 
-    if (!jobData) {
-      return NextResponse.json({ error: "Job data is required" }, { status: 400 });
+    if (!jobId) {
+      return NextResponse.json({ error: "Job ID is required" }, { status: 400 });
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || getSiteUrl() || "https://workiswork.xyz";
-    const metadata = buildJobMetadata(jobData);
 
-    console.log('[Create Checkout] Creating Polar checkout with:', {
-      product_id: process.env.POLAR_JOB_PRODUCT_ID,
-      success_url: `${siteUrl}/api/payments/success?checkout_id={CHECKOUT_ID}`,
-      metadata_keys: Object.keys(metadata),
-    });
+    // Minimal metadata for Polar
+    const metadata: Record<string, string> = {
+      custom_flow: "job_posting",
+      custom_job_id: String(jobId),
+    };
+
+    console.log('[Create Checkout] Creating Polar checkout for job:', jobId);
 
     const checkout = await createPolarCheckout({
       product_id: process.env.POLAR_JOB_PRODUCT_ID,
-      success_url: `${siteUrl}/api/payments/success?checkout_id={CHECKOUT_ID}`,
+      success_url: `${siteUrl}/api/payments/success?checkout_id={CHECKOUT_ID}&job_id=${jobId}`,
       allow_discount_codes: true,
       metadata,
     });
@@ -114,6 +128,11 @@ export async function POST(request: Request) {
     if (!checkout?.url) {
       throw new Error("Polar did not return a checkout URL");
     }
+
+    // Update job with checkout ID for tracking
+    await db.update(jobs)
+      .set({ polarCheckoutId: checkout.id })
+      .where(eq(jobs.id, jobId));
 
     return NextResponse.json({
       checkout_id: checkout.id,

@@ -161,11 +161,11 @@ export default async function JobDetailPage({ params }: Params) {
                 {job.categoryName}
               </span>
             </div>
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white leading-none max-w-5xl mx-auto uppercase">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white leading-none max-w-5xl mx-auto uppercase italic">
               {job.title} <span className="text-gray-700">/</span> {job.companyName}
             </h1>
 
-            <p className="text-gray-500 text-xl font-medium max-w-2xl mx-auto leading-relaxed border-l-2 border-orange-500/20 pl-8 text-left py-2">
+            <p className="text-gray-500 text-sm sm:text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed border-l-2 border-orange-500/20 pl-4 sm:pl-8 text-left py-2">
               Hiring the next generation of digital talent. {job.jobType.replace("_", " ")} position based in {job.location || "Remote"}.
             </p>
           </div>
@@ -180,10 +180,10 @@ export default async function JobDetailPage({ params }: Params) {
 
       <main className="relative z-20 mx-auto max-w-7xl px-6 -mt-16 pb-24">
         {/* Subscription Box - Squared */}
-        <div className="mb-24 bg-white border border-black p-12 md:p-20 flex flex-col md:flex-row items-center justify-between text-left gap-12 rounded-none shadow-[24px_24px_0px_rgba(0,0,0,1)]">
-          <div className="space-y-4 max-w-md">
-            <h2 className="text-4xl font-black text-black tracking-tight uppercase leading-none italic">Stay Ahead.</h2>
-            <p className="text-gray-500 font-medium text-lg leading-tight uppercase tracking-tight">Join 17,000+ experts receiving the best remote opportunities every Monday.</p>
+        <div className="mb-24 bg-white border border-black p-8 sm:p-12 md:p-20 flex flex-col md:flex-row items-center justify-between text-left gap-10 sm:gap-12 rounded-none shadow-[16px_16px_0px_rgba(0,0,0,1)] md:shadow-[24px_24px_0px_rgba(0,0,0,1)]">
+          <div className="space-y-4 max-w-md w-full">
+            <h2 className="text-3xl sm:text-4xl font-black text-black tracking-tight uppercase leading-none italic text-center md:text-left">Stay Ahead.</h2>
+            <p className="text-gray-500 font-medium text-base sm:text-lg leading-tight uppercase tracking-tight text-center md:text-left">Join 17,000+ experts receiving the best remote opportunities every Monday.</p>
           </div>
 
           <div className="w-full max-w-lg space-y-4">
@@ -369,29 +369,29 @@ export default async function JobDetailPage({ params }: Params) {
               </Link>
             </div>
 
-            <div className="grid gap-1 lg:grid-cols-3 bg-black border border-black overflow-hidden shadow-[32px_32px_0px_rgba(0,0,0,0.03)]">
+            <div className="grid gap-px bg-black border border-black overflow-hidden shadow-[16px_16px_0px_rgba(0,0,0,0.03)] md:shadow-[32px_32px_0px_rgba(0,0,0,0.03)] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {similar.map((j) => (
                 <Link
                   key={j.id}
                   href={`/jobs/${j.slug}`}
-                  className="group relative bg-white p-10 hover:bg-orange-50 transition-all duration-300"
+                  className="group relative bg-white p-8 sm:p-10 hover:bg-orange-50 transition-all duration-300 flex flex-col h-full"
                 >
-                  <div className="flex items-start justify-between mb-10">
-                    <div className="w-16 h-16 rounded-none bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl font-black text-gray-200 group-hover:bg-black group-hover:text-white transition-all">
+                  <div className="flex items-start justify-between mb-8 sm:mb-10">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-none bg-gray-50 border border-gray-100 flex items-center justify-center text-xl sm:text-2xl font-black text-gray-200 group-hover:bg-black group-hover:text-white transition-all shrink-0">
                       {j.companyName?.charAt(0)}
                     </div>
-                    <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest">
+                    <div className="text-[9px] sm:text-[10px] font-black text-gray-300 uppercase tracking-widest">
                       {new Date(j.postedAt!).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </div>
                   </div>
-                  <h3 className="font-black text-2xl text-black tracking-tighter uppercase italic leading-none mb-4 group-hover:translate-x-2 transition-transform">{j.title}</h3>
-                  <div className="flex items-center gap-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                    <span className="text-black">{j.companyName}</span>
-                    <span className="text-orange-500">/</span>
-                    <span>{j.location || "Remote"}</span>
+                  <h3 className="font-black text-xl sm:text-2xl text-black tracking-tighter uppercase italic leading-none mb-4 group-hover:translate-x-2 transition-transform">{j.title}</h3>
+                  <div className="flex items-center gap-3 text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-auto">
+                    <span className="text-black truncate">{j.companyName}</span>
+                    <span className="text-orange-500 shrink-0">/</span>
+                    <span className="truncate">{j.location || "Remote"}</span>
                   </div>
 
-                  <div className="mt-12 flex items-center text-[10px] font-black text-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0">
+                  <div className="mt-8 flex items-center text-[9px] font-black text-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0">
                     View Project <ChevronRight className="w-4 h-4 ml-1" />
                   </div>
                 </Link>

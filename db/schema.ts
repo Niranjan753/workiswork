@@ -204,6 +204,7 @@ export const subscriptions = pgTable("subscriptions", {
     .default(sql`CURRENT_TIMESTAMP`),
 });
 
+
 export const userPreferences = pgTable("user_preferences", {
   id: serial("id").primaryKey(),
   userId: uuid("user_id")
@@ -216,6 +217,28 @@ export const userPreferences = pgTable("user_preferences", {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const projects = pgTable("projects", {
+  id: serial("id").primaryKey(),
+  userName: text("user_name").notNull(),
+  userEmail: text("user_email").notNull(),
+  title: text("title").notNull(),
+  role: text("role").notNull(),
+  projectUrl: text("project_url"),
+  thumbnailUrl: text("thumbnail_url"),
+  location: text("location"),
+  rate: text("rate"),
+  description: text("description").notNull(),
+  tags: text("tags").array(),
+  isAvailable: boolean("is_available").notNull().default(true),
+  recommendations: integer("recommendations").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+
 
 
 

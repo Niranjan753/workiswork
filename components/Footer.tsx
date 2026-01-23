@@ -20,21 +20,21 @@ export function Footer({ variant = "dark" }: FooterProps) {
               <Logo className="w-8 h-8" />
               <span className="text-xl font-black uppercase tracking-tighter italic">WorkIsWork</span>
             </div>
-            <p className="text-zinc-500 font-black text-[10px] uppercase tracking-[0.2em] leading-relaxed max-w-xs">
-              THE GLOBAL PROTOCOL FOR REMOTE LABOR. <br />
-              CURATING THE WORLD'S ELITE OPPORTUNITIES.
+            <p className="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em] leading-relaxed max-w-xs">
+              Connecting top-tier remote talent <br />
+              with the world's most innovative companies.
             </p>
           </div>
 
           {/* Navigation Columns */}
           <div className="space-y-6">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Talent Ops</h3>
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">For Talent</h3>
             <ul className="space-y-3">
               {[
-                { label: "Marketplace", href: "/jobs" },
-                { label: "Signal Alerts", href: "/alerts" },
-                { label: "Intelligence", href: "/blog" },
-                { label: "Value Model", href: "/pricing" }
+                { label: "Browse Jobs", href: "/jobs" },
+                { label: "Job Alerts", href: "/alerts" },
+                { label: "Blog", href: "/blog" },
+                { label: "Pricing", href: "/pricing" }
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
@@ -46,12 +46,12 @@ export function Footer({ variant = "dark" }: FooterProps) {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Employer Ops</h3>
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">For Companies</h3>
             <ul className="space-y-3">
               {[
-                { label: "Acquire Talent", href: "/post" },
-                { label: "Enterprise Sales", href: "mailto:employers@workiswork.xyz" },
-                { label: "Capital Plans", href: "/pricing" }
+                { label: "Post a Job", href: "/post" },
+                { label: "Hire Talent", href: "/hire" },
+                { label: "Pricing", href: "/pricing" }
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
@@ -63,13 +63,13 @@ export function Footer({ variant = "dark" }: FooterProps) {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Corporate</h3>
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Company</h3>
             <ul className="space-y-3">
               {[
-                { label: "Genesis", href: "/about" },
-                { label: "Channel", href: "mailto:berlin@workiswork.xyz" },
-                { label: "Protocols", href: "/terms" },
-                { label: "Privacy", href: "/privacy" }
+                { label: "About Us", href: "/about" },
+                { label: "Contact", href: "mailto:berlin@workiswork.xyz" },
+                { label: "Terms of Service", href: "/terms" },
+                { label: "Privacy Policy", href: "/privacy" }
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
@@ -84,7 +84,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
         {/* Bottom Bar */}
         <div className="pt-10 border-t-2 border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600">
-            © {currentYear} WORKISWORK PROTOCOL. ALL SYSTEMS OPERATIONAL.
+            © {currentYear} Workiswork. All rights reserved.
           </div>
 
           <div className="flex items-center gap-8">

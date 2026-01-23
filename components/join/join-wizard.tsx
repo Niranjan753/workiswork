@@ -121,10 +121,10 @@ export function JoinWizard() {
           </div>
         </div>
         <div className="space-y-4">
-          <h2 className="text-4xl font-black text-black tracking-tighter uppercase italic leading-none">Protocol Optimized</h2>
+          <h2 className="text-4xl font-black text-black tracking-tighter uppercase italic leading-none">Preferences Saved</h2>
           <p className="text-[12px] font-black uppercase tracking-[0.2em] text-gray-400 max-w-md mx-auto leading-relaxed">
-            YOUR RECRUITMENT PARAMETERS HAVE BEEN SAVED. <br />
-            WE ARE CURATING THE NETWORK FOR YOUR SPECIFICATIONS.
+            Your recruitment parameters have been saved. <br />
+            We are now curating the marketplace for your specifications.
           </p>
         </div>
         <div className="flex justify-center pt-6">
@@ -186,9 +186,9 @@ export function JoinWizard() {
                     onClick={() => handleSelect(opt)}
                     disabled={disabled}
                     className={cn(
-                      "w-full px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] border-2 transition-all relative group",
+                      "w-full px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] border-2 transition-all relative group rounded-none",
                       disabled
-                        ? "bg-gray-50 text-gray-200 border-gray-100 cursor-not-allowed"
+                        ? "bg-gray-100 text-gray-300 border-gray-200 cursor-not-allowed"
                         : selected
                           ? "bg-black text-white border-black shadow-[4px_4px_0px_#f97316]"
                           : "bg-white text-black border-black hover:bg-orange-50 hover:border-orange-500"
@@ -211,7 +211,7 @@ export function JoinWizard() {
               type="button"
               onClick={goNext}
               disabled={!canProceed || isSaving}
-              className="group relative w-full h-16 bg-black text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-[8px_8px_0px_rgba(0,0,0,0.1)] active:scale-[0.98] overflow-hidden disabled:opacity-30"
+              className="group relative w-full h-16 bg-black text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-[8px_8px_0px_rgba(0,0,0,0.1)] active:scale-[0.98] overflow-hidden disabled:opacity-30 rounded-none"
             >
               <span className="relative z-10">{isLast ? "SYNCHRONIZE PREFERENCES" : "PROCEED TO NEXT PHASE"}</span>
               <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />

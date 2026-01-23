@@ -45,7 +45,6 @@ export function Navbar() {
                 <span className="text-lg font-black italic tracking-tighter uppercase">
                   WorkIsWork
                 </span>
-                <span className="text-[7px] font-bold tracking-[0.4em] text-orange-500 uppercase">Remote Elite</span>
               </div>
             </Link>
 

@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE_DEFAULT = 20;
-const PAGE_SIZE_MAX = 50;
+const PAGE_SIZE_MAX = 1000;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

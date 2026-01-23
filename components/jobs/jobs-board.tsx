@@ -186,16 +186,33 @@ export function JobsBoard() {
   });
 
   function toggleJobType(value: string) {
-    setJobTypes((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const existing = params.getAll("job_type");
+    params.delete("job_type");
+
+    const next = existing.includes(value)
+      ? existing.filter(v => v !== value)
+      : [...existing, value];
+
+    next.forEach(v => params.append("job_type", v));
+    router.replace(url.pathname + "?" + params.toString() + url.hash, { scroll: false });
   }
 
   function toggleCategory(value: string) {
-    setCategories((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const existing = params.getAll("category");
+    params.delete("category");
+
+    const next = existing.includes(value)
+      ? existing.filter(v => v !== value)
+      : [...existing, value];
+
+    next.forEach(v => params.append("category", v));
+    router.replace(url.pathname + "?" + params.toString() + url.hash, { scroll: false });
   }
+
 
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
@@ -288,12 +305,18 @@ export function JobsBoard() {
       {/* Main Content Area */}
       <section className="space-y-4">
         {/* Command Palette Overlay */}
-        <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandDialog
+          open={open}
+          onOpenChange={setOpen}
+          className="border-4 border-black shadow-[10px_10px_0px_black] bg-[#0A0A0A] text-white overflow-hidden"
+        >
           <CommandInput
             placeholder="Search roles, companies, tech..."
             value={searchValue}
             onValueChange={setSearchValue}
+            className="text-white placeholder:text-gray-500 bg-transparent border-none"
           />
+
           <CommandList className="custom-scrollbar min-h-[300px]">
             {jobsQuery.isFetching && (
               <div className="p-4 flex items-center justify-center border-b-2 border-black/5">
@@ -313,17 +336,64 @@ export function JobsBoard() {
               )}
             </CommandEmpty>
 
+            {/* Matching Categories */}
+            {searchValue && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Categories</span>}>
+                {JOB_ROLES.filter(r => r.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).map((role) => (
+                  <CommandItem
+                    key={role}
+                    value={role}
+                    onSelect={() => {
+                      toggleCategory(role.toLowerCase());
+                      setSearchValue("");
+                      setOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-3 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black"
+                  >
+                    <Code className="w-4 h-4 text-orange-500" />
+                    <span className="font-black text-[10px] uppercase italic tracking-tighter">Filter by {role}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {/* Matching Employment Types */}
+            {searchValue && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Employment Type</span>}>
+                {EMPLOYMENT_TYPES.filter(t => t.label.toLowerCase().includes(searchValue.toLowerCase())).map((type) => (
+                  <CommandItem
+                    key={type.value}
+                    value={type.label}
+                    onSelect={() => {
+                      toggleJobType(type.value);
+                      setSearchValue("");
+                      setOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-3 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black"
+                  >
+                    <Zap className="w-4 h-4 text-orange-500" />
+                    <span className="font-black text-[10px] uppercase italic tracking-tighter">{type.label} Roles</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+
             {(jobsQuery.data?.jobs ?? []).length > 0 && (
-              <CommandGroup heading="Opportunities">
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Opportunities</span>}>
                 {jobsQuery.data?.jobs.slice(0, 8).map((job) => (
                   <CommandItem
                     key={job.id}
                     value={job.title + " " + job.companyName}
                     onSelect={() => { router.push(`/jobs/${job.slug}`); setOpen(false); }}
-                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-gray-50 border-b border-black/5 last:border-0"
+                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black border-b border-black/5 last:border-0"
                   >
-                    <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_black] group-hover:shadow-[4px_4px_0px_black] transition-all shrink-0">
-                      {job.companyName?.charAt(0)}
+                    <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_black] transition-all shrink-0 overflow-hidden">
+                      {job.companyLogo ? (
+                        <img src={job.companyLogo} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-black">{job.companyName?.charAt(0)}</span>
+                      )}
                     </div>
                     <div className="flex flex-col min-w-0">
                       <span className="font-black text-sm uppercase italic tracking-tighter truncate">{job.title}</span>
@@ -339,16 +409,20 @@ export function JobsBoard() {
             )}
 
             {(companiesQuery.data?.companies ?? []).length > 0 && (
-              <CommandGroup heading="Entities">
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Entities</span>}>
                 {companiesQuery.data?.companies.slice(0, 4).map((company) => (
                   <CommandItem
                     key={company.id}
                     value={company.name}
                     onSelect={() => { router.push(`/companies/${company.slug}`); setOpen(false); }}
-                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-gray-50 border-b border-black/5 last:border-0"
+                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black border-b border-black/5 last:border-0"
                   >
-                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_rgba(0,0,0,0.1)] shrink-0">
-                      {company.name.charAt(0)}
+                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_rgba(0,0,0,0.1)] shrink-0 overflow-hidden">
+                      {company.logoUrl ? (
+                        <img src={company.logoUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-white">{company.name.charAt(0)}</span>
+                      )}
                     </div>
                     <div className="flex flex-col min-w-0">
                       <span className="font-black text-sm uppercase italic tracking-tighter truncate">{company.name}</span>
@@ -358,6 +432,8 @@ export function JobsBoard() {
                 ))}
               </CommandGroup>
             )}
+
+
 
             <CommandSeparator />
 

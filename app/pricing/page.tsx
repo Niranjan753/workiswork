@@ -4,7 +4,7 @@ export default function PricingPage() {
     const tiers = [
         {
             name: "Standard",
-            price: "$299",
+            price: "$59",
             duration: "per post",
             features: [
                 "30 days listing",

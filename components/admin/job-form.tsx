@@ -621,7 +621,7 @@ export function AdminJobForm({ categories }: Props) {
           disabled={submitting}
           className="group relative w-full h-16 bg-black text-white text-sm font-black uppercase tracking-[0.3em] rounded-none hover:bg-orange-500 transition-all shadow-[8px_8px_0px_rgba(0,0,0,0.1)] active:scale-[0.98] overflow-hidden"
         >
-          <span className="relative z-10">{submitting ? "Processing Transaction..." : "Initialize Posting - $299"}</span>
+          <span className="relative z-10">{submitting ? "Processing Transaction..." : "Initialize Posting - $59"}</span>
           <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Button>
 

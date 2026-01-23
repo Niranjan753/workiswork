@@ -5,7 +5,16 @@ import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
-import { ChevronRight, LockOpen, Loader2 } from "lucide-react";
+import { ChevronRight, LockOpen, Loader2, Search, Zap, Code, Briefcase } from "lucide-react";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 
 type Job = {
   id: number;
@@ -107,12 +116,42 @@ export function JobsBoard() {
     searchParams.get("optimised") === "true",
   );
   const [viewMode, setViewMode] = React.useState<"jobs" | "companies">("jobs");
+  const [open, setOpen] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState(q);
+
+  // Sync searchValue back to URL with debounce
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      const url = new URL(window.location.href);
+      if (searchValue) {
+        url.searchParams.set("q", searchValue);
+      } else {
+        url.searchParams.delete("q");
+      }
+      router.replace(url.pathname + url.search + url.hash, { scroll: false });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchValue, router]);
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   React.useEffect(() => {
     setJobTypes(searchParams.getAll("job_type"));
     setCategories(searchParams.getAll("category"));
     setOptimised(searchParams.get("optimised") === "true");
+    const currentQ = searchParams.get("q") ?? "";
+    setSearchValue(currentQ);
   }, [searchParams]);
+
 
   const jobsQuery = useQuery({
     queryKey: ["jobs", q, jobTypes, categories, remoteScope, minSalary],
@@ -147,16 +186,33 @@ export function JobsBoard() {
   });
 
   function toggleJobType(value: string) {
-    setJobTypes((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const existing = params.getAll("job_type");
+    params.delete("job_type");
+
+    const next = existing.includes(value)
+      ? existing.filter(v => v !== value)
+      : [...existing, value];
+
+    next.forEach(v => params.append("job_type", v));
+    router.replace(url.pathname + "?" + params.toString() + url.hash, { scroll: false });
   }
 
   function toggleCategory(value: string) {
-    setCategories((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const existing = params.getAll("category");
+    params.delete("category");
+
+    const next = existing.includes(value)
+      ? existing.filter(v => v !== value)
+      : [...existing, value];
+
+    next.forEach(v => params.append("category", v));
+    router.replace(url.pathname + "?" + params.toString() + url.hash, { scroll: false });
   }
+
 
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
@@ -248,7 +304,178 @@ export function JobsBoard() {
 
       {/* Main Content Area */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3 border-b-2 border-black pb-3">
+        {/* Command Palette Overlay */}
+        <CommandDialog
+          open={open}
+          onOpenChange={setOpen}
+          className="border-4 border-black shadow-[10px_10px_0px_black] bg-[#0A0A0A] text-white overflow-hidden"
+        >
+          <CommandInput
+            placeholder="Search roles, companies, tech..."
+            value={searchValue}
+            onValueChange={setSearchValue}
+            className="text-white placeholder:text-gray-500 bg-transparent border-none"
+          />
+
+          <CommandList className="custom-scrollbar min-h-[300px]">
+            {jobsQuery.isFetching && (
+              <div className="p-4 flex items-center justify-center border-b-2 border-black/5">
+                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+                <span className="ml-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Syncing...</span>
+              </div>
+            )}
+
+            <CommandEmpty className="py-12 text-center">
+              {jobsQuery.isFetching ? (
+                <div className="animate-pulse text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 italic">Reading the matrix...</div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">No results found for "{searchValue}"</div>
+                  <p className="text-[9px] font-bold text-gray-300 uppercase underline cursor-pointer" onClick={() => setSearchValue("")}>Clear Search</p>
+                </div>
+              )}
+            </CommandEmpty>
+
+            {/* Matching Categories */}
+            {searchValue && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Categories</span>}>
+                {JOB_ROLES.filter(r => r.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).map((role) => (
+                  <CommandItem
+                    key={role}
+                    value={role}
+                    onSelect={() => {
+                      toggleCategory(role.toLowerCase());
+                      setSearchValue("");
+                      setOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-3 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black"
+                  >
+                    <Code className="w-4 h-4 text-orange-500" />
+                    <span className="font-black text-[10px] uppercase italic tracking-tighter">Filter by {role}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {/* Matching Employment Types */}
+            {searchValue && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Employment Type</span>}>
+                {EMPLOYMENT_TYPES.filter(t => t.label.toLowerCase().includes(searchValue.toLowerCase())).map((type) => (
+                  <CommandItem
+                    key={type.value}
+                    value={type.label}
+                    onSelect={() => {
+                      toggleJobType(type.value);
+                      setSearchValue("");
+                      setOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-3 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black"
+                  >
+                    <Zap className="w-4 h-4 text-orange-500" />
+                    <span className="font-black text-[10px] uppercase italic tracking-tighter">{type.label} Roles</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+
+            {(jobsQuery.data?.jobs ?? []).length > 0 && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Opportunities</span>}>
+                {jobsQuery.data?.jobs.slice(0, 8).map((job) => (
+                  <CommandItem
+                    key={job.id}
+                    value={job.title + " " + job.companyName}
+                    onSelect={() => { router.push(`/jobs/${job.slug}`); setOpen(false); }}
+                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black border-b border-black/5 last:border-0"
+                  >
+                    <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_black] transition-all shrink-0 overflow-hidden">
+                      {job.companyLogo ? (
+                        <img src={job.companyLogo} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-black">{job.companyName?.charAt(0)}</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-black text-sm uppercase italic tracking-tighter truncate">{job.title}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest">{job.companyName}</span>
+                        <span className="w-1 h-1 bg-gray-200 rounded-full" />
+                        <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{job.location || "Remote"}</span>
+                      </div>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {(companiesQuery.data?.companies ?? []).length > 0 && (
+              <CommandGroup heading={<span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Entities</span>}>
+                {companiesQuery.data?.companies.slice(0, 4).map((company) => (
+                  <CommandItem
+                    key={company.id}
+                    value={company.name}
+                    onSelect={() => { router.push(`/companies/${company.slug}`); setOpen(false); }}
+                    className="flex items-center gap-4 py-4 cursor-pointer data-[selected=true]:bg-white data-[selected=true]:!text-black border-b border-black/5 last:border-0"
+                  >
+                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center text-[12px] font-black italic shadow-[2px_2px_0px_rgba(0,0,0,0.1)] shrink-0 overflow-hidden">
+                      {company.logoUrl ? (
+                        <img src={company.logoUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-white">{company.name.charAt(0)}</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-black text-sm uppercase italic tracking-tighter truncate">{company.name}</span>
+                      <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{company.location || "Global"}</span>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+
+
+            <CommandSeparator />
+
+            <CommandGroup heading="Navigation">
+              <CommandItem onSelect={() => { toggleCategory("developer"); setOpen(false); }} className="py-3">
+                <Code className="mr-3 h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Dev Openings</span>
+              </CommandItem>
+              <CommandItem onSelect={() => { toggleCategory("design"); setOpen(false); }} className="py-3">
+                <Zap className="mr-3 h-4 w-4 text-orange-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Motion & UI</span>
+              </CommandItem>
+              <CommandItem onSelect={() => { setViewMode("jobs"); setOpen(false); }} className="py-3">
+                <Briefcase className="mr-3 h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Switch to Feed</span>
+              </CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
+
+
+        {/* Search Bar Trigger - High Contrast */}
+        <div
+          onClick={() => setOpen(true)}
+          className="relative group cursor-pointer"
+        >
+          <div className="absolute inset-0 bg-black translate-x-[3px] translate-y-[3px] transition-transform group-hover:translate-x-[6px] group-hover:translate-y-[6px]" />
+          <div className="relative flex bg-white border-2 border-black p-1">
+            <div className="flex items-center px-4 border-r-2 border-black">
+              <Search className="w-4 h-4 text-black" />
+            </div>
+            <div className="flex-1 bg-white px-5 py-4 text-[13px] font-bold tracking-tight uppercase italic text-gray-300">
+              {q || "Search roles, companies, or technologies..."}
+            </div>
+            <div className="hidden sm:flex items-center px-4 bg-gray-50 border-l-2 border-black text-[9px] font-black uppercase tracking-widest text-[#FF5A1F]">
+              Command + K
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3 border-b-2 border-black pb-3 pt-4">
+
           <div className="flex gap-6">
             {["jobs", "companies"].map((v) => (
               <button
@@ -257,8 +484,8 @@ export function JobsBoard() {
                 className={cn(
                   "relative text-[10px] font-black uppercase tracking-[0.3em] transition-all pb-1",
                   viewMode === v
-                    ? "text-white after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[2px] after:bg-orange-500"
-                    : "text-gray-400 hover:text-white/40 cursor-pointer"
+                    ? "!text-black after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[2px] after:bg-orange-500"
+                    : "text-gray-400 hover:!text-black cursor-pointer"
                 )}
               >
                 {v}
@@ -266,9 +493,10 @@ export function JobsBoard() {
             ))}
           </div>
 
+
           <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
             {jobsQuery.isLoading || companiesQuery.isLoading ? (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 text-black">
                 <Loader2 className="w-2.5 h-2.5 animate-spin" />
                 Updating...
               </span>
@@ -279,6 +507,7 @@ export function JobsBoard() {
             )}
           </div>
         </div>
+
 
         {/* List View */}
         <div className="space-y-2">

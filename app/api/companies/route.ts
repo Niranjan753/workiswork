@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE_DEFAULT = 20;
-const PAGE_SIZE_MAX = 50;
+const PAGE_SIZE_MAX = 1000;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     filters.push(ilike(companies.location, pattern));
   }
 
-  const where = filters.length > 0 
+  const where = filters.length > 0
     ? and.apply(null, filters as any)
     : undefined;
 

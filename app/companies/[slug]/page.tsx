@@ -166,7 +166,7 @@ export default async function CompanyPage({ params }: Params) {
             {/* Jobs Board Segment */}
             <section className="space-y-6">
               <div className="flex items-center justify-between border-b-4 border-black pb-4">
-                <h2 className="text-2xl font-black uppercase tracking-tighter italic text-black">Live Opportunities</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tighter italic !text-black">Live Opportunities</h2>
                 <div className="text-[10px] font-black uppercase tracking-widest text-orange-500">{jobs.length} VACANCIES</div>
               </div>
 
@@ -184,9 +184,10 @@ export default async function CompanyPage({ params }: Params) {
                     >
                       <div className="flex justify-between items-start gap-4">
                         <div className="space-y-2">
-                          <h3 className="text-2xl font-black tracking-tighter uppercase italic group-hover:text-orange-500 transition-colors">
+                          <h3 className="text-2xl font-black tracking-tighter uppercase italic !text-black group-hover:text-orange-500 transition-colors">
                             {job.title}
                           </h3>
+
                           <div className="flex items-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                             {job.categoryName && <span className="text-black">{job.categoryName}</span>}
                             <span className="w-1 h-1 bg-gray-300 rounded-full" />
@@ -217,12 +218,12 @@ export default async function CompanyPage({ params }: Params) {
                 Subscribe Updates
               </button>
             </div>
-            
+
             <div className="p-6 border-2 border-black">
-               <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-4">Genesis Protocol</h5>
-               <p className="text-[11px] font-medium leading-relaxed text-gray-500 uppercase tracking-tight">
-                 Authorized recruitment channel for {company.name}. All roles are verified for remote capability.
-               </p>
+              <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-4">Genesis Protocol</h5>
+              <p className="text-[11px] font-medium leading-relaxed text-gray-500 uppercase tracking-tight">
+                Authorized recruitment channel for {company.name}. All roles are verified for remote capability.
+              </p>
             </div>
           </aside>
         </div>

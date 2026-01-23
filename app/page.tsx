@@ -5,7 +5,7 @@ export default function Home() {
     return (
         <div className="bg-white min-h-screen selection:bg-orange-500/30">
             {/* Dark Hero Section */}
-            <section className="bg-[#0A0A0A] text-white flex flex-col items-center justify-center min-h-[90vh] px-6 relative overflow-hidden">
+            <section className="bg-[#0A0A0A] text-white flex flex-col items-center justify-center pt-32 pb-24 px-6 relative overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
                     style={{ backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px)', backgroundSize: '60px 100%' }} />
@@ -21,10 +21,10 @@ export default function Home() {
                         </span>
                     </div>
 
-                    <h1 className="font-black tracking-tighter text-[50px] leading-[0.85] 
-                   sm:text-[80px] md:text-[120px] lg:text-[160px] uppercase italic">
+                    <h1 className="font-black tracking-tighter text-[40px] leading-[0.85] 
+                   sm:text-[60px] md:text-[90px] lg:text-[110px] uppercase italic">
                         The Global <br />
-                        <span className="text-gray-800">Labor</span> Market
+                        <span className="text-orange-500">Labor</span> Market
                     </h1>
 
                     <p className="mt-10 text-base sm:text-lg md:text-xl font-medium text-gray-400 max-w-xl mx-auto leading-tight uppercase tracking-tight">

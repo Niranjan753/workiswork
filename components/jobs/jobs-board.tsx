@@ -56,6 +56,16 @@ const EMPLOYMENT_TYPES = [
   { value: "internship", label: "internship" },
 ];
 
+const JOB_ROLES = [
+  "Developer", "Engineer", "Frontend", "Backend", "Fullstack", "Design", "Data", "Research",
+  "Finance", "Marketing", "Senior", "Sales", "Customer Service", "Customer Support", "Admin",
+  "Copywriter", "Technical Writer", "Software Engineer", "AI", "Graphic Design",
+  "Quality Assurance", "DevOps", "Security", "Security Engineer", "Project Manager",
+  "Product Manager", "Product Designer", "Executive Assistant", "Customer Success", "HR",
+  "Recruiter", "Operations", "Manager", "Mobile", "Legal", "Analyst", "Accounting",
+  "Support", "Management", "Business Development", "Assistant", "Web3"
+];
+
 function getTimeAgo(date: Date): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -90,6 +100,9 @@ export function JobsBoard() {
   const [jobTypes, setJobTypes] = React.useState<string[]>(
     searchParams.getAll("job_type"),
   );
+  const [categories, setCategories] = React.useState<string[]>(
+    searchParams.getAll("category"),
+  );
   const [optimised, setOptimised] = React.useState(
     searchParams.get("optimised") === "true",
   );
@@ -97,16 +110,17 @@ export function JobsBoard() {
 
   React.useEffect(() => {
     setJobTypes(searchParams.getAll("job_type"));
+    setCategories(searchParams.getAll("category"));
     setOptimised(searchParams.get("optimised") === "true");
   }, [searchParams]);
 
   const jobsQuery = useQuery({
-    queryKey: ["jobs", q, jobTypes, activeCategories, remoteScope, minSalary],
+    queryKey: ["jobs", q, jobTypes, categories, remoteScope, minSalary],
     queryFn: async (): Promise<JobsResponse> => {
       const params = new URLSearchParams();
       params.set("limit", "1000");
       if (q) params.set("q", q);
-      activeCategories.forEach((c) => params.append("category", c));
+      categories.forEach((c) => params.append("category", c));
       jobTypes.forEach((t) => params.append("job_type", t));
       if (remoteScope) params.set("remote_scope", remoteScope);
       if (minSalary) params.set("min_salary", minSalary);
@@ -134,6 +148,12 @@ export function JobsBoard() {
 
   function toggleJobType(value: string) {
     setJobTypes((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
+    );
+  }
+
+  function toggleCategory(value: string) {
+    setCategories((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
   }
@@ -167,6 +187,30 @@ export function JobsBoard() {
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
                       {t.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-6 border-t-2 border-black/5">
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Roles</p>
+              <div className="max-h-[400px] overflow-y-auto pr-2 space-y-2.5 custom-scrollbar">
+                {JOB_ROLES.map((role) => (
+                  <label key={role} className="flex items-center gap-2.5 cursor-pointer group">
+                    <div className="relative flex items-center shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={categories.includes(role.toLowerCase())}
+                        onChange={() => toggleCategory(role.toLowerCase())}
+                        className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
+                        ✓
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
+                      {role}
                     </span>
                   </label>
                 ))}

@@ -21,7 +21,7 @@ export default function Home() {
 
                     <h1 className="font-black tracking-tighter text-[40px] leading-[0.9] sm:text-[60px] md:text-[80px] lg:text-[100px] uppercase italic">
                         The Future <br />
-                        <span className="text-gray-800">Of</span> Work
+                        <span className="text-orange-500">Of</span> Work
                     </h1>
 
                     <p className="mt-8 text-base sm:text-lg md:text-xl font-medium text-gray-500 max-w-2xl mx-auto leading-tight uppercase tracking-tight">

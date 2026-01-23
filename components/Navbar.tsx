@@ -10,63 +10,56 @@ import { cn } from "../lib/utils";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
 
 export function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
-
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
 
-  const isJobs = pathname === "/jobs" || pathname.startsWith("/jobs");
-  const isBlog = pathname.startsWith("/blog");
-  const isJoin = pathname.startsWith("/join");
   const isHire = pathname.startsWith("/hire");
   const isPost = pathname.startsWith("/post");
-  const isPortfolio = pathname.startsWith("/portfolio");
 
   React.useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   const navLinks = [
-    { name: "Jobs", href: "/hire", active: isHire },
-    { name: "Blog", href: "/blog", active: isBlog },
-    { name: "Portfolio", href: "/portfolio", active: isPortfolio },
-    { name: "Join", href: "/join", active: isJoin },
-    { name: "Post a Job", href: "/post", active: isPost },
+    { name: "Hire Talent", href: "/hire", active: isHire },
+    { name: "Post Jobs", href: "/post", active: isPost },
+    { name: "PORTFOLIO", href: "/portfolio" },
+    { name: "JOIN", href: "/join" },
   ];
 
   return (
     <>
-      {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#1b1b1b] backdrop-blur text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/80 backdrop-blur-xl text-white">
+        <div className="mx-auto max-w-7xl px-6">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <Logo width={28} height={20} />
-              <span className="text-xl font-bold">
-                WorkIsWork
-              </span>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <Logo width={28} height={21} />
+              <div className="flex flex-col leading-none">
+                <span className="text-lg font-black italic tracking-tighter uppercase">
+                  WorkIsWork
+                </span>
+                <span className="text-[7px] font-bold tracking-[0.4em] text-orange-500 uppercase">Remote Elite</span>
+              </div>
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
-                  key={link.href}
+                  key={link.name}
                   href={link.href}
                   className={cn(
-                    "px-4 py-2 rounded-md text-md font-medium transition",
+                    "px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all",
                     link.active
-                      ? "bg-white/10 text-white"
-                      : "text-gray-300 hover:bg-white/5 hover:text-white"
+                      ? "text-orange-500"
+                      : "text-gray-400 hover:text-white"
                   )}
                 >
                   {link.name}
@@ -75,117 +68,104 @@ export function Navbar() {
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-5">
               <button
                 onClick={() => setShowUnlockDialog(true)}
-                className="flex items-center gap-2 rounded-md bg-[#FF5A1F] px-6 py-2 text-md font-bold text-white hover:bg-[#FF5A1F]/90 cursor-pointer"
+                className="bg-white text-black px-6 py-2.5 rounded-none text-[9px] font-black uppercase tracking-[0.2em] hover:bg-orange-500 hover:text-white transition-all border border-white"
               >
-                <LockOpen className="h-4 w-4" />
-                Unlock Jobs
+                Access Portal
               </button>
             </div>
 
             {/* Mobile Button */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="md:hidden rounded-md p-2 text-white hover:bg-white/10"
+              className="lg:hidden w-10 h-10 flex items-center justify-center border border-white/10 hover:bg-white/5 transition-all"
             >
-              <Menu size={22} />
+              <div className="space-y-1">
+                <div className="w-5 h-0.5 bg-white" />
+                <div className="w-3 h-0.5 bg-white" />
+              </div>
             </button>
           </div>
         </div>
       </header>
 
-      {/* ================= MOBILE OVERLAY ================= */}
-      <div
-        onClick={() => setMobileOpen(false)}
-        className={cn(
-          "fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity md:hidden",
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        )}
-      />
-
       {/* ================= MOBILE DRAWER ================= */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 h-full w-[85%] max-w-sm bg-[#121212] shadow-2xl transition-all ease-[cubic-bezier(0.2,0.6,0.2,0.8)] duration-200 md:hidden",
-          mobileOpen ? "translate-x-0" : "translate-x-full"
+          "fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl transition-all duration-500 ease-in-out lg:hidden",
+          mobileOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
-        {/* Drawer Header */}
-        <div className="flex h-16 items-center text-white justify-between border-b border-white/10 px-5">
-          <div className="flex items-center gap-2">
-            <Logo width={24} height={18} />
-            <span className="font-bold text-white">WorkIsWork</span>
-          </div>
+        <div className="flex flex-col h-full p-8 pt-24">
           <button
             onClick={() => setMobileOpen(false)}
-            className="rounded-md p-2 hover:bg-white/10"
+            className="absolute top-8 right-8 w-12 h-12 border border-white/20 flex items-center justify-center text-white"
           >
-            <X size={20} />
+            <X size={24} />
           </button>
-        </div>
 
-        {/* Links */}
-        <div className="flex flex-col px-4 py-4 space-y-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "rounded-lg px-4 py-3 text-base font-medium transition",
-                link.active
-                  ? "bg-white/10 text-white"
-                  : "text-gray-300 hover:bg-white/5 hover:text-white"
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
+          <div className="space-y-12">
+            <div className="flex flex-col space-y-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-5xl font-black text-white hover:text-orange-500 transition-colors uppercase italic tracking-tighter"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
 
-        <div className="mx-4 my-3 h-px bg-white/10" />
-
-        {/* Actions */}
-        <div className="space-y-3 px-4">
-          <button
-            onClick={() => {
-              setMobileOpen(false);
-              setShowUnlockDialog(true);
-            }}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#FF5A1F] py-3 font-bold text-white"
-          >
-            <LockOpen className="h-4 w-4" />
-            Unlock Jobs
-          </button>
+            <div className="pt-12 border-t border-white/10 space-y-8">
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  setShowUnlockDialog(true);
+                }}
+                className="w-full bg-orange-500 text-white py-6 text-xs font-black uppercase tracking-[0.3em] italic"
+              >
+                Access Elite Portal
+              </button>
+              <div className="flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                <span>©2024 WorkIsWork</span>
+                <span>Direct Hiring Inc.</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* ================= UNLOCK DIALOG ================= */}
       <Dialog open={showUnlockDialog} onOpenChange={setShowUnlockDialog}>
-        <DialogContent className="sm:rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>Join WorkIsWork</DialogTitle>
-            <DialogDescription>
-              Unlock unlimited access to the best remote jobs.
-            </DialogDescription>
+        <DialogContent className="rounded-none border-2 border-black bg-white p-12 max-w-lg shadow-[24px_24px_0px_rgba(0,0,0,1)]">
+          <DialogHeader className="text-left space-y-4">
+            <div className="w-12 h-1 bg-black" />
+            <DialogTitle className="text-4xl font-black uppercase italic tracking-tighter leading-none">
+              Restricted <br /> Access
+            </DialogTitle>
+            <p className="text-gray-500 font-medium uppercase tracking-tight text-sm">
+              Authenticating credentials for elite marketplace access. Join the network to proceed.
+            </p>
           </DialogHeader>
-          <DialogFooter className="gap-2">
+          <div className="mt-12 flex flex-col gap-4">
             <Link
               href="/join"
               onClick={() => setShowUnlockDialog(false)}
-              className="rounded-full bg-primary px-6 py-2 font-bold text-white"
+              className="w-full bg-black text-white py-5 text-center text-xs font-black uppercase tracking-[0.2em] hover:bg-orange-500 transition-all"
             >
-              Join Now
+              Initialize Membership
             </Link>
             <button
               onClick={() => setShowUnlockDialog(false)}
-              className="rounded-full px-4 py-2 text-muted-foreground"
+              className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-black transition-colors"
             >
-              Cancel
+              Decline Access
             </button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </>

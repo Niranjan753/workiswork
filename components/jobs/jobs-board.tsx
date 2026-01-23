@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 import Link from "next/link";
-import { LockOpen } from "lucide-react";
+import { ChevronRight, LockOpen, Loader2 } from "lucide-react";
 
 type Job = {
   id: number;
@@ -139,45 +139,82 @@ export function JobsBoard() {
   }
 
   return (
-    <div className="grid gap-6 mt-20 lg:grid-cols-[260px_minmax(0,1fr)]">
-      {/* Sidebar */}
-      <aside className="space-y-6 border border-[#3a3a3a] bg-[#2a2a2a] rounded-xl p-6 text-sm text-gray-300 shadow-sm h-fit">
-        <div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-gray-500 mb-3">
-            Employment types
-          </p>
-          {EMPLOYMENT_TYPES.map((t) => (
-            <label key={t.value} className="flex items-center gap-2 mb-2 cursor-pointer hover:text-white transition-colors">
-              <input
-                type="checkbox"
-                checked={jobTypes.includes(t.value)}
-                onChange={() => toggleJobType(t.value)}
-                className="h-4 w-4 border border-gray-600 rounded bg-[#1a1a1a] text-orange-500 focus:ring-orange-500"
-              />
-              <span className="capitalize">{t.label}</span>
-            </label>
-          ))}
+    <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
+      {/* Sidebar - Brute Style */}
+      <aside className="space-y-6 h-fit">
+        <div className="bg-white border-2 border-black p-5 sm:p-6 rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-5 border-b-2 border-black pb-3 flex items-center justify-between">
+            Filters
+            <span className="w-1.5 h-1.5 bg-orange-500 rounded-none shadow-[1.5px_1.5px_0px_black]" />
+          </h3>
+
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Employment Type</p>
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+                {EMPLOYMENT_TYPES.map((t) => (
+                  <label key={t.value} className="flex items-center gap-2.5 cursor-pointer group">
+                    <div className="relative flex items-center shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={jobTypes.includes(t.value)}
+                        onChange={() => toggleJobType(t.value)}
+                        className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
+                        ✓
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
+                      {t.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t-2 border-black">
+            <Link
+              href="/post"
+              className="group relative block w-full bg-black text-white px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Post Job
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            </Link>
+          </div>
         </div>
 
-        <Link
-          href="/join"
-          className="block text-center rounded-xl bg-orange-500 px-4 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
-        >
-          Join the community
-        </Link>
+        {/* Action Card */}
+        <div className="bg-orange-500 border-2 border-black p-6 rounded-none shadow-[3px_3px_0px_black] text-white">
+          <h4 className="text-lg font-black uppercase italic tracking-tighter leading-none mb-3">
+            Get the best talent <br /> direct to your inbox
+          </h4>
+          <p className="text-[9px] font-black uppercase tracking-widest text-white/80 mb-5">
+            Join 5,000+ companies hiring through Workiswork.
+          </p>
+          <button className="w-full bg-black text-white py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
+            Unlock Talent
+          </button>
+        </div>
       </aside>
 
-      {/* Main */}
+      {/* Main Content Area */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-4 shadow-sm">
-          <div className="flex bg-[#1a1a1a] p-1 rounded-xl">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3 border-b-2 border-black pb-3">
+          <div className="flex gap-6">
             {["jobs", "companies"].map((v) => (
               <button
                 key={v}
                 onClick={() => setViewMode(v as any)}
                 className={cn(
-                  "px-6 py-2 text-sm font-bold rounded-lg transition-colors",
-                  viewMode === v ? "bg-orange-500 text-white" : "text-gray-400 hover:text-white",
+                  "relative text-[10px] font-black uppercase tracking-[0.3em] transition-all pb-1",
+                  viewMode === v
+                    ? "text-white after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[2px] after:bg-orange-500"
+                    : "text-gray-400 hover:text-white/40 cursor-pointer"
                 )}
               >
                 {v}
@@ -185,127 +222,124 @@ export function JobsBoard() {
             ))}
           </div>
 
-          <p className="text-sm font-bold text-gray-400">
-            {viewMode === "jobs"
-              ? `${jobsQuery.data?.total ?? 0} jobs`
-              : `${companiesQuery.data?.total ?? 0} companies`}
-          </p>
+          <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+            {jobsQuery.isLoading || companiesQuery.isLoading ? (
+              <span className="flex items-center gap-1.5">
+                <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                Updating...
+              </span>
+            ) : (
+              viewMode === "jobs"
+                ? `${jobsQuery.data?.total ?? 0} OPPORTUNITIES`
+                : `${companiesQuery.data?.total ?? 0} ENTITIES`
+            )}
+          </div>
         </div>
 
-        {/* Jobs */}
-        {viewMode === "jobs" &&
-          jobsQuery.data?.jobs.map((job) => {
-            const timeAgo = job.postedAt ? getTimeAgo(new Date(job.postedAt)) : null;
+        {/* List View */}
+        <div className="space-y-2">
+          {(jobsQuery.isLoading || companiesQuery.isLoading) && (
+            <div className="space-y-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-white border-2 border-black p-6 animate-pulse">
+                  <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 bg-gray-100" />
+                    <div className="flex-1 space-y-2.5">
+                      <div className="h-3.5 bg-gray-100 w-1/3" />
+                      <div className="h-2.5 bg-gray-100 w-1/4" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-            return (
-              <Link
-                key={job.id}
-                href={`/jobs/${job.slug}`}
-                className={cn(
-                  "block border rounded-xl p-5 transition-all duration-200",
-                  job.isFeatured
-                    ? "bg-[#2a2a2a] border-orange-500/50 shadow-[0_0_20px_rgba(255,90,31,0.05)]"
-                    : "bg-[#2a2a2a] border-[#3a3a3a] hover:bg-[#323232]",
-                )}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  {/* Left: Logo + Content */}
-                  <div className="flex items-start gap-3 flex-1 min-w-0">
-                    {/* Company Logo */}
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center flex-shrink-0 overflow-hidden">
+          {viewMode === "jobs" && !jobsQuery.isLoading &&
+            jobsQuery.data?.jobs.map((job) => {
+              const timeAgo = job.postedAt ? getTimeAgo(new Date(job.postedAt)) : null;
+
+              return (
+                <Link
+                  key={job.id}
+                  href={`/jobs/${job.slug}`}
+                  className={cn(
+                    "group relative flex flex-col md:flex-row md:items-center justify-between p-5 sm:p-7 transition-all duration-300 gap-5 border-2 border-black rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
+                    job.isFeatured
+                      ? "bg-orange-50 border-orange-500 shadow-[3px_3px_0px_#f97316]"
+                      : "bg-white"
+                  )}
+                >
+                  <div className="flex items-center gap-5 min-w-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-lg font-black text-black shrink-0 transition-all">
                       {job.companyLogo ? (
                         <img
                           src={job.companyLogo}
-                          alt={job.companyName || "Company"}
+                          alt={job.companyName || ""}
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-white font-bold text-lg">
-                          {job.companyName?.charAt(0) || "?"}
-                        </span>
+                        job.companyName?.charAt(0)
                       )}
                     </div>
 
-                    {/* Job Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h3 className="text-base font-semibold text-white truncate">
-                          {job.title}
-                        </h3>
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
                         {job.isFeatured && (
-                          <span className="bg-orange-500/20 text-orange-400 text-[10px] font-black uppercase tracking-tighter px-1.5 py-0.5 rounded">
-                            Featured
+                          <span className="text-[7px] font-black text-white bg-orange-500 px-1.5 py-0.5 uppercase tracking-[0.2em] leading-none shrink-0">
+                            PRIME ROLE
                           </span>
                         )}
+                        <span className="text-[8px] font-black text-black/40 uppercase tracking-[0.2em] leading-none">
+                          {job.jobType.replace("_", " ")}
+                        </span>
                       </div>
-                      <p className="text-sm text-gray-400 mb-2">
-                        {job.companyName}
-                      </p>
-
-                      {/* Tags */}
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {/* Remote Scope Badge */}
-                        <div className="flex items-center gap-1 text-xs text-gray-400">
-                          <svg
-                            className="w-3.5 h-3.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          <span className="capitalize">
-                            {job.remoteScope === "worldwide" ? "Worldwide" : job.remoteScope.replace("_", " ")}
-                          </span>
-                        </div>
-
-                        {/* Tags */}
-                        {job.tags && job.tags.length > 0 && (
-                          <>
-                            {job.tags.slice(0, 1).map((tag, idx) => (
-                              <span
-                                key={idx}
-                                className="px-2 py-0.5 bg-[#3a3a3a] text-gray-300 rounded text-xs"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </>
-                        )}
+                      <h3 className="text-lg sm:text-2xl font-black text-black tracking-tighter uppercase italic leading-[1.1] mb-1.5 group-hover:text-orange-500 transition-colors">
+                        {job.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2.5 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
+                        <span className="text-black">{job.companyName}</span>
+                        <span className="w-1 h-1 bg-gray-300 rounded-full" />
+                        <span>{job.location || "Remote"}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Right: Time Posted */}
-                  {timeAgo && (
-                    <div className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
+                  <div className="flex items-center justify-between md:flex-col md:items-end md:justify-center gap-3 shrink-0 border-t md:border-t-0 md:border-l border-black/5 pt-3 md:pt-0 md:pl-6">
+                    {job.salaryMin && (
+                      <div className="text-xs sm:text-base font-black text-black uppercase tracking-tighter">
+                        ${parseInt(job.salaryMin) / 1000}K+ <span className="text-[9px] text-gray-400">/ YEAR</span>
+                      </div>
+                    )}
+                    <div className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em]">
                       {timeAgo}
                     </div>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
+                  </div>
+                </Link>
+              );
+            })}
 
-        {/* Companies */}
-        {viewMode === "companies" &&
-          companiesQuery.data?.companies.map((company) => (
-            <div
-              key={company.id}
-              onClick={() => router.push(`/companies/${company.slug}`)}
-              className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6 cursor-pointer text-white transition-all hover:bg-[#323232]"
-            >
-              <h3 className="text-xl font-bold">{company.name}</h3>
-              {company.location && (
-                <p className="text-sm text-gray-400">{company.location}</p>
-              )}
-            </div>
-          ))}
+          {viewMode === "companies" && !companiesQuery.isLoading &&
+            companiesQuery.data?.companies.map((company) => (
+              <Link
+                key={company.id}
+                href={`/companies/${company.slug}`}
+                className="group relative flex items-center justify-between p-6 sm:p-8 transition-all duration-300 gap-5 bg-white border-2 border-black rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
+              >
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-2xl font-black text-black transition-all">
+                    {company.logoUrl ? (
+                      <img src={company.logoUrl} className="w-full h-full object-cover" />
+                    ) : company.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h3 className="text-xl sm:text-3xl font-black text-black tracking-tighter uppercase italic leading-none mb-1.5">{company.name}</h3>
+                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em]">{company.location || "Global"}</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-6 h-6 text-black group-hover:text-orange-500 group-hover:translate-x-2 transition-all" />
+              </Link>
+            ))}
+        </div>
       </section>
     </div>
   );

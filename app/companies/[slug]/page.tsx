@@ -95,108 +95,137 @@ export default async function CompanyPage({ params }: Params) {
   const { company, jobs } = data;
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-white selection:bg-orange-500/30">
-      {/* Header */}
-      <section className="relative z-10 py-16 sm:py-24 border-b border-white/[0.05] bg-black">
-        <div className="mx-auto max-w-5xl px-4">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-24 h-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-8">
+    <div className="bg-white min-h-screen selection:bg-orange-500/30">
+      {/* Dark Hero Header */}
+      <section className="bg-[#0A0A0A] text-white pt-24 pb-32 px-6 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{ backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px)', backgroundSize: '60px 100%' }} />
+
+        <div className="max-w-[1200px] mx-auto text-center relative z-10">
+          <div className="flex items-center justify-center mb-10">
+            <div className="w-20 h-20 bg-white border-4 border-black rounded-none flex items-center justify-center p-3 shadow-[6px_6px_0px_#f97316]">
               {company.logoUrl ? (
                 <img
                   src={company.logoUrl}
                   alt={company.name}
-                  className="w-16 h-16 object-contain"
+                  className="w-full h-full object-contain"
                 />
               ) : (
-                <span className="text-3xl font-bold text-zinc-700">
+                <span className="text-3xl font-black text-black">
                   {company.name[0]}
                 </span>
               )}
             </div>
+          </div>
 
-            <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tighter">
-              {company.name}
-            </h1>
+          <h1 className="text-[50px] sm:text-[70px] md:text-[90px] font-black tracking-tighter uppercase italic leading-[0.85] mb-8">
+            {company.name}
+          </h1>
 
-            <div className="flex flex-wrap gap-6 text-sm font-bold uppercase tracking-widest text-zinc-500">
-              {company.location && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-orange-500" />
-                  {company.location}
-                </div>
-              )}
-              {company.websiteUrl && (
-                <a
-                  href={company.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-white"
-                >
-                  <Globe className="w-4 h-4 text-orange-500" />
-                  Website
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              )}
-            </div>
+          <div className="flex flex-wrap justify-center gap-8">
+            {[
+              { icon: MapPin, label: company.location || "Remote" },
+              { icon: Globe, label: "Official Site", href: company.websiteUrl }
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center gap-3">
+                <item.icon className="w-4 h-4 text-orange-500" />
+                {item.href ? (
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                    {item.label} <ExternalLink className="w-3 h-3" />
+                  </a>
+                ) : (
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">
+                    {item.label}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Content */}
-      <main className="mx-auto max-w-5xl px-4 pt-16 pb-24">
-        {/* Stats */}
-        <div className="grid gap-6 sm:grid-cols-3 mb-16">
-          <Stat label="Jobs Posted" value={jobs.length} />
-          <Stat
-            label="Featured"
-            value={jobs.filter((j) => j.isFeatured).length}
-          />
-          <Stat
-            label="Categories"
-            value={
-              new Set(jobs.map((j) => j.categorySlug).filter(Boolean)).size
-            }
-          />
-        </div>
-
-        {/* Jobs */}
-        <section className="space-y-8">
-          <h2 className="text-2xl font-bold tracking-tight">Open Positions</h2>
-
-          {jobs.length === 0 ? (
-            <div className="bg-zinc-900/30 border border-zinc-800 p-20 text-center rounded-[2.5rem]">
-              <p className="text-zinc-500">No jobs posted yet.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {jobs.map((job) => (
-                <Link
-                  key={job.id}
-                  href={`/jobs/${job.slug}`}
-                  className="block bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-8 hover:bg-[#111111] transition"
-                >
-                  <h3 className="text-2xl font-bold mb-2 tracking-tight">{job.title}</h3>
-
-                  <div className="flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                    {job.categoryName && (
-                      <span className="text-orange-500">
-                        {job.categoryName}
-                      </span>
-                    )}
-                    <span>{job.location || "Remote"}</span>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {new Date(job.postedAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </div>
-                  </div>
-                </Link>
+      {/* Main Content Area */}
+      <main className="max-w-[1200px] mx-auto px-6 pb-32 -mt-16 relative z-20">
+        <div className="grid gap-12 lg:grid-cols-[1fr_320px]">
+          <div className="space-y-12">
+            {/* Stats Overview */}
+            <div className="grid grid-cols-3 gap-6">
+              {[
+                { label: "Active Roles", value: jobs.length },
+                { label: "Featured", value: jobs.filter(j => j.isFeatured).length },
+                { label: "Sectors", value: new Set(jobs.map(j => j.categorySlug)).size }
+              ].map((stat, idx) => (
+                <div key={idx} className="bg-white border-2 border-black p-6 rounded-none shadow-[4px_4px_0px_black]">
+                  <p className="text-3xl font-black tracking-tighter italic text-black leading-none mb-2">{stat.value}</p>
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 leading-none">{stat.label}</p>
+                </div>
               ))}
             </div>
-          )}
-        </section>
+
+            {/* Jobs Board Segment */}
+            <section className="space-y-6">
+              <div className="flex items-center justify-between border-b-4 border-black pb-4">
+                <h2 className="text-2xl font-black uppercase tracking-tighter italic text-black">Live Opportunities</h2>
+                <div className="text-[10px] font-black uppercase tracking-widest text-orange-500">{jobs.length} VACANCIES</div>
+              </div>
+
+              {jobs.length === 0 ? (
+                <div className="border-2 border-dashed border-gray-200 p-24 text-center">
+                  <p className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-300">Station Idle - No Active Roles</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {jobs.map((job) => (
+                    <Link
+                      key={job.id}
+                      href={`/jobs/${job.slug}`}
+                      className="group bg-white border-2 border-black p-6 rounded-none transition-all shadow-[4px_4px_0px_black] hover:shadow-[8px_8px_0px_black] hover:-translate-x-1 hover:-translate-y-1"
+                    >
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="space-y-2">
+                          <h3 className="text-2xl font-black tracking-tighter uppercase italic group-hover:text-orange-500 transition-colors">
+                            {job.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                            {job.categoryName && <span className="text-black">{job.categoryName}</span>}
+                            <span className="w-1 h-1 bg-gray-300 rounded-full" />
+                            <span>{job.location || "Remote"}</span>
+                          </div>
+                        </div>
+                        <div className="text-[10px] font-black text-gray-300 group-hover:text-black transition-colors uppercase tracking-widest flex items-center gap-2">
+                          Details <ExternalLink className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+
+          {/* Sidebar Area */}
+          <aside className="space-y-8">
+            <div className="bg-orange-500 border-2 border-black p-8 rounded-none shadow-[6px_6px_0px_black] text-white">
+              <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-[0.9] mb-4">
+                Partner with <br /> {company.name}
+              </h4>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90 mb-8 leading-relaxed">
+                Be the first to know about new opportunities from this company.
+              </p>
+              <button className="w-full bg-black text-white py-4 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
+                Subscribe Updates
+              </button>
+            </div>
+            
+            <div className="p-6 border-2 border-black">
+               <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-4">Genesis Protocol</h5>
+               <p className="text-[11px] font-medium leading-relaxed text-gray-500 uppercase tracking-tight">
+                 Authorized recruitment channel for {company.name}. All roles are verified for remote capability.
+               </p>
+            </div>
+          </aside>
+        </div>
       </main>
     </div>
   );

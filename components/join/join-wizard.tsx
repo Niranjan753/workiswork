@@ -114,24 +114,26 @@ export function JoinWizard() {
 
   if (preferencesSaved) {
     return (
-      <div className="bg-white border border-gray-100 shadow-xl shadow-gray-200/50 rounded-[2.5rem] p-12 text-center space-y-8 animate-in fade-in zoom-in duration-500">
+      <div className="bg-white border-2 border-black p-12 text-center space-y-8 shadow-[12px_12px_0px_black] animate-in fade-in zoom-in duration-500">
         <div className="flex justify-center">
-          <div className="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
-            <CheckCircle2 className="w-12 h-12 text-green-500" />
+          <div className="w-24 h-24 bg-orange-500 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_black]">
+            <CheckCircle2 className="w-12 h-12 text-white" />
           </div>
         </div>
         <div className="space-y-4">
-          <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Preferences Saved!</h2>
-          <p className="text-xl font-medium text-gray-500 max-w-md mx-auto leading-relaxed">
-            Your profile is now optimised. We&apos;ll use these details to show you the best remote opportunities.
+          <h2 className="text-4xl font-black text-black tracking-tighter uppercase italic leading-none">Protocol Optimized</h2>
+          <p className="text-[12px] font-black uppercase tracking-[0.2em] text-gray-400 max-w-md mx-auto leading-relaxed">
+            YOUR RECRUITMENT PARAMETERS HAVE BEEN SAVED. <br />
+            WE ARE CURATING THE NETWORK FOR YOUR SPECIFICATIONS.
           </p>
         </div>
         <div className="flex justify-center pt-6">
           <Link
             href="/jobs"
-            className="px-8 py-4 text-base font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+            className="group relative bg-black text-white px-10 py-5 text-[11px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
           >
-            Browse Jobs
+            <span className="relative z-10">Access Marketplace</span>
+            <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </Link>
         </div>
       </div>
@@ -140,39 +142,39 @@ export function JoinWizard() {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-white border border-gray-100 shadow-xl shadow-gray-200/50 rounded-[2.5rem] overflow-hidden">
+      <div className="bg-white border-2 border-black shadow-[12px_12px_0px_black] overflow-hidden">
         {/* Progress Bar */}
-        <div className="w-full h-2 bg-gray-50">
+        <div className="w-full h-1 bg-gray-100">
           <div
-            className="h-full bg-blue-600 transition-all duration-700 ease-in-out"
+            className="h-full bg-orange-500 transition-all duration-700 ease-in-out"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="p-8 sm:p-10 space-y-8">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">
-                Step {step + 1} of {total}
+        <div className="p-8 sm:p-12 md:p-16 space-y-12">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-4">
+              <span className="text-[10px] font-black text-black uppercase tracking-[0.4em]">
+                PHASE {step + 1} // {total}
               </span>
               {isSkillsQuestion && (
-                <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                  {currentAnswers.length}/{maxSkills} Selected
+                <span className="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em]">
+                  {currentAnswers.length}/{maxSkills} ACQUIRED
                 </span>
               )}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+            <h2 className="text-4xl font-black text-black tracking-tighter uppercase italic leading-none">
               {current.label}
             </h2>
             {current.helper && (
-              <p className="text-base font-medium text-gray-500 leading-relaxed">
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">
                 {current.helper}
               </p>
             )}
           </div>
 
-          <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {current.options.map((opt) => {
                 const selected = currentAnswers.includes(opt);
                 const disabled = isSkillsQuestion && !selected && currentAnswers.length >= maxSkills;
@@ -184,18 +186,18 @@ export function JoinWizard() {
                     onClick={() => handleSelect(opt)}
                     disabled={disabled}
                     className={cn(
-                      "w-full px-5 py-3 text-left text-[14px] font-bold border rounded-xl transition-all shadow-sm group relative",
+                      "w-full px-6 py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] border-2 transition-all relative group",
                       disabled
-                        ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed"
+                        ? "bg-gray-50 text-gray-200 border-gray-100 cursor-not-allowed"
                         : selected
-                          ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20"
-                          : "bg-white text-gray-600 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/10"
+                          ? "bg-black text-white border-black shadow-[4px_4px_0px_#f97316]"
+                          : "bg-white text-black border-black hover:bg-orange-50 hover:border-orange-500"
                     )}
                   >
                     {opt}
                     {selected && (
                       <span className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <CheckCircle2 className="w-5 h-5 text-white" />
+                        <CheckCircle2 className="w-4 h-4 text-orange-500 px-0.5" />
                       </span>
                     )}
                   </button>
@@ -204,24 +206,25 @@ export function JoinWizard() {
             </div>
           </div>
 
-          <div className="pt-6 flex flex-col items-center gap-6">
+          <div className="pt-8 border-t-2 border-black flex flex-col items-center gap-8">
             <button
               type="button"
               onClick={goNext}
               disabled={!canProceed || isSaving}
-              className="w-full px-8 py-4 text-lg font-bold bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/25 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="group relative w-full h-16 bg-black text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-[8px_8px_0px_rgba(0,0,0,0.1)] active:scale-[0.98] overflow-hidden disabled:opacity-30"
             >
-              {isLast ? "Save Preferences" : "Continue"}
+              <span className="relative z-10">{isLast ? "SYNCHRONIZE PREFERENCES" : "PROCEED TO NEXT PHASE"}</span>
+              <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </button>
 
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-12">
               {!isFirst && (
                 <button
                   type="button"
                   onClick={goBack}
-                  className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors"
+                  className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors"
                 >
-                  ← Previous Step
+                  ← REVERT PHASE
                 </button>
               )}
 
@@ -230,9 +233,9 @@ export function JoinWizard() {
                   type="button"
                   onClick={skipStep}
                   disabled={isSaving}
-                  className="text-sm font-bold text-gray-400 hover:text-blue-600 transition-colors"
+                  className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-orange-500 transition-colors"
                 >
-                  Skip for now
+                  BYPASS STEP
                 </button>
               )}
             </div>

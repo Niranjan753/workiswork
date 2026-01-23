@@ -29,34 +29,34 @@ export function Navbar() {
   const navLinks = [
     { name: "Hire Talent", href: "/hire", active: isHire },
     { name: "Post Jobs", href: "/post", active: isPost },
-    { name: "Marketplace", href: "#" },
-    { name: "Network", href: "#" },
+    { name: "PORTFOLIO", href: "/portfolio" },
+    { name: "JOIN", href: "/join" },
   ];
 
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/80 backdrop-blur-xl text-white">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="flex h-20 items-center justify-between">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <Logo width={32} height={24} />
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <Logo width={28} height={21} />
               <div className="flex flex-col leading-none">
-                <span className="text-xl font-black italic tracking-tighter uppercase">
+                <span className="text-lg font-black italic tracking-tighter uppercase">
                   WorkIsWork
                 </span>
-                <span className="text-[8px] font-bold tracking-[0.4em] text-orange-500 uppercase">Remote Elite</span>
+                <span className="text-[7px] font-bold tracking-[0.4em] text-orange-500 uppercase">Remote Elite</span>
               </div>
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-2">
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "px-6 py-2 text-[11px] font-black uppercase tracking-[0.2em] transition-all",
+                    "px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all",
                     link.active
                       ? "text-orange-500"
                       : "text-gray-400 hover:text-white"
@@ -68,10 +68,10 @@ export function Navbar() {
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-5">
               <button
                 onClick={() => setShowUnlockDialog(true)}
-                className="bg-white text-black px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.2em] hover:bg-orange-500 hover:text-white transition-all border border-white"
+                className="bg-white text-black px-6 py-2.5 rounded-none text-[9px] font-black uppercase tracking-[0.2em] hover:bg-orange-500 hover:text-white transition-all border border-white"
               >
                 Access Portal
               </button>
@@ -80,11 +80,11 @@ export function Navbar() {
             {/* Mobile Button */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden w-12 h-12 flex items-center justify-center border border-white/10 hover:bg-white/5 transition-all"
+              className="lg:hidden w-10 h-10 flex items-center justify-center border border-white/10 hover:bg-white/5 transition-all"
             >
-              <div className="space-y-1.5">
-                <div className="w-6 h-0.5 bg-white" />
-                <div className="w-4 h-0.5 bg-white" />
+              <div className="space-y-1">
+                <div className="w-5 h-0.5 bg-white" />
+                <div className="w-3 h-0.5 bg-white" />
               </div>
             </button>
           </div>

@@ -251,18 +251,22 @@ export function AdminJobForm({ categories }: Props) {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-6 border border-[#3a3a3a] bg-[#1a1a1a] rounded-2xl p-6 text-sm text-white shadow-xl"
+      className="space-y-8 bg-white border-2 border-black p-8 sm:p-12 md:p-16 rounded-none text-black shadow-[12px_12px_0px_black]"
     >
-      <h2 className="text-3xl font-black text-white tracking-tighter">Post a job</h2>
+      <div className="border-b-2 border-black pb-8 mb-8">
+        <h2 className="text-4xl font-black text-black tracking-tighter uppercase italic leading-none">Job Specifications</h2>
+        <p className="mt-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Authenticate your recruitment credentials</p>
+      </div>
 
       <div className="space-y-4">
         {/* Company Name with Autocomplete */}
-        <div className="space-y-2 relative">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
+        <div className="space-y-3 relative">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black flex items-center justify-between">
             Company Name
+            <span className="w-2 h-2 bg-orange-500 shadow-[1.5px_1.5px_0px_black]" />
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Your company's brand/trade name: without Inc., Ltd., B.V., Pte., etc. If your company already exists, select it from the suggestions.
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+            Brand name without legal suffixes (Inc., Ltd.).
           </p>
           <div className="relative">
             <Input
@@ -272,26 +276,25 @@ export function AdminJobForm({ categories }: Props) {
               onChange={handleCompanyNameChange}
               onFocus={() => companySuggestions.length > 0 && setShowSuggestions(true)}
               onBlur={() => {
-                // Delay to allow clicking on suggestions
                 setTimeout(() => setShowSuggestions(false), 200);
               }}
               required
-              placeholder="Acme"
-              className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] text-white focus:bg-[#1a1a1a] transition-all placeholder:text-gray-600"
+              placeholder="ACME CORP"
+              className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
             />
             <input type="hidden" name="companyId" value={selectedCompanyId || ""} />
             {showSuggestions && companySuggestions.length > 0 && (
-              <div className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-xl shadow-2xl max-h-60 overflow-y-auto overflow-hidden">
+              <div className="absolute z-50 w-full mt-1 bg-white border-2 border-black rounded-none shadow-[4px_4px_0px_black] max-h-60 overflow-y-auto">
                 {companySuggestions.map((company) => (
                   <button
                     key={company.id}
                     type="button"
                     onClick={() => selectCompany(company)}
-                    className="w-full text-left px-3 py-2 hover:bg-[#2a2a2a] border-b border-[#3a3a3a] last:border-b-0 text-sm font-medium transition-colors"
+                    className="w-full text-left px-4 py-3 hover:bg-orange-50 border-b-2 border-black last:border-b-0 transition-colors"
                   >
-                    <div className="font-bold text-white">{company.name}</div>
+                    <div className="font-black text-black uppercase text-[11px]">{company.name}</div>
                     {company.websiteUrl && (
-                      <div className="text-xs text-gray-400">{company.websiteUrl}</div>
+                      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{company.websiteUrl}</div>
                     )}
                   </button>
                 ))}
@@ -301,66 +304,59 @@ export function AdminJobForm({ categories }: Props) {
         </div>
 
         {/* Job Title */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
             Job Title
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Please specify as single job position like "Machine Learning Engineer"
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+            Single position e.g., "Full Stack Engineer"
           </p>
           <Input
             name="title"
             required
-            placeholder="Machine Learning Engineer"
-            className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] text-white focus:bg-[#1a1a1a] transition-all placeholder:text-gray-600"
+            placeholder="LEAD ML ENGINEER"
+            className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
           />
         </div>
 
         {/* Tags with comma-separated highlighting */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Tags, Keywords, or Stack
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
+            Tech Stack / Tags
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Short tags are preferred. Use tags like industry and tech stack. You can enter comma-separated values (e.g., "React, TypeScript, Node.js").
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+            Max 4 tags. Comma separated (e.g., React, Node).
           </p>
-          <div className="flex flex-wrap gap-2 mb-2">
+          <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-gray-300 rounded-full"
+                className="inline-flex items-center gap-2 border-2 border-black bg-black px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-white rounded-none"
               >
                 {tag}
                 <button
                   type="button"
                   onClick={() => removeTag(tag)}
-                  className="hover:text-red-500 transition-all rounded-full p-0.5"
+                  className="hover:text-orange-500 transition-all"
                 >
                   <X className="h-3 w-3" />
                 </button>
               </span>
             ))}
           </div>
-          <div className="space-y-2">
-            <div className="relative">
-              <div className="absolute inset-0 px-3 py-2 pointer-events-none text-sm border border-transparent flex items-center">
-                {tagInput && getTagHighlights(tagInput)}
-              </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
               <Input
                 value={tagInput}
                 onChange={(e) => {
                   const value = e.target.value;
                   setTagInput(value);
-                  // Auto-add tags when comma is entered
                   if (value.includes(",")) {
                     const parts = value.split(",");
                     const beforeComma = parts[0]?.trim();
                     if (beforeComma && tags.length < 4) {
-                      const next = Array.from(new Set([...tags, beforeComma]));
-                      setTags(next);
-                      // Keep everything after the first comma
-                      const afterComma = parts.slice(1).join(",");
-                      setTagInput(afterComma);
+                      setTags(Array.from(new Set([...tags, beforeComma])));
+                      setTagInput(parts.slice(1).join(","));
                     } else if (tags.length >= 4) {
                       setTagInput("");
                     }
@@ -372,37 +368,29 @@ export function AdminJobForm({ categories }: Props) {
                     addTag();
                   }
                 }}
-                placeholder="Type tags separated by commas (e.g., React, TypeScript, Node.js)"
-                className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] text-white focus:bg-[#1a1a1a] transition-all placeholder:text-gray-600"
-                style={{
-                  color: tagInput ? "transparent" : "inherit",
-                  caretColor: "black"
-                }}
+                placeholder="ADD TAGS..."
+                className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
               />
             </div>
             <Button
               type="button"
               onClick={addTag}
-              variant="outline"
-              className="border-[#3a3a3a] bg-[#2a2a2a] text-white rounded-xl font-bold hover:bg-[#3a3a3a] transition-all text-white placeholder:text-gray-600"
+              className="h-12 border-2 border-black bg-black text-white rounded-none font-black uppercase tracking-widest hover:bg-orange-500 transition-all px-8"
             >
-              Add Tags
+              Add
             </Button>
           </div>
         </div>
 
         {/* Company Logo */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
             Company Logo
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Upload a square logo of at least 48×48 pixels for best aesthetic results. Supports: JPG, PNG, WebP, SVG, AVIF, and GIF formats.
-          </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6 p-4 border-2 border-black bg-gray-50">
             {logoPreview ? (
               <div className="relative">
-                <div className="w-16 h-12 rounded-full overflow-hidden border-2 border-[#3a3a3a]">
+                <div className="w-16 h-16 rounded-none overflow-hidden border-2 border-black bg-white">
                   <img
                     src={logoPreview}
                     alt="Logo preview"
@@ -415,263 +403,231 @@ export function AdminJobForm({ categories }: Props) {
                     setLogoPreview(null);
                     setLogoFile(null);
                   }}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                  className="absolute -top-2 -right-2 bg-black text-white p-1 hover:bg-orange-500 transition-colors"
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
             ) : (
-              <div className="w-16 h-16 rounded-full bg-[#0B0B0B] flex items-center justify-center border-2 border-dashed border-[#3a3a3a]">
-                <svg
-                  className="w-8 h-8 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
+              <div className="w-16 h-16 rounded-none bg-white flex items-center justify-center border-2 border-black">
+                <svg className="w-6 h-6 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             )}
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-                className="hidden"
-              />
-              <div className="px-4 py-2 bg-[#FF5A1F] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#E54D15] transition-all text-white placeholder:text-gray-600">
-                {logoPreview ? "Change Logo" : "Upload"}
-              </div>
-            </label>
+            <div className="space-y-2">
+              <label className="cursor-pointer inline-block">
+                <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
+                <div className="px-6 py-2.5 bg-black text-white text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 transition-all">
+                  {logoPreview ? "Replace Logo" : "Upload Logo"}
+                </div>
+              </label>
+              <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tight">Square logo • JPG/PNG • Max 5MB</p>
+            </div>
           </div>
         </div>
 
         {/* Job Description */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
             Job Description
           </label>
           <textarea
             name="descriptionHtml"
             required
             rows={8}
-            className="w-full border border-[#3a3a3a] bg-[#0B0B0B] px-3 py-2 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-[#1a1a1a] transition-all text-gray-300"
-            placeholder="Write the full job description here..."
+            className="w-full border-2 border-black bg-white px-4 py-3 text-[13px] font-medium rounded-none focus:outline-none focus:border-orange-500 transition-all text-black placeholder:text-gray-300"
+            placeholder="Technical requirements, responsibilities, and benefits..."
           />
         </div>
 
         {/* Apply URL */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
             Apply URL
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Apply URLs with a form an applicant can fill out generally receive a lot more applicants
-          </p>
           <Input
             name="applyUrl"
             type="url"
             required
-            placeholder="https://company.com/jobs/123"
-            className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600"
+            placeholder="HTTPS://JOBS.COMPANY.COM/ROLE"
+            className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
           />
         </div>
 
-        {/* Receive applications by email */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={receiveByEmail}
-              onChange={(e) => setReceiveByEmail(e.target.checked)}
-              className="h-4 w-4 border border-[#3a3a3a] rounded bg-[#0B0B0B] text-orange-500 focus:ring-orange-500"
-            />
-            <span className="text-sm font-black uppercase tracking-widest text-gray-300">
-              I want to receive applications by email
+        {/* Email Applications Toggle */}
+        <div className="py-2">
+          <label className="flex items-center gap-4 cursor-pointer group">
+            <div className="relative flex items-center shrink-0">
+              <input
+                type="checkbox"
+                checked={receiveByEmail}
+                onChange={(e) => setReceiveByEmail(e.target.checked)}
+                className="peer appearance-none h-5 w-5 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+              />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[10px]">✓</div>
+            </div>
+            <span className="text-[11px] font-black uppercase tracking-widest text-black group-hover:text-orange-500 transition-colors">
+              Direct application delivery via email
             </span>
           </label>
         </div>
 
         {/* Company Email */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Company Email (For invoice)
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">
+            Administrative Email
           </label>
-          <p className="text-xs text-gray-400 font-medium">
-            Make sure this email is accessible by you! We use this to send the invoice and edit link.
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+            For invoices and edit links.
           </p>
           <Input
             name="companyEmail"
             type="email"
             required
-            placeholder="contact@company.com"
-            className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600"
+            placeholder="CONTACT@COMPANY.COM"
+            className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
           />
         </div>
 
-        {/* Highlight with brand color */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={highlightColor}
-              onChange={(e) => setHighlightColor(e.target.checked)}
-              className="h-4 w-4 border border-[#3a3a3a] rounded bg-[#0B0B0B] text-orange-500 focus:ring-orange-500"
-            />
-            <span className="text-sm font-black uppercase tracking-widest text-gray-300">
-              Highlight with a brand color (+$49)
-            </span>
-            <span className="text-xs text-gray-400 font-bold">2x more views</span>
-          </label>
-          {highlightColor && (
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 py-8 border-y-2 border-black bg-gray-50 -mx-8 sm:-mx-12 md:-mx-16 px-8 sm:px-12 md:px-16">
+          {/* Category */}
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">Category</label>
+            <select
+              name="category"
+              className="h-12 w-full border-2 border-black bg-white px-4 text-[11px] font-black uppercase tracking-widest rounded-none focus:border-orange-500 outline-none hover:bg-orange-50 transition-all"
+              required
+              defaultValue={categories[0]?.slug}
+            >
+              {categories.map((cat) => (
+                <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Job Type */}
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">Job Type</label>
+            <select
+              name="jobType"
+              className="h-12 w-full border-2 border-black bg-white px-4 text-[11px] font-black uppercase tracking-widest rounded-none focus:border-orange-500 outline-none hover:bg-orange-50 transition-all"
+              required
+              defaultValue="full_time"
+            >
+              <option value="full_time">Full-time</option>
+              <option value="part_time">Part-time</option>
+              <option value="freelance">Freelance</option>
+              <option value="contract">Contract</option>
+              <option value="internship">Internship</option>
+            </select>
+          </div>
+
+          {/* Remote Scope */}
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">Remote Scope</label>
+            <select
+              name="remoteScope"
+              className="h-12 w-full border-2 border-black bg-white px-4 text-[11px] font-black uppercase tracking-widest rounded-none focus:border-orange-500 outline-none hover:bg-orange-50 transition-all"
+              required
+              defaultValue="worldwide"
+            >
+              <option value="worldwide">Worldwide / Any</option>
+              <option value="north_america">North America</option>
+              <option value="europe">Europe</option>
+              <option value="latam">Latin America</option>
+              <option value="asia">Asia-Pacific</option>
+            </select>
+          </div>
+
+          {/* Location */}
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">Work Auth</label>
             <Input
-              name="highlightColor"
-              type="color"
-              defaultValue="#facc15"
-              className="border border-border w-20 h-10 rounded-md p-1"
+              name="location"
+              placeholder="E.G. US ONLY, EU ONLY"
+              className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
+              required
             />
-          )}
-        </div>
+          </div>
 
-        {/* Category - using jobs page categories */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Category
-          </label>
-          <select
-            name="category"
-            className="h-10 w-full border border-[#3a3a3a] bg-[#0B0B0B] px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-[#1a1a1a] transition-all text-gray-300"
-            required
-            defaultValue={categories[0]?.slug}
-          >
-            {categories.map((cat) => (
-              <option key={cat.slug} value={cat.slug}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Job Type */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Job Type
-          </label>
-          <p className="text-xs text-muted-foreground">
-            What type of employment contract is this?
-          </p>
-          <select
-            name="jobType"
-            className="h-10 w-full border border-[#3a3a3a] bg-[#0B0B0B] px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-[#1a1a1a] transition-all text-gray-300"
-            required
-            defaultValue="full_time"
-          >
-            <option value="full_time">Full-time</option>
-            <option value="part_time">Part-time</option>
-            <option value="freelance">Freelance</option>
-            <option value="contract">Contract</option>
-            <option value="internship">Internship</option>
-          </select>
-        </div>
-
-        {/* Remote Scope / Time Zones */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Remote Scope / Time Zones
-          </label>
-          <p className="text-xs text-muted-foreground">
-            Which regions or time zones can candidates work from?
-          </p>
-          <select
-            name="remoteScope"
-            className="h-10 w-full border border-[#3a3a3a] bg-[#0B0B0B] px-4 text-sm font-bold rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-[#1a1a1a] transition-all text-gray-300"
-            required
-            defaultValue="worldwide"
-          >
-            <option value="worldwide">Worldwide / Any</option>
-            <option value="north_america">North America (US, Canada, Mexico)</option>
-            <option value="europe">Europe</option>
-            <option value="latam">Latin America</option>
-            <option value="asia">Asia-Pacific</option>
-          </select>
-        </div>
-
-        {/* Salary Range */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Salary Range (USD)
-          </label>
-          <p className="text-xs text-muted-foreground">
-            Optional: Provide salary range to attract more candidates
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
+          {/* Salary */}
+          <div className="sm:col-span-2 space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-black">Salary Range (USD)</label>
+            <div className="grid grid-cols-2 gap-4">
               <Input
                 name="salaryMin"
                 type="number"
-                placeholder="Min (e.g., 90000)"
-                className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] focus:bg-[#1a1a1a] transition-all font-bold"
+                placeholder="MIN (E.G. 90000)"
+                className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
               />
-            </div>
-            <div>
               <Input
                 name="salaryMax"
                 type="number"
-                placeholder="Max (e.g., 130000)"
-                className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] focus:bg-[#1a1a1a] transition-all font-bold"
+                placeholder="MAX (E.G. 140000)"
+                className="border-2 border-black rounded-none h-12 bg-white text-black font-black uppercase focus:ring-0 focus:border-orange-500 transition-all placeholder:text-gray-200"
               />
             </div>
           </div>
         </div>
 
-        {/* Location / Work Authorization */}
-        <div className="space-y-2">
-          <label className="text-sm font-black uppercase tracking-widest text-gray-300">
-            Location / Work Authorization
+        {/* Highlight Upgrade */}
+        <div className="py-6">
+          <label className="flex items-center gap-4 cursor-pointer group bg-orange-50 p-6 border-2 border-orange-200 hover:border-orange-500 transition-all mb-4">
+            <div className="relative flex items-center shrink-0">
+              <input
+                type="checkbox"
+                checked={highlightColor}
+                onChange={(e) => setHighlightColor(e.target.checked)}
+                className="peer appearance-none h-6 w-6 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+              />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-xs">✓</div>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-black uppercase tracking-widest text-black">Premium Highlight Upgrade</span>
+                <span className="text-[9px] font-black bg-orange-500 text-white px-2 py-0.5 uppercase tracking-widest animate-pulse leading-none">High Velocity</span>
+              </div>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tight mt-1">Select a custom signature color for your listing (+$49)</p>
+            </div>
           </label>
-          <p className="text-xs text-muted-foreground">
-            Where should candidates be legally authorized to work? (e.g., "US only", "EU", "Remote contractor worldwide")
-          </p>
-          <Input
-            name="location"
-            placeholder="e.g., US only, EU, Remote contractor worldwide"
-            className="border-[#3a3a3a] rounded-xl h-10 bg-[#0B0B0B] focus:bg-[#1a1a1a] transition-all text-white placeholder:text-gray-600"
-            required
-          />
+
+          {highlightColor && (
+            <div className="flex items-center gap-4 p-4 border-2 border-black bg-white animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex-1">
+                <p className="text-[9px] font-black uppercase tracking-widest text-black mb-2">Signature Brand Color</p>
+                <div className="flex items-center gap-3">
+                  <Input
+                    name="highlightColor"
+                    type="color"
+                    defaultValue="#f97316"
+                    className="w-12 h-12 border-2 border-black rounded-none p-1 cursor-pointer bg-white"
+                  />
+                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                    This color will be used for your job's <br />
+                    premium border and highlights.
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="pt-8 border-t border-[#3a3a3a] flex flex-col gap-6">
+      <div className="pt-8 border-t-2 border-black flex flex-col gap-6">
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full h-12 bg-[#FF5A1F] text-white text-[13px] font-black uppercase tracking-widest rounded-2xl hover:bg-[#E54D15] transition-all shadow-xl shadow-orange-500/10 active:scale-[0.98]"
+          className="group relative w-full h-16 bg-black text-white text-sm font-black uppercase tracking-[0.3em] rounded-none hover:bg-orange-500 transition-all shadow-[8px_8px_0px_rgba(0,0,0,0.1)] active:scale-[0.98] overflow-hidden"
         >
-          {submitting ? "Redirecting to payment…" : "Post job - $299"}
+          <span className="relative z-10">{submitting ? "Processing Transaction..." : "Initialize Posting - $299"}</span>
+          <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Button>
 
         {error && (
-          <div className="border border-red-900/50 bg-red-950/30 p-4 rounded-xl text-center">
-            <p className="text-xs font-bold text-red-400">Error: {error}</p>
-          </div>
-        )}
-        {successSlug && (
-          <div className="border border-green-900/50 bg-green-950/30 p-4 rounded-xl text-center">
-            <p className="text-sm font-bold text-green-400">
-              Job created successfully!{" "}
-              <button
-                type="button"
-                className="underline hover:text-green-300"
-                onClick={() => router.push(`/jobs/${successSlug}`)}
-              >
-                View it on the board
-              </button>
-            </p>
+          <div className="border-2 border-black bg-red-50 p-6 rounded-none text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600">Authentication Error: {error}</p>
           </div>
         )}
       </div>

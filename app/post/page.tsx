@@ -88,19 +88,44 @@ export default async function PostJobPage() {
   const cats = await getCategories();
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#0B0B0B] text-white overflow-hidden">
-      <header className="relative z-10 border-b border-[#3a3a3a] bg-[#0B0B0B]">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link href="/hire" className="text-sm font-bold text-gray-400 hover:text-white hover:underline transition-colors">
-            ← Back to jobs
-          </Link>
-        </div>
-      </header>
+    <div className="bg-white min-h-screen selection:bg-orange-500/30 font-sans">
+      {/* Dark Hero Section */}
+      <section className="bg-[#0A0A0A] text-white pt-24 pb-32 px-6 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{ backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px)', backgroundSize: '60px 100%' }} />
 
-      {/* Main Content */}
-      <main className="relative z-10 flex-1 mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <AdminJobForm categories={cats} />
-      </main>
+        <div className="max-w-[1200px] mx-auto text-center relative z-10">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-orange-500 border border-orange-500/20 px-3 py-1">
+              RECRUITMENT HUB
+            </span>
+          </div>
+
+          <h1 className="font-black tracking-tighter text-[40px] leading-[0.9] sm:text-[60px] md:text-[80px] lg:text-[100px] uppercase italic">
+            Acquire <br />
+            <span className="text-gray-800">Elite</span> Talent
+          </h1>
+
+          <p className="mt-8 text-base sm:text-lg md:text-xl font-medium text-gray-400 max-w-xl mx-auto leading-tight uppercase tracking-tight">
+            Connect your mission with the world's most innovative <br className="hidden md:block" />
+            remote professionals. Join the elite network.
+          </p>
+
+          <div className="mt-12 flex items-center justify-center gap-6">
+            <Link href="/jobs" className="text-[10px] font-black text-white hover:text-orange-500 transition-colors uppercase tracking-[0.3em] flex items-center gap-2">
+              <span className="text-orange-500">←</span> Browse Marketplace
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className="px-6 pb-32 -mt-16 relative z-20">
+        <div className="max-w-3xl mx-auto">
+          <AdminJobForm categories={cats} />
+        </div>
+      </section>
     </div>
   );
 }

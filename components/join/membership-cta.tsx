@@ -38,15 +38,20 @@ export function MembershipCTA({ label = "Join membership" }: Props) {
   };
 
   return (
-    <div className="space-y-2">
-      <Button
+    <div className="space-y-4">
+      <button
         onClick={startCheckout}
         disabled={loading}
-        className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-bold px-8 h-12 transition-all shadow-sm"
+        className="group relative w-full sm:w-auto bg-black text-white px-10 h-14 text-[11px] font-black uppercase tracking-[0.3em] transition-all shadow-[8px_8px_0px_rgba(0,0,0,0.1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 overflow-hidden disabled:opacity-30"
       >
-        {loading ? "Redirecting…" : label}
-      </Button>
-      {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+        <span className="relative z-10">{loading ? "INITIALIZING SECURE LINK…" : label}</span>
+        <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+      </button>
+      {error && (
+        <p className="text-[10px] font-black uppercase tracking-widest text-red-600 border-2 border-black bg-red-50 p-3 italic">
+          CRITICAL ERROR: {error}
+        </p>
+      )}
     </div>
   );
 }

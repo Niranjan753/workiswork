@@ -11,132 +11,91 @@ export function Footer({ variant = "dark" }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0B0B0B] text-white py-16 px-6 border-t border-zinc-900">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
-          {/* Brand/Logo Section (2 columns wide on large screens) */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center gap-2">
+    <footer className="bg-[#0A0A0A] text-white py-16 px-6 border-t-2 border-black selection:bg-orange-500/30">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+          {/* Brand Section */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
               <Logo className="w-8 h-8" />
-              <span className="text-xl font-bold tracking-tight">WorkIsWork</span>
+              <span className="text-xl font-black uppercase tracking-tighter italic">WorkIsWork</span>
             </div>
-            <p className="text-zinc-500 font-medium text-lg max-w-sm leading-relaxed">
-              Where the world comes to work.
-              <br />
-              The best remote jobs, curated for you.
+            <p className="text-zinc-500 font-black text-[10px] uppercase tracking-[0.2em] leading-relaxed max-w-xs">
+              THE GLOBAL PROTOCOL FOR REMOTE LABOR. <br />
+              CURATING THE WORLD'S ELITE OPPORTUNITIES.
             </p>
           </div>
 
-          {/* Links Columns */}
-          <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="space-y-6">
-              <h3 className="font-bold text-white text-sm">For Talent</h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link href="/jobs" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Browse Jobs
+          {/* Navigation Columns */}
+          <div className="space-y-6">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Talent Ops</h3>
+            <ul className="space-y-3">
+              {[
+                { label: "Marketplace", href: "/jobs" },
+                { label: "Signal Alerts", href: "/alerts" },
+                { label: "Intelligence", href: "/blog" },
+                { label: "Value Model", href: "/pricing" }
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+                    {link.label}
                   </Link>
                 </li>
-                <li>
-                  <Link href="/alerts" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Job Alerts
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pricing" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Pricing
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
+          </div>
 
-            <div className="space-y-6">
-              <h3 className="font-bold text-white text-sm">For Employers</h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link href="/post" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Post a Job
+          <div className="space-y-6">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Employer Ops</h3>
+            <ul className="space-y-3">
+              {[
+                { label: "Acquire Talent", href: "/post" },
+                { label: "Enterprise Sales", href: "mailto:employers@workiswork.xyz" },
+                { label: "Capital Plans", href: "/pricing" }
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+                    {link.label}
                   </Link>
                 </li>
-                <li>
-                  <a href="mailto:employers@workiswork.xyz" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Contact Sales
-                  </a>
-                </li>
-                <li>
-                  <Link href="/pricing" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Pricing Plans
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
+          </div>
 
-            <div className="space-y-6">
-              <h3 className="font-bold text-white text-sm">Company</h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link href="/about" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    About Us
+          <div className="space-y-6">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-orange-500">Corporate</h3>
+            <ul className="space-y-3">
+              {[
+                { label: "Genesis", href: "/about" },
+                { label: "Channel", href: "mailto:berlin@workiswork.xyz" },
+                { label: "Protocols", href: "/terms" },
+                { label: "Privacy", href: "/privacy" }
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+                    {link.label}
                   </Link>
                 </li>
-                <li>
-                  <a href="mailto:berlin@workiswork.xyz" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <Link href="/terms" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="text-zinc-500 hover:text-white transition-colors text-sm font-medium">
-                    Privacy Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-zinc-500 text-sm font-medium">
-            © {currentYear} WorkIsWork Inc. All rights reserved.
-          </p>
+        <div className="pt-10 border-t-2 border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600">
+            © {currentYear} WORKISWORK PROTOCOL. ALL SYSTEMS OPERATIONAL.
+          </div>
 
-          <div className="flex items-center gap-6">
-            <a
-              href="https://twitter.com/workiswork"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter className="w-5 h-5" />
+          <div className="flex items-center gap-8">
+            <a href="https://twitter.com/workiswork" className="text-zinc-600 hover:text-orange-500 transition-colors">
+              <Twitter className="w-4 h-4" />
             </a>
-            <a
-              href="https://linkedin.com/company/workiswork"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-5 h-5" />
+            <a href="https://linkedin.com/company/workiswork" className="text-zinc-600 hover:text-orange-500 transition-colors">
+              <Linkedin className="w-4 h-4" />
             </a>
-            <a
-              href="https://github.com/workiswork"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-colors"
-              aria-label="GitHub"
-            >
-              <Github className="w-5 h-5" />
+            <a href="https://github.com/workiswork" className="text-zinc-600 hover:text-orange-500 transition-colors">
+              <Github className="w-4 h-4" />
             </a>
           </div>
         </div>

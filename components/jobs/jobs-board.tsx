@@ -139,33 +139,33 @@ export function JobsBoard() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+    <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
       {/* Sidebar - Brute Style */}
-      <aside className="space-y-8 h-fit">
-        <div className="bg-white border-2 border-black p-6 sm:p-8 rounded-none shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] transition-all">
-          <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-black mb-6 border-b-2 border-black pb-4 flex items-center justify-between">
+      <aside className="space-y-6 h-fit">
+        <div className="bg-white border-2 border-black p-5 sm:p-6 rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-5 border-b-2 border-black pb-3 flex items-center justify-between">
             Filters
-            <span className="w-2 h-2 bg-orange-500 rounded-none shadow-[2px_2px_0px_black]" />
+            <span className="w-1.5 h-1.5 bg-orange-500 rounded-none shadow-[1.5px_1.5px_0px_black]" />
           </h3>
 
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Employment Type</p>
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Employment Type</p>
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
                 {EMPLOYMENT_TYPES.map((t) => (
-                  <label key={t.value} className="flex items-center gap-3 cursor-pointer group">
+                  <label key={t.value} className="flex items-center gap-2.5 cursor-pointer group">
                     <div className="relative flex items-center shrink-0">
                       <input
                         type="checkbox"
                         checked={jobTypes.includes(t.value)}
                         onChange={() => toggleJobType(t.value)}
-                        className="peer appearance-none h-5 w-5 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+                        className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
                       />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[10px]">
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
                         ✓
                       </div>
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
+                    <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
                       {t.label}
                     </span>
                   </label>
@@ -174,14 +174,14 @@ export function JobsBoard() {
             </div>
           </div>
 
-          <div className="mt-10 pt-8 border-t-2 border-black">
+          <div className="mt-8 pt-6 border-t-2 border-black">
             <Link
               href="/post"
-              className="group relative block w-full bg-black text-white px-4 py-4 text-[11px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
+              className="group relative block w-full bg-black text-white px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Post Job
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </Link>
@@ -189,32 +189,32 @@ export function JobsBoard() {
         </div>
 
         {/* Action Card */}
-        <div className="bg-orange-500 border-2 border-black p-8 rounded-none shadow-[4px_4px_0px_black] text-white">
-          <h4 className="text-xl font-black uppercase italic tracking-tighter leading-none mb-4">
+        <div className="bg-orange-500 border-2 border-black p-6 rounded-none shadow-[3px_3px_0px_black] text-white">
+          <h4 className="text-lg font-black uppercase italic tracking-tighter leading-none mb-3">
             Get the best talent <br /> direct to your inbox
           </h4>
-          <p className="text-[10px] font-black uppercase tracking-widest text-white/80 mb-6">
+          <p className="text-[9px] font-black uppercase tracking-widest text-white/80 mb-5">
             Join 5,000+ companies hiring through Workiswork.
           </p>
-          <button className="w-full bg-black text-white py-4 text-[11px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
+          <button className="w-full bg-black text-white py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
             Unlock Talent
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <section className="space-y-6">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-4 border-b-2 border-black pb-4">
-          <div className="flex gap-8">
+      <section className="space-y-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-baseline justify-between gap-3 border-b-2 border-black pb-3">
+          <div className="flex gap-6">
             {["jobs", "companies"].map((v) => (
               <button
                 key={v}
                 onClick={() => setViewMode(v as any)}
                 className={cn(
-                  "relative text-[11px] font-black uppercase tracking-[0.3em] transition-all pb-1",
+                  "relative text-[10px] font-black uppercase tracking-[0.3em] transition-all pb-1",
                   viewMode === v
-                    ? "text-black after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[3px] after:bg-orange-500"
-                    : "text-gray-400 hover:text-black"
+                    ? "text-white after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[2px] after:bg-orange-500"
+                    : "text-gray-400 hover:text-white/40 cursor-pointer"
                 )}
               >
                 {v}
@@ -222,11 +222,11 @@ export function JobsBoard() {
             ))}
           </div>
 
-          <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+          <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
             {jobsQuery.isLoading || companiesQuery.isLoading ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="w-3 h-3 animate-spin" />
-                Updating Results...
+              <span className="flex items-center gap-1.5">
+                <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                Updating...
               </span>
             ) : (
               viewMode === "jobs"
@@ -237,16 +237,16 @@ export function JobsBoard() {
         </div>
 
         {/* List View */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           {(jobsQuery.isLoading || companiesQuery.isLoading) && (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="bg-white border-2 border-black p-8 animate-pulse">
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 bg-gray-100" />
-                    <div className="flex-1 space-y-3">
-                      <div className="h-4 bg-gray-100 w-1/3" />
-                      <div className="h-3 bg-gray-100 w-1/4" />
+                <div key={i} className="bg-white border-2 border-black p-6 animate-pulse">
+                  <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 bg-gray-100" />
+                    <div className="flex-1 space-y-2.5">
+                      <div className="h-3.5 bg-gray-100 w-1/3" />
+                      <div className="h-2.5 bg-gray-100 w-1/4" />
                     </div>
                   </div>
                 </div>
@@ -263,14 +263,14 @@ export function JobsBoard() {
                   key={job.id}
                   href={`/jobs/${job.slug}`}
                   className={cn(
-                    "group relative flex flex-col md:flex-row md:items-center justify-between p-6 sm:p-10 transition-all duration-300 gap-6 border-2 border-black rounded-none shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
+                    "group relative flex flex-col md:flex-row md:items-center justify-between p-5 sm:p-7 transition-all duration-300 gap-5 border-2 border-black rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1",
                     job.isFeatured
-                      ? "bg-orange-50 border-orange-500 shadow-[4px_4px_0px_#f97316]"
+                      ? "bg-orange-50 border-orange-500 shadow-[3px_3px_0px_#f97316]"
                       : "bg-white"
                   )}
                 >
-                  <div className="flex items-center gap-6 min-w-0">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-2xl font-black text-black shrink-0 transition-all">
+                  <div className="flex items-center gap-5 min-w-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-lg font-black text-black shrink-0 transition-all">
                       {job.companyLogo ? (
                         <img
                           src={job.companyLogo}
@@ -283,20 +283,20 @@ export function JobsBoard() {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
                         {job.isFeatured && (
-                          <span className="text-[8px] font-black text-white bg-orange-500 px-2 py-0.5 uppercase tracking-[0.2em] leading-none shrink-0">
+                          <span className="text-[7px] font-black text-white bg-orange-500 px-1.5 py-0.5 uppercase tracking-[0.2em] leading-none shrink-0">
                             PRIME ROLE
                           </span>
                         )}
-                        <span className="text-[9px] font-black text-black/40 uppercase tracking-[0.2em] leading-none">
+                        <span className="text-[8px] font-black text-black/40 uppercase tracking-[0.2em] leading-none">
                           {job.jobType.replace("_", " ")}
                         </span>
                       </div>
-                      <h3 className="text-xl sm:text-3xl font-black text-black tracking-tighter uppercase italic leading-[1.1] mb-2 group-hover:text-orange-500 transition-colors">
+                      <h3 className="text-lg sm:text-2xl font-black text-black tracking-tighter uppercase italic leading-[1.1] mb-1.5 group-hover:text-orange-500 transition-colors">
                         {job.title}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                      <div className="flex flex-wrap items-center gap-2.5 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
                         <span className="text-black">{job.companyName}</span>
                         <span className="w-1 h-1 bg-gray-300 rounded-full" />
                         <span>{job.location || "Remote"}</span>
@@ -304,13 +304,13 @@ export function JobsBoard() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between md:flex-col md:items-end md:justify-center gap-4 shrink-0 border-t md:border-t-0 md:border-l border-black/5 pt-4 md:pt-0 md:pl-8">
+                  <div className="flex items-center justify-between md:flex-col md:items-end md:justify-center gap-3 shrink-0 border-t md:border-t-0 md:border-l border-black/5 pt-3 md:pt-0 md:pl-6">
                     {job.salaryMin && (
-                      <div className="text-sm sm:text-lg font-black text-black uppercase tracking-tighter">
-                        ${parseInt(job.salaryMin) / 1000}K+ <span className="text-[10px] text-gray-400">/ YEAR</span>
+                      <div className="text-xs sm:text-base font-black text-black uppercase tracking-tighter">
+                        ${parseInt(job.salaryMin) / 1000}K+ <span className="text-[9px] text-gray-400">/ YEAR</span>
                       </div>
                     )}
-                    <div className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">
+                    <div className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em]">
                       {timeAgo}
                     </div>
                   </div>
@@ -323,20 +323,20 @@ export function JobsBoard() {
               <Link
                 key={company.id}
                 href={`/companies/${company.slug}`}
-                className="group relative flex items-center justify-between p-8 sm:p-12 transition-all duration-300 gap-6 bg-white border-2 border-black rounded-none shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
+                className="group relative flex items-center justify-between p-6 sm:p-8 transition-all duration-300 gap-5 bg-white border-2 border-black rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
               >
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-4xl font-black text-black transition-all">
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-2xl font-black text-black transition-all">
                     {company.logoUrl ? (
                       <img src={company.logoUrl} className="w-full h-full object-cover" />
                     ) : company.name.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-2xl sm:text-4xl font-black text-black tracking-tighter uppercase italic leading-none mb-2">{company.name}</h3>
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">{company.location || "Global"}</p>
+                    <h3 className="text-xl sm:text-3xl font-black text-black tracking-tighter uppercase italic leading-none mb-1.5">{company.name}</h3>
+                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em]">{company.location || "Global"}</p>
                   </div>
                 </div>
-                <ChevronRight className="w-8 h-8 text-black group-hover:text-orange-500 group-hover:translate-x-2 transition-all" />
+                <ChevronRight className="w-6 h-6 text-black group-hover:text-orange-500 group-hover:translate-x-2 transition-all" />
               </Link>
             ))}
         </div>

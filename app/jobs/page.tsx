@@ -4,38 +4,37 @@ import { Suspense } from "react";
 
 export default function Home() {
     return (
-        <div className="bg-[#0B0B0B] min-h-screen">
-            <section className="text-white flex flex-col items-center justify-center pt-20 pb-20 px-6">
-                <div className="max-w-[720px] text-center">
+        <div className="bg-[#050505] min-h-screen selection:bg-orange-500/30">
+            <section className="text-white flex flex-col items-center justify-center pt-24 pb-20 px-6">
+                <div className="max-w-[840px] text-center">
 
                     {/* Headline */}
-                    <h1 className="font-semibold tracking-tighter text-[44px] leading-[1]
-                   sm:text-[56px] md:text-[90px]">
+                    <h1 className="font-bold tracking-tighter text-[44px] leading-[1]
+                   sm:text-[64px] md:text-[80px]">
                         Built for the future
                         <br />
-                        of <span className="text-[#FF5A1F]">remote work</span>
+                        of <span className="text-orange-500">remote work</span>
                     </h1>
 
                     {/* Description */}
-                    <p className="mt-6 text-[18px] sm:text-[24px] leading-[1.1] text-[#B6B6B6]">
-                        Best place for companies to hire real talent
-                        <br />
-                        from around the world & find remote jobs.
+                    <p className="mt-8 text-[18px] sm:text-[22px] leading-[1.4] text-gray-400 max-w-2xl mx-auto">
+                        The premier platform for companies to source world-class talent
+                        and for professionals to find their next remote role.
                     </p>
 
                     {/* CTA */}
-                    <div className="mt-8 flex flex-col items-center gap-3">
+                    <div className="mt-10 flex flex-col items-center gap-4">
                         <Link
                             href="/post"
-                            className="bg-[#FF5A1F] hover:bg-[#E54D15]
-                   text-white text-[22px] mt-6 font-medium cursor-pointer
-                   px-8 py-[8px] rounded-2xl
-                   transition-colors"
+                            className="bg-orange-500 hover:bg-orange-600
+                   text-white text-lg font-bold
+                   px-10 py-3.5 rounded-xl
+                   transition-all active:scale-[0.98] shadow-lg shadow-orange-500/10"
                         >
                             Post a job
                         </Link>
 
-                        <span className="text-[13px] text-[#8C8C8C]">
+                        <span className="text-xs font-medium text-gray-500 uppercase tracking-widest">
                             No subscription required
                         </span>
                     </div>
@@ -43,9 +42,9 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="px-6 py-12">
+            <section className="px-6 pb-24">
                 <div className="max-w-[1200px] mx-auto">
-                    <Suspense fallback={<div className="text-center py-20 text-gray-400">Loading jobs...</div>}>
+                    <Suspense fallback={<div className="text-center py-20 text-gray-500 animate-pulse">Loading opportunities...</div>}>
                         <JobsBoard />
                     </Suspense>
                 </div>

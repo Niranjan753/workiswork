@@ -95,9 +95,9 @@ export default async function CompanyPage({ params }: Params) {
   const { company, jobs } = data;
 
   return (
-    <div className="relative min-h-screen bg-black text-white selection:bg-blue-500/30">
+    <div className="relative min-h-screen bg-[#050505] text-white selection:bg-orange-500/30">
       {/* Header */}
-      <section className="relative z-10 py-16 sm:py-24 border-b border-zinc-900 bg-black/50 backdrop-blur-xl">
+      <section className="relative z-10 py-16 sm:py-24 border-b border-white/[0.05] bg-black">
         <div className="mx-auto max-w-5xl px-4">
           <div className="flex flex-col items-center text-center">
             <div className="w-24 h-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-8">
@@ -108,20 +108,20 @@ export default async function CompanyPage({ params }: Params) {
                   className="w-16 h-16 object-contain"
                 />
               ) : (
-                <span className="text-3xl font-black text-zinc-700">
+                <span className="text-3xl font-bold text-zinc-700">
                   {company.name[0]}
                 </span>
               )}
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-black mb-6">
+            <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tighter">
               {company.name}
             </h1>
 
             <div className="flex flex-wrap gap-6 text-sm font-bold uppercase tracking-widest text-zinc-500">
               {company.location && (
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-blue-500" />
+                  <MapPin className="w-4 h-4 text-orange-500" />
                   {company.location}
                 </div>
               )}
@@ -132,7 +132,7 @@ export default async function CompanyPage({ params }: Params) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-white"
                 >
-                  <Globe className="w-4 h-4 text-blue-500" />
+                  <Globe className="w-4 h-4 text-orange-500" />
                   Website
                   <ExternalLink className="w-3 h-3" />
                 </a>
@@ -161,7 +161,7 @@ export default async function CompanyPage({ params }: Params) {
 
         {/* Jobs */}
         <section className="space-y-8">
-          <h2 className="text-2xl font-black">Open Positions</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Open Positions</h2>
 
           {jobs.length === 0 ? (
             <div className="bg-zinc-900/30 border border-zinc-800 p-20 text-center rounded-[2.5rem]">
@@ -173,13 +173,13 @@ export default async function CompanyPage({ params }: Params) {
                 <Link
                   key={job.id}
                   href={`/jobs/${job.slug}`}
-                  className="block bg-zinc-900/30 border border-zinc-800 rounded-3xl p-8 hover:bg-zinc-900/80 transition"
+                  className="block bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-8 hover:bg-[#111111] transition"
                 >
-                  <h3 className="text-2xl font-bold mb-2">{job.title}</h3>
+                  <h3 className="text-2xl font-bold mb-2 tracking-tight">{job.title}</h3>
 
                   <div className="flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
                     {job.categoryName && (
-                      <span className="text-blue-500">
+                      <span className="text-orange-500">
                         {job.categoryName}
                       </span>
                     )}
@@ -204,9 +204,9 @@ export default async function CompanyPage({ params }: Params) {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-zinc-900/50 border border-zinc-800 p-8 text-center rounded-3xl">
-      <p className="text-4xl font-black mb-2">{value}</p>
-      <p className="text-[11px] font-black uppercase tracking-widest text-zinc-500">
+    <div className="bg-white/[0.02] border border-white/[0.05] p-8 text-center rounded-3xl">
+      <p className="text-4xl font-bold mb-2 tracking-tighter">{value}</p>
+      <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-500">
         {label}
       </p>
     </div>

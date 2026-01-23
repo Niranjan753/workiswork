@@ -215,9 +215,10 @@ export function JobsBoard() {
 
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
+    <div className="flex flex-col-reverse lg:grid lg:grid-cols-[240px_1fr] gap-8 lg:gap-12">
       {/* Sidebar - Brute Style */}
-      <aside className="space-y-6 h-fit">
+      <aside className="space-y-6 lg:h-fit w-full lg:w-auto">
+
         <div className="bg-white border-2 border-black p-5 sm:p-6 rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all">
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-5 border-b-2 border-black pb-3 flex items-center justify-between">
             Filters
@@ -593,25 +594,34 @@ export function JobsBoard() {
 
           {viewMode === "companies" && !companiesQuery.isLoading &&
             companiesQuery.data?.companies.map((company) => (
-              <Link
-                key={company.id}
-                href={`/companies/${company.slug}`}
-                className="group relative flex items-center justify-between p-6 sm:p-8 transition-all duration-300 gap-5 bg-white border-2 border-black rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-gray-50 border-2 border-black rounded-none flex items-center justify-center text-2xl font-black text-black transition-all">
-                    {company.logoUrl ? (
-                      <img src={company.logoUrl} className="w-full h-full object-cover" />
-                    ) : company.name.charAt(0)}
+              <div key={company.id} className="relative group w-full">
+                {/* Fixed Shadow Box */}
+                <div className="absolute inset-0 bg-black translate-x-[3px] translate-y-[3px] group-hover:translate-x-[6px] group-hover:translate-y-[6px] transition-transform" />
+
+                <Link
+                  href={`/companies/${company.slug}`}
+                  className="relative flex items-center justify-between p-4 sm:p-7 bg-white border-2 border-black rounded-none transition-all duration-300 gap-4"
+                >
+                  <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-50 border-2 border-black flex items-center justify-center text-xl sm:text-2xl font-black text-black shrink-0">
+                      {company.logoUrl ? (
+                        <img src={company.logoUrl} className="w-full h-full object-cover" />
+                      ) : company.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-[15px] sm:text-2xl font-black text-black tracking-tighter uppercase italic leading-tight mb-0.5 sm:mb-1 truncate sm:whitespace-normal">
+                        {company.name}
+                      </h3>
+                      <p className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                        {company.location || "Global"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl sm:text-3xl font-black text-black tracking-tighter uppercase italic leading-none mb-1.5">{company.name}</h3>
-                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em]">{company.location || "Global"}</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-6 h-6 text-black group-hover:text-orange-500 group-hover:translate-x-2 transition-all" />
-              </Link>
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-black group-hover:text-orange-500 group-hover:translate-x-2 transition-all shrink-0" />
+                </Link>
+              </div>
             ))}
+
         </div>
       </section>
     </div>

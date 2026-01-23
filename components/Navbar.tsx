@@ -19,7 +19,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = React.useState(false);
 
-  const isHire = pathname.startsWith("/hire");
+  const isJobs = pathname.startsWith("/jobs");
   const isPost = pathname.startsWith("/post");
 
   React.useEffect(() => {
@@ -27,7 +27,7 @@ export function Navbar() {
   }, [pathname]);
 
   const navLinks = [
-    { name: "Hire Talent", href: "/hire", active: isHire },
+    { name: "Browse Jobs", href: "/jobs", active: isJobs },
     { name: "Post Jobs", href: "/post", active: isPost },
     { name: "PORTFOLIO", href: "/portfolio" },
     { name: "JOIN", href: "/join" },

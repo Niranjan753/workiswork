@@ -50,7 +50,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
             <ul className="space-y-3">
               {[
                 { label: "Post a Job", href: "/post" },
-                { label: "Hire Talent", href: "/hire" },
+                { label: "Browse Jobs", href: "/jobs" },
                 { label: "Pricing", href: "/pricing" }
               ].map((link) => (
                 <li key={link.label}>

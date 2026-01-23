@@ -20,7 +20,7 @@ export default function Home() {
 
           <h1 className="font-black tracking-tighter text-[40px] leading-[0.9] sm:text-[60px] md:text-[80px] lg:text-[100px] uppercase italic">
             Elite <br />
-            <span className="text-gray-800">Remote</span> Talent
+            <span className="text-orange-500">Remote</span> Talent
           </h1>
 
           <p className="mt-8 text-base sm:text-lg md:text-xl font-medium text-gray-400 max-w-xl mx-auto leading-tight uppercase tracking-tight">

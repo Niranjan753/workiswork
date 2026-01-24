@@ -1,55 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { TrendingUp, Users, DollarSign, Eye, Activity } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { Area, AreaChart, CartesianGrid, XAxis, Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts";
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart";
+import { useEffect, useState } from "react";
+import { Loader2, Plus } from "lucide-react";
 import Link from "next/link";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { formatDistanceToNow } from "date-fns";
 
-// Mock Data for Visualization
-const chartData = [
-    { month: "January", views: 18600, earnings: 186 },
-    { month: "February", views: 30500, earnings: 305 },
-    { month: "March", views: 23700, earnings: 237 },
-    { month: "April", views: 73000, earnings: 730 },
-    { month: "May", views: 20900, earnings: 209 },
-    { month: "June", views: 21400, earnings: 214 },
-];
-
-const chartConfig = {
-    views: {
-        label: "Views",
-        color: "hsl(20, 100%, 50%)", // Orange-ish
-    },
-    earnings: {
-        label: "Earnings ($)",
-        color: "hsl(0, 0%, 10%)", // Black
-    },
-} satisfies ChartConfig;
+type Campaign = {
+    id: number;
+    brandName: string;
+    description: string;
+    logoUrl: string | null;
+    status: string;
+    payPerViewRate: string;
+    createdAt: string;
+};
 
 export default function DashboardPage() {
-    const [stats, setStats] = useState({
-        totalViews: 0,
-        totalEarnings: "0.00",
-        activeClips: 0,
-        recentSubmissions: [] as any[]
-    });
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("/api/clip/stats")
+        // Fetch all campaigns
+        fetch("/api/clip/campaigns")
             .then(res => res.json())
             .then(data => {
-                setStats(data);
+                setCampaigns(data);
                 setLoading(false);
             })
             .catch(err => setLoading(false));
@@ -61,164 +37,73 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-gray-50/50 p-6 md:p-12 font-sans">
-            <div className="max-w-[1200px] mx-auto space-y-8">
-                <Link href="/clip" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors">
-                    <ChevronLeft className="w-3 h-3" />
-                    Back to Hub
-                </Link>
+            <div className="max-w-[1200px] mx-auto space-y-12">
 
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter sm:leading-none mb-2">
-                        Clipping <span className="text-orange-500">Analytics</span>
-                    </h1>
-                    <p className="text-gray-500 font-bold uppercase tracking-wide text-xs">
-                        Track your performance across all campaigns
-                    </p>
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b-4 border-black">
+                    <div>
+                        <span className="inline-block border border-orange-500 text-orange-500 px-3 py-1 text-[9px] font-black uppercase tracking-[0.3em] mb-4">
+                            My Workspace
+                        </span>
+                        <h1 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none mb-4">
+                            Active <span className="text-orange-500">Campaigns</span>
+                        </h1>
+                        <p className="text-gray-500 font-bold uppercase tracking-wide text-xs max-w-lg">
+                            Select a campaign to view your submissions, track performance, or submit new clips.
+                        </p>
+                    </div>
+                    <Link href="/clip" className="bg-black hover:bg-orange-500 text-white px-8 py-4 text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+                        <Plus className="w-4 h-4" /> Browse More
+                    </Link>
                 </div>
 
-                {/* KPI Cards */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card className="border-2 border-black rounded-none shadow-[4px_4px_0px_black]">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Total Views</CardTitle>
-                            <Eye className="h-4 w-4 text-orange-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-black italic tracking-tighter">{stats.totalViews.toLocaleString()}</div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mt-1">
-                                Lifetime Views
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-2 border-black rounded-none shadow-[4px_4px_0px_black]">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Total Earnings</CardTitle>
-                            <DollarSign className="h-4 w-4 text-orange-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-black italic tracking-tighter">${stats.totalEarnings}</div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mt-1">
-                                Estimated Revenue
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-2 border-black rounded-none shadow-[4px_4px_0px_black]">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Active Clips</CardTitle>
-                            <Activity className="h-4 w-4 text-orange-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-black italic tracking-tighter">{stats.activeClips}</div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mt-1">
-                                Submitted Links
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-2 border-black rounded-none shadow-[4px_4px_0px_black] bg-black text-white">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">Pending Payout</CardTitle>
-                            <TrendingUp className="h-4 w-4 text-orange-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-black italic tracking-tighter">${stats.totalEarnings}</div>
-                            <button className="mt-3 w-full bg-orange-500 text-white text-[9px] font-black uppercase tracking-[0.2em] py-2 hover:bg-white hover:text-black transition-colors">
-                                Request Payout
-                            </button>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                    <Card className="col-span-4 border-2 border-black rounded-none shadow-[4px_4px_0px_black]">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-black uppercase italic tracking-tighter">Performance Trend</CardTitle>
-                            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                                Views vs Earnings over time
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                    <defs>
-                                        <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#ff5a1f" stopOpacity={0.8} />
-                                            <stop offset="95%" stopColor="#ff5a1f" stopOpacity={0} />
-                                        </linearGradient>
-                                        <linearGradient id="fillEarnings" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#000000" stopOpacity={0.8} />
-                                            <stop offset="95%" stopColor="#000000" stopOpacity={0} />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" />
-                                    <XAxis
-                                        dataKey="month"
-                                        tickLine={false}
-                                        axisLine={false}
-                                        tickMargin={8}
-                                        tickFormatter={(value) => value.slice(0, 3)}
-                                        tick={{ fontSize: 10, fontWeight: 700, fill: '#9ca3af' }}
-                                    />
-                                    <ChartTooltip content={<ChartTooltipContent />} />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="views"
-                                        stroke="#ff5a1f"
-                                        strokeWidth={3}
-                                        fillOpacity={1}
-                                        fill="url(#fillViews)"
-                                        stackId="1"
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="earnings"
-                                        stroke="#000000"
-                                        strokeWidth={3}
-                                        fillOpacity={1}
-                                        fill="url(#fillEarnings)"
-                                        stackId="2" // Stacking might not be what viewing want if scales differ vastly, but for visual effect
-                                    />
-                                </AreaChart>
-                            </ChartContainer>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="col-span-3 border-2 border-black rounded-none shadow-[4px_4px_0px_black]">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-black uppercase italic tracking-tighter">Recent Submission</CardTitle>
-                            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                                Latest clips tracked
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-6">
-                                {stats.recentSubmissions.length === 0 ? (
-                                    <p className="text-xs text-gray-400 font-bold uppercase">No recent clips found.</p>
-                                ) : (
-                                    stats.recentSubmissions.map((clip) => (
-                                        <div key={clip.id} className="flex items-center justify-between pb-4 border-b border-gray-100 last:border-0 last:pb-0">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 bg-gray-100 border border-black flex items-center justify-center font-black uppercase">
-                                                    {clip.campaignName ? clip.campaignName[0] : "C"}
-                                                </div>
-                                                <div>
-                                                    <p className="text-xs font-black uppercase tracking-tight line-clamp-1">{clip.campaignName || "Unknown Campaign"}</p>
-                                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wide">
-                                                        {clip.platform} • {clip.createdAt ? formatDistanceToNow(new Date(clip.createdAt), { addSuffix: true }) : "Just now"}
-                                                    </p>
-                                                </div>
+                {/* Campaign Grid */}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {campaigns.length === 0 ? (
+                        <div className="col-span-full py-20 text-center border-2 border-dashed border-gray-300">
+                            <p className="text-gray-400 font-black uppercase tracking-widest text-xs">No active campaigns found.</p>
+                            <Link href="/clip" className="text-orange-500 font-bold uppercase underline text-xs mt-2 inline-block">Join one now</Link>
+                        </div>
+                    ) : (
+                        campaigns.map((campaign) => (
+                            <Link key={campaign.id} href={`/clip/${campaign.id}`} className="group relative block h-full">
+                                <div className="absolute inset-0 bg-black translate-x-[6px] translate-y-[6px] transition-transform group-hover:translate-x-[10px] group-hover:translate-y-[10px]" />
+                                <div className="relative bg-white border-2 border-black p-8 h-full flex flex-col justify-between transition-transform duration-300">
+                                    <div className="space-y-6">
+                                        <div className="flex items-start justify-between">
+                                            <div className="w-14 h-14 border-2 border-black bg-gray-50 flex items-center justify-center font-black text-2xl uppercase">
+                                                {campaign.logoUrl ? (
+                                                    <img src={campaign.logoUrl} alt={campaign.brandName} className="w-full h-full object-cover" />
+                                                ) : campaign.brandName[0]}
                                             </div>
-                                            <div className="text-right">
-                                                <p className="text-xs font-black">{(clip.views || 0).toLocaleString()} Views</p>
-                                                <p className={`text-[9px] font-bold uppercase tracking-wide ${clip.status === 'approved' ? 'text-green-500' : 'text-orange-500'}`}>
-                                                    {clip.status}
-                                                </p>
-                                            </div>
+                                            <span className="bg-orange-100 text-orange-700 px-2 py-1 text-[8px] font-black uppercase tracking-widest border border-orange-200">
+                                                Active
+                                            </span>
                                         </div>
-                                    ))
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
+
+                                        <div>
+                                            <h3 className="text-3xl font-black uppercase italic tracking-tighter mb-2 group-hover:text-orange-500 transition-colors">
+                                                {campaign.brandName}
+                                            </h3>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed line-clamp-2">
+                                                {campaign.description}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-6 mt-6 border-t-2 border-black/5 flex items-center justify-between">
+                                        <div className="flex flex-col">
+                                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Rate</span>
+                                            <span className="text-lg font-black italic tracking-tighter">${campaign.payPerViewRate}/view</span>
+                                        </div>
+                                        <span className="w-8 h-8 bg-black text-white flex items-center justify-center group-hover:bg-orange-500 transition-colors">
+                                            <Plus className="w-4 h-4" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))
+                    )}
                 </div>
             </div>
         </div>

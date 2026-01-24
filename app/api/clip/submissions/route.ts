@@ -8,13 +8,12 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const campaignId = searchParams.get("campaignId");
 
-        let query = db.select().from(clips).orderBy(desc(clips.createdAt));
+        const whereCondition = campaignId ? eq(clips.campaignId, parseInt(campaignId)) : undefined;
 
-        if (campaignId) {
-            query = query.where(eq(clips.campaignId, parseInt(campaignId)));
-        }
-
-        const allClips = await query;
+        const allClips = await db.select()
+            .from(clips)
+            .where(whereCondition)
+            .orderBy(desc(clips.createdAt));
         return NextResponse.json(allClips);
     } catch (error) {
         console.error("[CLIPS_GET]", error);

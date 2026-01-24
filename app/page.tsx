@@ -12,21 +12,21 @@ export default function Home() {
 
                 <div className="max-w-[1200px] text-center relative z-10">
 
-                    <h1 className="font-black tracking-tighter text-[40px] leading-[0.85] 
+                    <h1 className="text-white tracking-tighter text-[40px] leading-[0.85] 
                    sm:text-[60px] md:text-[90px] lg:text-[110px] uppercase italic">
-                        The PLACE FOR <br />
-                        <span className="text-orange-500"> YOUR TALENT</span>
+                        REMOTE ONLY <br />
+                        <span className="text-orange-500"> JOB BOARD </span>
                     </h1>
 
                     <p className="mt-10 text-base sm:text-lg md:text-xl font-medium text-gray-400 max-w-xl mx-auto leading-tight uppercase tracking-tight">
-                        Connecting high-velocity companies with the world's most elite 
+                        Connecting high-velocity companies with the world's most elite
                         remote professionals.
                     </p>
 
                     <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Link
                             href="/post"
-                            className="group relative bg-[#FF5A1F] text-white text-[11px] font-black uppercase tracking-[0.3em]
+                            className="group relative bg-[#FF5A1F] text-white text-[11px] text-black uppercase tracking-[0.3em]
                                      px-10 py-5 rounded-none transition-all shadow-[8px_8px_0px_rgba(255,90,31,0.2)]
                                      hover:shadow-none hover:translate-x-1 hover:translate-y-1 overflow-hidden border-2 border-[#FF5A1F]"
                         >
@@ -36,7 +36,7 @@ export default function Home() {
 
                         <Link
                             href="/jobs"
-                            className="group relative bg-white text-black text-[11px] font-black uppercase tracking-[0.3em]
+                            className="group relative bg-white text-black text-[11px] text-black uppercase tracking-[0.3em]
                                      px-10 py-5 rounded-none transition-all shadow-[8px_8px_0px_rgba(255,255,255,0.1)]
                                      hover:shadow-none hover:translate-x-1 hover:translate-y-1 overflow-hidden border-2 border-white"
                         >

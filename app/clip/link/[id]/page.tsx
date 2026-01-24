@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, Eye, DollarSign, ExternalLink, ChevronLeft, TrendingUp } from "lucide-react";
+import { Loader2, Eye, DollarSign, ExternalLink, ChevronLeft, TrendingUp, RefreshCw } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,6 +26,7 @@ export default function LinkDashboardPage() {
     const params = useParams();
     const [clip, setClip] = useState<ClipDetails | null>(null);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         if (params.id) {
@@ -73,9 +74,28 @@ export default function LinkDashboardPage() {
                             </div>
                         </div>
 
-                        <a href={clip.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-black text-white px-6 py-3 text-[10px] text-black uppercase tracking-[0.2em] hover:bg-orange-500 transition-colors">
-                            View Original <ExternalLink className="w-3 h-3" />
-                        </a>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => {
+                                    setRefreshing(true);
+                                    fetch(`/api/clip/link/${clip.id}/refresh`, { method: "POST" })
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            setClip(prev => prev ? { ...prev, views: data.views } : null);
+                                            setRefreshing(false);
+                                        })
+                                        .catch(() => setRefreshing(false));
+                                }}
+                                disabled={refreshing}
+                                className="flex items-center gap-2 bg-white border-2 border-black text-black px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-gray-100 transition-colors disabled:opacity-50"
+                            >
+                                {refreshing ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                                {refreshing ? "Scanning..." : "Refresh Stats"}
+                            </button>
+                            <a href={clip.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-black text-white px-6 py-3 text-[10px] text-black uppercase tracking-[0.2em] hover:bg-orange-500 transition-colors">
+                                View Original <ExternalLink className="w-3 h-3" />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -117,7 +137,7 @@ export default function LinkDashboardPage() {
                                 <TrendingUp className="h-4 w-4 text-orange-500" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-5xl text-black italic tracking-tighter">High</div>
+                                <div className="text-5xl text-white italic tracking-tighter">High</div>
                                 <p className="text-[9px] font-bold text-white/50 uppercase tracking-wide">Top 10% of clips</p>
                             </CardContent>
                         </Card>
@@ -129,16 +149,16 @@ export default function LinkDashboardPage() {
                     <h3 className="text-xl text-black uppercase italic tracking-tighter mb-6">Activity Log</h3>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-                            <span className="text-xs font-bold uppercase">View Count Updated</span>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Just now</span>
+                            <span className="text-xs font-bold text-black uppercase">View Count Updated</span>
+                            <span className="text-[10px] font-bold text-black text-gray-400 uppercase tracking-wide">Just now</span>
                         </div>
                         <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-                            <span className="text-xs font-bold uppercase">Clip Status set to <span className="text-green-600">Approved</span></span>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{formatDistanceToNow(new Date(clip.createdAt))} ago</span>
+                            <span className="text-xs font-bold text-black uppercase">Clip Status set to <span className="text-green-600">Approved</span></span>
+                            <span className="text-[10px] font-bold text-black text-gray-400 uppercase tracking-wide">{formatDistanceToNow(new Date(clip.createdAt))} ago</span>
                         </div>
                         <div className="flex items-center justify-between pb-2">
-                            <span className="text-xs font-bold uppercase">Submitted for review</span>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{formatDistanceToNow(new Date(clip.createdAt))} ago</span>
+                            <span className="text-xs font-bold text-black uppercase">Submitted for review</span>
+                            <span className="text-[10px] font-bold text-black text-gray-400 uppercase tracking-wide">{formatDistanceToNow(new Date(clip.createdAt))} ago</span>
                         </div>
                     </div>
                 </div>

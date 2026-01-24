@@ -39,13 +39,11 @@ async function scrapeViewCount(url: string, platform: string): Promise<number | 
             const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
             if (items && items.length > 0) {
-                const post = items[0];
+                const post: any = items[0];
                 console.log("Apify Result:", post.url); // Log URL to confirm match
 
                 // Instagram scraper output mapping
-                // @ts-ignore
                 const views = post.videoViewCount || post.video_view_count || post.viewCount || 0;
-                // @ts-ignore
                 const likes = post.likesCount || post.likes_count || 0;
 
                 // If it's a video/reel, views are preferred.

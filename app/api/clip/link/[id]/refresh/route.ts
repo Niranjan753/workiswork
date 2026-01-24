@@ -9,7 +9,7 @@ dotenv.config();
 
 // Initialize the ApifyClient with API token
 const client = new ApifyClient({
-    token: 'apify_api_1yQM383YQuwfMfd8Nxja39icmnBr552HEjWN',
+    token: process.env.APIFY_API_TOKEN,
 });
 
 // Helper to scrape view count based on platform

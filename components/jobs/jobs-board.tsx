@@ -217,91 +217,98 @@ export function JobsBoard() {
   return (
     <div className="flex flex-col-reverse lg:grid lg:grid-cols-[240px_1fr] gap-8 lg:gap-12">
       {/* Sidebar - Brute Style */}
-      <aside className="space-y-6 lg:h-fit w-full lg:w-auto">
+      <aside className="space-y-8 lg:h-fit w-full">
+        <div className="relative group w-full">
+          {/* Shadow Box */}
+          <div className="absolute inset-0 bg-black translate-x-[3px] translate-y-[3px]" />
+          <div className="relative bg-white border-2 border-black p-5 sm:p-6">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-5 border-b-2 border-black pb-3 flex items-center justify-between">
+              Filters
+              <span className="w-1.5 h-1.5 bg-orange-500 rounded-none shadow-[1.5px_1.5px_0px_black]" />
+            </h3>
 
-        <div className="bg-white border-2 border-black p-5 sm:p-6 rounded-none shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-5 border-b-2 border-black pb-3 flex items-center justify-between">
-            Filters
-            <span className="w-1.5 h-1.5 bg-orange-500 rounded-none shadow-[1.5px_1.5px_0px_black]" />
-          </h3>
-
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Employment Type</p>
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
-                {EMPLOYMENT_TYPES.map((t) => (
-                  <label key={t.value} className="flex items-center gap-2.5 cursor-pointer group">
-                    <div className="relative flex items-center shrink-0">
-                      <input
-                        type="checkbox"
-                        checked={jobTypes.includes(t.value)}
-                        onChange={() => toggleJobType(t.value)}
-                        className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
-                        ✓
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Employment Type</p>
+                <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+                  {EMPLOYMENT_TYPES.map((t) => (
+                    <label key={t.value} className="flex items-center gap-2.5 cursor-pointer group">
+                      <div className="relative flex items-center shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={jobTypes.includes(t.value)}
+                          onChange={() => toggleJobType(t.value)}
+                          className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
+                          ✓
+                        </div>
                       </div>
-                    </div>
-                    <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
-                      {t.label}
-                    </span>
-                  </label>
-                ))}
+                      <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
+                        {t.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-6 border-t-2 border-black/5">
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Roles</p>
+                <div className="max-h-[400px] overflow-y-auto pr-2 space-y-2.5 custom-scrollbar">
+                  {JOB_ROLES.map((role) => (
+                    <label key={role} className="flex items-center gap-2.5 cursor-pointer group">
+                      <div className="relative flex items-center shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={categories.includes(role.toLowerCase())}
+                          onChange={() => toggleCategory(role.toLowerCase())}
+                          className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
+                          ✓
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
+                        {role}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="space-y-3 pt-6 border-t-2 border-black/5">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Roles</p>
-              <div className="max-h-[400px] overflow-y-auto pr-2 space-y-2.5 custom-scrollbar">
-                {JOB_ROLES.map((role) => (
-                  <label key={role} className="flex items-center gap-2.5 cursor-pointer group">
-                    <div className="relative flex items-center shrink-0">
-                      <input
-                        type="checkbox"
-                        checked={categories.includes(role.toLowerCase())}
-                        onChange={() => toggleCategory(role.toLowerCase())}
-                        className="peer appearance-none h-4 w-4 border-2 border-black rounded-none checked:bg-black transition-all cursor-pointer"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 peer-checked:opacity-100 text-white font-black text-[8px]">
-                        ✓
-                      </div>
-                    </div>
-                    <span className="text-[9px] font-bold uppercase tracking-tight text-gray-400 group-hover:text-black transition-colors truncate">
-                      {role}
-                    </span>
-                  </label>
-                ))}
-              </div>
+            <div className="mt-8 pt-6 border-t-2 border-black">
+              <Link
+                href="/post"
+                className="group relative block w-full bg-black text-white px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Post Job
+                  <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              </Link>
             </div>
-          </div>
-
-          <div className="mt-8 pt-6 border-t-2 border-black">
-            <Link
-              href="/post"
-              className="group relative block w-full bg-black text-white px-4 py-3 text-[10px] font-black uppercase tracking-[0.3em] transition-all overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Post Job
-                <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </span>
-              <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-            </Link>
           </div>
         </div>
 
         {/* Action Card */}
-        <div className="bg-orange-500 border-2 border-black p-6 rounded-none shadow-[3px_3px_0px_black] text-white">
-          <h4 className="text-lg font-black uppercase italic tracking-tighter leading-none mb-3">
-            Get the best talent <br /> direct to your inbox
-          </h4>
-          <p className="text-[9px] font-black uppercase tracking-widest text-white/80 mb-5">
-            Join 5,000+ companies hiring through Workiswork.
-          </p>
-          <button className="w-full bg-black text-white py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
-            Unlock Talent
-          </button>
+        <div className="relative group w-full">
+          <div className="absolute inset-0 bg-black translate-x-[3px] translate-y-[3px]" />
+          <div className="relative bg-orange-500 border-2 border-black p-6 text-white">
+            <h4 className="text-xl font-black uppercase italic tracking-tighter leading-none mb-3">
+              Get the best talent <br /> direct to your inbox
+            </h4>
+            <p className="text-[9px] font-black uppercase tracking-widest text-white/80 mb-5 leading-relaxed">
+              Join 5,000+ companies hiring through Workiswork.
+            </p>
+            <button className="w-full bg-black text-white py-3.5 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
+              Unlock Talent
+            </button>
+          </div>
         </div>
       </aside>
+
 
       {/* Main Content Area */}
       <section className="space-y-4">

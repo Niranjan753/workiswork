@@ -14,12 +14,12 @@ export default function Home() {
 
                     <h1 className="font-black tracking-tighter text-[40px] leading-[0.85] 
                    sm:text-[60px] md:text-[90px] lg:text-[110px] uppercase italic">
-                        The PLACE FOR <br />
-                        <span className="text-orange-500"> YOUR TALENT</span>
+                        REMOTE ONLY <br />
+                        <span className="text-orange-500"> JOB BOARD </span>
                     </h1>
 
                     <p className="mt-10 text-base sm:text-lg md:text-xl font-medium text-gray-400 max-w-xl mx-auto leading-tight uppercase tracking-tight">
-                        Connecting high-velocity companies with the world's most elite 
+                        Connecting high-velocity companies with the world's most elite
                         remote professionals.
                     </p>
 

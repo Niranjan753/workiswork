@@ -11,6 +11,57 @@ import {
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
+export const campaignStatusEnum = pgEnum("campaign_status", [
+  "pending",
+  "approved",
+  "rejected",
+  "active",
+  "ended",
+]);
+
+export const clipStatusEnum = pgEnum("clip_status", [
+  "pending",
+  "approved",
+  "rejected",
+]);
+
+export const clipPlatformEnum = pgEnum("clip_platform", [
+  "instagram",
+  "tiktok",
+  "youtube",
+]);
+
+export const clippingCampaigns = pgTable("clipping_campaigns", {
+  id: serial("id").primaryKey(),
+  brandName: text("brand_name").notNull(),
+  logoUrl: text("logo_url"),
+  description: text("description").notNull(),
+  goals: text("goals").notNull(), // Stored as text (maybe JSON later, but text is fine for simple descriptions)
+  payPerViewRate: numeric("pay_per_view_rate").notNull(),
+  status: campaignStatusEnum("status").notNull().default("pending"),
+  creatorEmail: text("creator_email").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const clips = pgTable("clips", {
+  id: serial("id").primaryKey(),
+  campaignId: integer("campaign_id")
+    .notNull()
+    .references(() => clippingCampaigns.id, { onDelete: "cascade" }),
+  clipperEmail: text("clipper_email").notNull(),
+  platform: clipPlatformEnum("platform").notNull(),
+  link: text("link").notNull(),
+  views: integer("views").notNull().default(0),
+  status: clipStatusEnum("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const jobTypeEnum = pgEnum("job_type", [
   "full_time",
   "part_time",
